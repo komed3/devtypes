@@ -5,3 +5,6 @@ export type Merge< Left, Right > = Simplify< Pick< Left, Exclude< keyof Left, ke
 
 /** Intersection of unions -> prefer mapped merge strategy */
 export type MergeMany< T extends any[] > = T extends [ infer H, ...infer R ] ? Merge< H, MergeMany< R > > : {};
+
+/** Convert a union to an intersection */
+export type UnionToIntersection< U > = ( U extends any ? ( k: U ) => void : never ) extends ( ( k: infer I ) => void ) ? I : never;
