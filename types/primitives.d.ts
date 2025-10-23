@@ -1,3 +1,10 @@
+/**
+ * Primitive Types
+ * Primitive-related helpers and literal utilities.
+ * 
+ * @module types/primitives
+ */
+
 import { IsAny } from './base';
 
 /** Primitive types union */

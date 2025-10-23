@@ -1,8 +1,6 @@
 /**
  * Utility Types
- * 
  * Common utility types for manipulating and transforming types.
- * Serve as building blocks for more complex type operations.
  * 
  * @module types/utils
  */

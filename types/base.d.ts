@@ -1,8 +1,6 @@
 /**
  * Base Types
- * 
  * Core foundational utility types for high-performance type-level programming.
- * Keep these small and generic — many other modules build on them.
  * 
  * @module types/base
  */
