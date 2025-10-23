@@ -1,3 +1,10 @@
+/**
+ * Collection Types
+ * Collection and deep helpers (arrays, tuples, records).
+ * 
+ * @module types/collection
+ */
+
 /** Element type for arrays/tuples */
 export type ElementOf< T > = T extends readonly ( infer E )[] ? E : never;
 
