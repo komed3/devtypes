@@ -1,4 +1,9 @@
-/** Combinators: union/tuple/intersection utilities */
+/**
+ * Combinator Types
+ * Union, tuple, and intersection type helpers.
+ * 
+ * @module types/combinators
+ */
 
 /** Convert a tuple to a union */
 export type TupleToUnion< T extends readonly any[] > = T[ number ];
