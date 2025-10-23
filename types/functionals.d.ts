@@ -1,4 +1,9 @@
-/** Function-related higher-order type utilities */
+/**
+ * Functional Types
+ * Function-related higher-order type utilities.
+ * 
+ * @module types/functionals
+ */
 
 /** Curry a function type (simple 1-arg recursion) */
 export type Curry< F > = F extends ( ...args: infer Args ) =>
