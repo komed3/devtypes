@@ -20,6 +20,9 @@ export type IsUnknown< T > = IsAny< T > extends true ? false : unknown extends T
 /** Fast equality test — works for most practical cases */
 export type Equals< A, B > = ( < T >() => T extends A ? 1 : 2 ) extends ( < T >() => T extends B ? 1 : 2 ) ? true : false;
 
+/** Maybe type (null or undefined) */
+export type Maybe< T > = T | null | undefined;
+
 /** Simplify a type to make Intellisense show a friendly shape */
 export type Simplify< T > = T extends Function ? T : { [ K in keyof T ]: T[ K ] } & {};
 
