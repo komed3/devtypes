@@ -12,6 +12,12 @@ export type DeepPartial< T > = T extends Function ? T
     : T extends object ? { [ K in keyof T ]?: DeepPartial< T[ K ] > }
     : T;
 
+/** Deep required (recursive) */
+export type DeepRequired< T > = T extends Function ? T
+    : T extends Array< infer U > ? Array< DeepRequired< U > >
+    : T extends object ? { [ K in keyof T ]-?: DeepRequired< T[ K ] > }
+    : T;
+
 /** Deep readonly (recursive) */
 export type DeepReadonly< T > = T extends Function ? T
     : T extends Array< infer U > ? ReadonlyArray< DeepReadonly< U > >
