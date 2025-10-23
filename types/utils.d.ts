@@ -35,3 +35,6 @@ export type RequiredKeys< T > = { [ K in keyof T ]-?: {} extends Pick< T, K > ? 
 
 /** Expand/flatten insertion points for nicer hover results */
 export type Expand< T > = T extends object ? { [ K in keyof T ]: T[ K ] } & {} : T;
+
+/** Flatten array types for nicer hover results */
+export type Flatten< T > = T extends any[] ? { [ K in keyof T ]: T[ K ] } : T;
