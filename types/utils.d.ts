@@ -36,3 +36,10 @@ export type Expand< T > = T extends object ? { [ K in keyof T ]: T[ K ] } & {} :
 
 /** Flatten array types for nicer hover results */
 export type Flatten< T > = T extends any[] ? { [ K in keyof T ]: T[ K ] } : T;
+
+/**
+ * Exact - ensure T has exactly the properties of Shape (no more)
+ * Usage: Exact< { a:number }, { a:number } > -> passes;
+ *        Exact< { a:number; b: number }, { a:number } > -> fails
+ */
+export type Exact< T, Shape > = T extends Shape ? Exclude< keyof T, keyof Shape > extends never ? T : never : never;
