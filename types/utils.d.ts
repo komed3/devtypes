@@ -18,6 +18,28 @@ import { Simplify } from './base';
 export type Merge< Left, Right > = Simplify< Pick< Left, Exclude< keyof Left, keyof Right > > & Right >;
 
 /**
+ * Deep merge two object types; right-hand fields override left-hand ones recursively
+ * @example
+ * type A = { a: { x: number; y: string }; b: string };
+ * type B = { a: { y: number; z: boolean }; c: boolean };
+ * type Merged = DeepMerge<A, B>;
+ * // { a: { x: number; y: number; z: boolean }; b: string; c: boolean }
+ */
+export type DeepMerge< Left, Right > = {
+    [ K in keyof Left | keyof Right ]:
+        K extends keyof Right ? (
+            K extends keyof Left ?
+                Left[ K ] extends object ?
+                    Right[ K ] extends object ?
+                        DeepMerge< Left[ K ], Right[ K ] >
+                    : Right[ K ]
+                : Right[ K ]
+            : Right[ K ]
+        )
+    : K extends keyof Left ? Left[ K ] : never;
+} & {};
+
+/**
  * Intersection of unions -> prefer mapped merge strategy
  * @example
  * type U = { a: number } | { b: string };
