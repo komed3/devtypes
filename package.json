@@ -1,6 +1,6 @@
 {
   "name": "ts-abstract",
-  "description": "",
+  "description": "A comprehensive collection of highly-optimized TypeScript type utilities for building type-safe applications",
   "license": "MIT",
   "version": "1.0.0",
   "author": {
@@ -9,12 +9,38 @@
     "url": "https://komed3.de"
   },
   "homepage": "https://github.com/komed3/ts-abstract",
-  "keywords": [],
+  "keywords": [
+    "typescript",
+    "types",
+    "utility-types",
+    "type-safety",
+    "type-level",
+    "typescript-types",
+    "type-utils",
+    "constraints",
+    "deep-types"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/komed3/ts-abstract.git"
   },
   "bugs": {
     "url": "https://github.com/komed3/ts-abstract/issues"
+  },
+  "main": "types/index.d.ts",
+  "types": "types/index.d.ts",
+  "files": [
+    "types/**/*.d.ts",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
