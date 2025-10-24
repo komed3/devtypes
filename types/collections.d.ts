@@ -14,16 +14,26 @@ export type Flat< T extends readonly any[] > = T extends readonly ( infer E )[]
     : never;
 
 /** Deep partial (recursive) */
-export type DeepPartial< T > = T extends Function ? T
-    : T extends Array< infer U > ? Array< DeepPartial< U > >
-    : T extends object ? { [ K in keyof T ]?: DeepPartial< T[ K ] > }
-    : T;
+export type DeepPartial< T > = {
+    [ P in keyof T ]?: T[ P ] extends Array< infer U >
+        ? DeepPartial< U >[]
+        : T[ P ] extends ReadonlyArray< infer U >
+        ? ReadonlyArray< DeepPartial< U > >
+        : T[ P ] extends object
+            ? DeepPartial< T[ P ] >
+            : T[ P ];
+};
 
 /** Deep required (recursive) */
-export type DeepRequired< T > = T extends Function ? T
-    : T extends Array< infer U > ? Array< DeepRequired< U > >
-    : T extends object ? { [ K in keyof T ]-?: DeepRequired< T[ K ] > }
-    : T;
+export type DeepRequired< T > = {
+    [ P in keyof T ]-?: T[ P ] extends Array< infer U >
+        ? DeepRequired< U >[]
+        : T[ P ] extends ReadonlyArray< infer U >
+        ? ReadonlyArray< DeepRequired< U > >
+        : T[ P ] extends object
+            ? DeepRequired< T[ P ] >
+            : T[ P ];
+};
 
 /** Deep readonly (recursive) */
 export type DeepReadonly< T > = T extends Function ? T
