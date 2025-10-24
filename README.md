@@ -13,7 +13,7 @@ A comprehensive collection of high-performance TypeScript type utilities focused
 ## Installation
 
 ```bash
-npm install <...>
+npm install devtypes
 ```
 
 ## Quick Examples
@@ -21,7 +21,7 @@ npm install <...>
 ### Object Type Manipulation
 
 ```ts
-import { Merge, RequireExactlyOne } from '<...>';
+import { Merge, RequireExactlyOne } from 'devtypes';
 
 type UserBase = { id: number; name: string; email?: string };
 type UserAuth = { email: string; password: string };
@@ -40,7 +40,7 @@ type LoginCredentials = RequireExactlyOne<
 ### Deep Utilities
 
 ```ts
-import { DeepPartial, DeepRequired } from '<...>';
+import { DeepPartial, DeepRequired } from 'devtypes';
 
 interface Config {
     server: {
@@ -82,10 +82,10 @@ Import from specific modules:
 
 ```ts
 // Good
-import { Merge } from '<...>/types/utils';
+import { Merge } from 'devtypes/types/utils';
 
 // Avoid
-import { Merge } from '<...>';
+import { Merge } from 'devtypes';
 ```
 
 ## License

@@ -1,5 +1,5 @@
 {
-  "name": "ts-abstract",
+  "name": "devtypes",
   "description": "A comprehensive collection of highly-optimized TypeScript type utilities for building type-safe applications",
   "license": "MIT",
   "version": "1.0.0",
@@ -8,7 +8,7 @@
     "email": "webmaster@komed3.de",
     "url": "https://komed3.de"
   },
-  "homepage": "https://github.com/komed3/ts-abstract",
+  "homepage": "https://github.com/komed3/devtypes",
   "keywords": [
     "typescript",
     "types",
@@ -22,10 +22,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/komed3/ts-abstract.git"
+    "url": "git+https://github.com/komed3/devtypes.git"
   },
   "bugs": {
-    "url": "https://github.com/komed3/ts-abstract/issues"
+    "url": "https://github.com/komed3/devtypes/issues"
   },
   "main": "types/index.d.ts",
   "types": "types/index.d.ts",
