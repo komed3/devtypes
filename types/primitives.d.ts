@@ -25,4 +25,8 @@ export type IsLiteral< T > = IsAny< T > extends true ? false : (
 );
 
 /** Convert a union of primitive literals to a union of corresponding boxed types */
-export type Box<T> = T extends string ? String : T extends number ? Number : T extends boolean ? Boolean : T;
+export type Box< T > = T extends string ? String
+    : T extends number ? Number
+    : T extends boolean ? Boolean
+    : T extends Symbol ? Symbol
+    : T;
