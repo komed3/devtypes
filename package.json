@@ -2,7 +2,7 @@
   "name": "devtypes",
   "description": "A comprehensive collection of highly-optimized TypeScript type utilities for building type-safe applications",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "komed3 (Paul Köhler)",
     "email": "webmaster@komed3.de",
