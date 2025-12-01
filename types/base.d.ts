@@ -69,11 +69,13 @@ export type Simplify< T > = T extends Function ? T : { [ K in keyof T ]: T[ K ] 
 export type Narrow< T > = T extends string ? ( string extends T ? T : T ) : T extends number ? ( number extends T ? T : T ) : T;
 
 /**
- * Branding/nominal typing
+ * Brand a type with a unique tag to create nominal typing
  * @example
- * type UserID = Brand<number, 'UserID'>; // nominally typed UserID
+ * type UserID = Brand<number, 'UserID', '__userID', true>;
+ * const id: UserID = 123 as UserID;
  */
-export type Brand< Base, Tag extends string > = Base & { readonly __brand?: Tag };
+export type Brand< Base, Tag extends string, Key extends string = '__brand', Required extends boolean = false > =
+    Base & Required extends true ? { readonly [ K in Key ]: Tag } : { readonly [ K in Key ]?: Tag };
 
 /**
  * Cast a type to another, preserving assignability when possible
