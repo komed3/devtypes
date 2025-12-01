@@ -75,7 +75,7 @@ export type Narrow< T > = T extends string ? ( string extends T ? T : T ) : T ex
  * const id: UserID = 123 as UserID;
  */
 export type Brand< Base, Tag extends string, Key extends string = '__brand', Required extends boolean = false > =
-    Base & Required extends true ? { readonly [ K in Key ]: Tag } : { readonly [ K in Key ]?: Tag };
+    Base & If< Required, { readonly [ K in Key ]: Tag }, { readonly [ K in Key ]?: Tag } >;
 
 /**
  * Cast a type to another, preserving assignability when possible
