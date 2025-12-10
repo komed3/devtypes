@@ -23,7 +23,7 @@
  * ```
  * 
  * @author Paul Köhler (komed3)
- * @version 1.0.1
+ * @version 1.0.2
  * @license MIT
  */
 
@@ -32,5 +32,6 @@ export * from './collections';
 export * from './combinators';
 export * from './constraints';
 export * from './functionals';
+export * from './lists';
 export * from './primitives';
 export * from './utils';
