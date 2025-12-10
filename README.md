@@ -73,6 +73,7 @@ type FullConfig = DeepRequired< Config >;
 - **combinators** - Union and tuple operations
 - **constraints** - Property requirement utilities
 - **functionals** - Function type utilities
+- **lists** - Tuple and array type helpers
 - **primitives** - Primitive type helpers
 - **utils** - General type transformations
 
