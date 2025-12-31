@@ -12,22 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Create output directory
-        run: |
-          mkdir -p ./out
-      - name: Build
         uses: andstor/jsdoc-action@v1
         with:
           source_dir: ./types
+          recurse: true
           output_dir: ./out
           template: minami
           front_page: README.md
-      - name: Funny Debug step 1
-        run: |
-          touch ./out/IHATEYOU.md
-      - name: Funny Debug step 2
-        run: |
-          ls -lah ./out
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
