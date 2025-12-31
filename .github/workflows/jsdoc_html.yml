@@ -23,7 +23,12 @@ jobs:
       - name: Funny Debug
         run: |
           ls -lah ./out
-
+      - name: Create output directory
+        run: |
+          mkdir -p ./out
+      - name: Funny Debug step 2
+        run: |
+          touch IHATEYOU.md
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
