@@ -20,12 +20,6 @@ jobs:
           output_dir: ./out
           template: minami
           front_page: README.md
-      - name: Funny Debug step 1
-        run: |
-          touch ./out/IHATEYOU.md
-      - name: Funny Debug step 2
-        run: |
-          ls -lah ./out
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
