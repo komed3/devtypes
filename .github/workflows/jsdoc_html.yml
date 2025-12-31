@@ -18,7 +18,6 @@ jobs:
         with:
           source_dir: ./types
           output_dir: ./out
-          config_file: conf.json
           template: minami
           front_page: README.md
 
