@@ -25,7 +25,7 @@ jobs:
           mkdir -p ./out
       - name: Funny Debug step 1
         run: |
-          touch .out/IHATEYOU.md
+          touch ./out/IHATEYOU.md
       - name: Funny Debug step 2
         run: |
           ls -lah ./out
