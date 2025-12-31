@@ -25,5 +25,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           deploy_key: ${{ secrets.GITHUB_TOKEN }}
-          deploy_branch: gh-pages
           publish_dir: ./out
