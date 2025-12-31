@@ -6,9 +6,8 @@ on:
     branches:
       - master
 
-
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,13 +17,12 @@ jobs:
         uses: andstor/jsdoc-action@v1
         with:
           source_dir: ./types
-          output_dir: ./docs
+          output_dir: ./out
           template: minami
           front_page: README.md
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          deploy_branch: gh-pages
-          deploy_folder: ./docs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
