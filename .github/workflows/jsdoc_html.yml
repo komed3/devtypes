@@ -6,6 +6,7 @@ on:
     branches:
       - master
 
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,7 +23,8 @@ jobs:
           front_page: README.md
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deploy_branch: gh-pages
+          deploy_folder: ./out
