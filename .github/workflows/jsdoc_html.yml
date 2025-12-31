@@ -12,9 +12,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Funny Debug step 2
+      - name: jsdoc-action does not support d.ts
         run: |
-          ls -lah ./types
+          find . -name "*.d.ts" -exec bash -c 'mv "$1" "${1%.d.ts}".ts' - '{}' +
       - name: Build
         uses: andstor/jsdoc-action@v1
         with:
