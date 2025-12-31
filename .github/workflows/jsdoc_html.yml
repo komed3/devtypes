@@ -22,9 +22,8 @@ jobs:
           front_page: README.md
 
       - name: Deploy
-        uses: JamesIbbotson/gh-pages-deploy-action@v1
+        uses: peaceiris/actions-gh-pages@v4
         with:
           deploy_key: ${{ secrets.GITHUB_TOKEN }}
           deploy_branch: gh-pages
-          deploy_folder: ./
           publish_dir: ./out
