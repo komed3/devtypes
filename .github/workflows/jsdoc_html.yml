@@ -18,7 +18,7 @@ jobs:
         uses: andstor/jsdoc-action@v1
         with:
           source_dir: ./types
-          output_dir: ./out
+          output_dir: ./docs
           template: minami
           front_page: README.md
 
@@ -27,4 +27,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           deploy_branch: gh-pages
-          deploy_folder: ./out
+          deploy_folder: ./docs
