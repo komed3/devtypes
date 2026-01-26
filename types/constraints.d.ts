@@ -1,40 +1,55 @@
 /**
  * Constraint Types
- * Types for enforcing specific requirements on object properties and structure validation.
+ * 
+ * Utility types for enforcing structural constraints on object types,
+ * including required/optional properties and mutually exclusive fields.
  * 
  * @module types/constraints
+ * @since 1.0.0
  */
 
 /**
- * Extract the keys of properties that are optional
- * Identifies properties that have undefined in their value type.
+ * Extract the keys of optional properties.
  * 
- * @template T - The object type to analyze
+ * @remarks
+ * Identifies properties that are optional in the object type, including
+ * properties whose value type explicitly allows `undefined`.
+ * 
+ * @template T - Object type to analyze
  * 
  * @example
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
- * type OptKeys = OptionalKeys< Obj >; // "b" | "c"
+ * type OptKeys = OptionalKeys< Obj >;
+ * // "b" | "c"
  */
-export type OptionalKeys< T > = { [ K in keyof T ]-?: {} extends Pick< T, K > ? K : never }[ keyof T ];
+export type OptionalKeys< T > =
+    { [ K in keyof T ]-?: {} extends Pick< T, K > ? K : never }[ keyof T ];
 
 /**
- * Extract the keys of properties that are required
- * Identifies properties that do not have undefined in their value type.
+ * Extract the keys of required properties.
  * 
- * @template T - The object type to analyze
+ * @remarks
+ * Identifies properties that must be present and do not allow `undefined`.
+ * 
+ * @template T - Object type to analyze
  * 
  * @example
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
- * type ReqKeys = RequiredKeys< Obj >; // "a" | "d"
+ * type ReqKeys = RequiredKeys< Obj >;
+ * // "a" | "d"
  */
-export type RequiredKeys< T > = { [ K in keyof T ]-?: {} extends Pick< T, K > ? never : K }[ keyof T ];
+export type RequiredKeys< T > =
+    { [ K in keyof T ]-?: {} extends Pick< T, K > ? never : K }[ keyof T ];
 
 /**
- * Extract specific properties as a partial type
- * Creates an optional subset of the target object properties.
+ * Extract specific properties as optional.
  * 
- * @template T - The object type
- * @template K - The keys to extract as optional
+ * @remarks
+ * Creates a new object type containing only the selected keys, all marked
+ * as optional regardless of their original required state.
+ * 
+ * @template T - Source object type
+ * @template K - Keys to extract
  * 
  * @example
  * type User = { id: number; name: string; email?: string; phone?: string };
@@ -44,11 +59,14 @@ export type RequiredKeys< T > = { [ K in keyof T ]-?: {} extends Pick< T, K > ? 
 export type ExtractFrom< T, K extends keyof T > = Partial< Pick< T, K > >;
 
 /**
- * Require specific properties (make them required)
- * Creates a required subset of the target object properties.
+ * Extract specific properties as required.
  * 
- * @template T - The object type
- * @template K - The keys to require
+ * @remarks
+ * Creates a new object type containing only the selected keys, all marked
+ * as required regardless of their original optional state.
+ * 
+ * @template T - Source object type
+ * @template K - Keys to require
  * 
  * @example
  * type User = { id: number; name: string; email?: string; phone?: string };
@@ -58,50 +76,123 @@ export type ExtractFrom< T, K extends keyof T > = Partial< Pick< T, K > >;
 export type RequireFrom< T, K extends keyof T > = Required< Pick< T, K > >;
 
 /**
- * Require exactly one property from a set
- * Creates a union of types where each variant has exactly one of the specified properties required.
+ * Require exactly one property from a set.
  * 
- * @template T - The object type
- * @template K - The keys where exactly one must be required (defaults to all keys)
+ * @remarks
+ * Produces a union of object variants where exactly one of the specified
+ * properties is present and all others are explicitly disallowed.
+ * 
+ * @template T - Source object type
+ * @template K - Keys where exactly one must be present (defaults to all keys)
  * 
  * @example
  * type Test = { a?: string; b?: number; c: boolean };
  * type Result = RequireExactlyOne< Test, 'a' | 'b' >;
  * // { a: string; b?: never; c: boolean } | { a?: never; b: number; c: boolean }
  */
-export type RequireExactlyOne< T, K extends keyof T = keyof T > = {
-    [ P in K ]: Required< Pick< T, P > > &
+export type RequireExactlyOne< T, K extends keyof T = keyof T > =
+    { [ P in K ]:
+        Required< Pick< T, P > > &
         Partial< Record< Exclude< K, P >, never > > &
         Omit< T, K >;
-}[ K ];
+    }[ K ];
 
 /**
- * Require at least one property from a set
- * Creates a union of types where each variant has at least one of the specified properties required.
+ * Require at least one property from a set.
  * 
- * @template T - The object type
- * @template K - The keys where at least one must be required (defaults to all keys)
+ * @remarks
+ * Produces a union of object variants where at least one of the specified
+ * properties must be present.
+ * 
+ * @template T - Source object type
+ * @template K - Keys where at least one must be present (defaults to all keys)
+ * 
+ * @example
+ * type Test = { a?: string; b?: number; };
+ * type Result = RequireAtLeastOne< Test, 'a' | 'b' >;
+ * // { a: string; b?: number; } | { a?: string; b: number; } | { a: string; b: number; }
+ */
+export type RequireAtLeastOne< T, K extends keyof T = keyof T > =
+    Pick< T, Exclude< keyof T, K > > &
+    { [ P in K ]:
+        Required< Pick< T, P > > &
+        Partial< Pick< T, Exclude< K, P > > >;
+    }[ K ];
+
+/**
+ * Require none of the specified properties.
+ * 
+ * @since 1.1.0
+ * @remarks
+ * Explicitly disallows a set of properties by forcing them to `never`.
+ * Useful for mutually exclusive object shapes.
+ * 
+ * @template T - Source object type
+ * @template K - Keys that must not be present
  * 
  * @example
  * type Test = { a?: string; b?: number; c: boolean };
- * type Result = RequireAtLeastOne< Test, 'a' | 'b' >;
+ * type Result = RequireNone< Test, 'a' | 'b' >;
+ * // { c: boolean; a?: never; b?: never; }
  */
-export type RequireAtLeastOne< T, K extends keyof T = keyof T > = Pick< T, Exclude< keyof T, K > > & {
-    [ P in K ]: Required< Pick< T, P > > & Partial< Pick< T, Exclude< K, P > > >;
-}[ K ];
+export type RequireNone< T, K extends keyof T > =
+    Omit< T, K > &
+    Partial< Record< K, never > >;
 
 /**
- * Create a strict object subset with required and optional properties
- * Builds a type with specified required and optional properties from the target.
+ * Require all or none of a set of properties.
  * 
- * @template T - The object type
- * @template R - The keys that must be required
- * @template O - The keys that should be optional
+ * @since 1.1.0
+ * @remarks
+ * Either all specified properties must be present, or none of them.
  * 
+ * @template T - Source object type
+ * @template K - Keys participating in the constraint
+ * 
+ * @example
+ * type Test = { a?: string; b?: number; c: boolean };
+ * type Result = RequireAllOrNone< Test, 'a' | 'b' >;
+ * // { a: string; b: number; c: boolean } | { c: boolean; a?: never; b?: never; }
+ */
+export type RequireAllOrNone< T, K extends keyof T > =
+    | ( T & Required< Pick< T, K > > )
+    | RequireNone< T, K >;
+
+/**
+ * Make specific properties non-nullable.
+ *
+ * @since 1.1.0
+ * @remarks
+ * Removes `null` and `undefined` from the selected property value types.
+ *
+ * @template T - Source object type
+ * @template K - Keys to make non-nullable
+ * 
+ * @example
+ * type User = { id: number | null; name?: string | undefined; email: string | null };
+ * type NonNullableUser = NonNullableProps< User, 'id' | 'name' >;
+ * // { id: number; name?: string; email: string | null; }
+ */
+export type NonNullableProps< T, K extends keyof T > =
+    Omit< T, K > &
+    { [ P in K ]: NonNullable< T[ P ] > };
+
+/**
+ * Create a strict object subset.
+ *
+ * @remarks
+ * Builds a new object type consisting only of explicitly required and
+ * optional properties. All other properties are excluded.
+ *
+ * @template T - Source object type
+ * @template R - Keys that must be required
+ * @template O - Keys that should be optional
+ *
  * @example
  * type User = { id: number; name: string; email?: string; phone?: string };
  * type UserSubset = StrictSubset< User, 'id', 'email' | 'phone' >;
  * // { id: number; email?: string; phone?: string }
  */
 export type StrictSubset< T extends object, R extends keyof T, O extends keyof T > =
-    RequireFrom< T, R > & ExtractFrom< T, O >;
+    RequireFrom< T, R > &
+    ExtractFrom< T, O >;
