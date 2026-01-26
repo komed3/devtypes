@@ -112,26 +112,23 @@ export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer 
 
 
 /**
- * Deep Intersection (recursive)
+ * Deep recursive intersection of two types
  * @example
  * type Nested = { level_1: { level_2: { } } };
  * type MetaData = { metadata?: string };
  * type DeepIntersected = DeepIntersection<Nested, MetaData>;
  * // { level_1: { level_2: { metadata: '' } } }
-}
  * @remarks
- * In case of property conflict, the Target type(T) will not get its properties overwritten by the aDditionnal type(D)
+ * In case of property conflict, the target type T will not get its properties overwritten by additionnal type D
  */
 export type DeepIntersection< T, D > = {
-  [ P in keyof T ]: T[ P ] extends Array< infer U >
-        ? DeepIntersection< U, D>[]
+    [ P in keyof T ]: T[ P ] extends Array< infer U >
+        ? DeepIntersection< U, D >[]
         : T[ P ] extends ReadonlyArray< infer U >
-        ? ReadonlyArray< DeepIntersection< U, D > >
-        : T[ P ] extends object
-            ? DeepIntersection< T[ P ], D >
-            : T[ P ];
+            ? ReadonlyArray< DeepIntersection< U, D > >
+            : T[ P ] extends object
+                ? DeepIntersection< T[ P ], D >
+                : T[ P ];
 } & {
-  [ P in keyof D ]: P extends keyof T ? 
-    never : 
-    D[ P ]
+    [ P in keyof D ]: P extends keyof T ? never : D[ P ]
 };
