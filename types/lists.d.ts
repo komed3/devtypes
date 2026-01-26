@@ -1,21 +1,25 @@
 /**
  * List-like Types
- * Utilities for working with list-like structures (arrays, records, sets, maps, iterables).
+ * 
+ * Utility types for working with list-like data structures such as arrays,
+ * records, sets, maps, and generic iterables.
  * 
  * @module types/lists
+ * @since 1.0.0
  */
 
 /**
- * Any list-like structure
- * A union representing all common collection types in JavaScript.
- * Useful when an API accepts any iterable or collection of values.
+ * Any list-like structure.
  * 
- * @template T - The element/value type
- * @template I - The index/key type for keyed collections (defaults to string | number)
+ * @remarks
+ * Represents the most common collection and iterable types in JavaScript.
+ * Useful for APIs that accept any kind of value collection.
+ * 
+ * @template T - Element or value type
+ * @template I - Index or key type for keyed collections
  * 
  * @example
  * type NumList = ListLike< number >;
- * // number[] | ReadonlyArray< number > | Set< number > | Map< string | number, number > | ...
  */
 export type ListLike< T = any, I extends string | number = string | number > =
     | T[]
@@ -28,61 +32,73 @@ export type ListLike< T = any, I extends string | number = string | number > =
     | Iterable< T >;
 
 /**
- * Extract the element/value type from any ListLike structure
- * Works with arrays, sets, maps, records, and iterables.
+ * Extract the element or value type from a list-like structure.
  * 
- * @template L - A ListLike type
+ * @remarks
+ * Works with arrays, records, sets, maps, and generic iterables.
+ * 
+ * @template L - List-like type
  * 
  * @example
- * type LE1 = ListElement< number[] >;                  // number
- * type LE2 = ListElement< Set< string > >;             // string
- * type LE3 = ListElement< Record< string, boolean > >; // boolean
+ * type E1 = ListElement< number[] >;                  // number
+ * type E2 = ListElement< Set< string > >;             // string
+ * type E3 = ListElement< Record< string, boolean > >; // boolean
  */
-export type ListElement< L > = L extends ( infer E )[] ? E
-    : L extends ReadonlyArray< infer RE > ? RE
-    : L extends Set< infer SE > ? SE
-    : L extends ReadonlySet< infer RSE > ? RSE
-    : L extends Map< any, infer MV > ? MV
-    : L extends ReadonlyMap< any, infer RMV > ? RMV
-    : L extends Record< any, infer RV > ? RV
-    : L extends Iterable< infer IT > ? IT
-    : never;
+export type ListElement< L > =
+    L extends ( infer E )[] ? E
+        : L extends ReadonlyArray< infer RE > ? RE
+        : L extends Set< infer SE > ? SE
+        : L extends ReadonlySet< infer RSE > ? RSE
+        : L extends Map< any, infer MV > ? MV
+        : L extends ReadonlyMap< any, infer RMV > ? RMV
+        : L extends Record< any, infer RV > ? RV
+        : L extends Iterable< infer IT > ? IT
+        : never;
 
 /**
- * Extract the key/index type from a keyed ListLike collection
- * Works with records and maps; defaults to string | number for other types.
+ * Extract the key or index type from a keyed list-like structure.
  * 
- * @template L - A ListLike type
+ * @remarks
+ * For arrays and other non-keyed collections, this defaults to
+ * `string | number`.
+ * 
+ * @template L - List-like type
  * 
  * @example
- * type LI1 = ListLikeIndex< Record< string, number > >; // string
- * type LI2 = ListLikeIndex< Map< number, string > >;    // number
- * type LI3 = ListLikeIndex< number[] >;                 // string | number
+ * type I1 = ListLikeIndex< Record< string, number > >; // string
+ * type I2 = ListLikeIndex< Map< number, string > >;    // number
+ * type I3 = ListLikeIndex< number[] >;                 // string | number
  */
-export type ListLikeIndex< L > = L extends Record< infer K, any > ? K
-    : L extends Map< infer MK, any > ? MK : number | string;
+export type ListLikeIndex< L > =
+    L extends Record< infer K, any > ? K
+        : L extends Map< infer MK, any > ? MK
+        : string | number;
 
 /**
- * Test if a type is ListLike (conservative check)
- * Returns true for any recognizable list-like structure.
+ * Test whether a type is list-like.
  * 
- * @template T - The type to test
+ * @remarks
+ * Conservative structural check against known list-like shapes.
  * 
+ * @template T - Type to test
+ *
  * @example
- * type IL1 = IsListLike< number[] >;                 // true
- * type IL2 = IsListLike< Record< string, number > >; // true
- * type IL3 = IsListLike< string >;                   // false
+ * type A = IsListLike< number[] >;                 // true
+ * type B = IsListLike< Record< string, number > >; // true
+ * type C = IsListLike< string >;                   // false
  */
 export type IsListLike< T > = T extends ListLike< any, any > ? true : false;
 
 /**
- * Convert any ListLike to an array of its elements
- * Extracts the element type and wraps it in an array.
+ * Convert a list-like structure to an array type.
  * 
- * @template L - A ListLike type
+ * @remarks
+ * Extracts the element type and wraps it in a mutable array.
+ * 
+ * @template L - List-like type
  * 
  * @example
- * type LA1 = ToArray< number[] >;      // number[]
- * type LA2 = ToArray< Set< string > >; // string[]
+ * type A = ToArray< number[] >;      // number[]
+ * type B = ToArray< Set< string > >; // string[]
  */
 export type ToArray< L > = ListElement< L >[];
