@@ -86,18 +86,6 @@ export type Flatten< T > = T extends any[] ? { [ K in keyof T ]: T[ K ] } : T;
 export type Exact< T, Shape > = T extends Shape ? Exclude< keyof T, keyof Shape > extends never ? T : never : never;
 
 /**
- * Convert a union type to an intersection
- * All union members must be combined into a single type.
- * 
- * @template U - A union type
- * 
- * @example
- * type U = { a: number } | { b: string };
- * type I = UnionToIntersection< U >; // { a: number } & { b: string }
- */
-export type UnionToIntersection< U > = ( U extends any ? ( k: U ) => void : never ) extends ( ( k: infer I ) => void ) ? I : never;
-
-/**
  * Pick specific members from a union by type
  * Extracts only the union members that extend a given type.
  * 
