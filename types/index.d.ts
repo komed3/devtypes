@@ -28,6 +28,7 @@
  */
 
 export * from './base';
+export * from './classes';
 export * from './collections';
 export * from './combinators';
 export * from './constraints';
