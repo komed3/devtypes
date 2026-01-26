@@ -23,7 +23,7 @@
  * ```
  * 
  * @author Paul Köhler (komed3)
- * @version 1.0.2
+ * @version 1.1.0
  * @license MIT
  */
 

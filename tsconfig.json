@@ -1,5 +1,5 @@
 {
-    "compilerOptions": {
-        "lib": ["ES2015"]
-    }
+  "compilerOptions": {
+    "lib": [ "ES2015" ]
+  }
 }

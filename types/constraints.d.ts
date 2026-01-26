@@ -6,6 +6,30 @@
  */
 
 /**
+ * Extract the keys of properties that are optional
+ * Identifies properties that have undefined in their value type.
+ * 
+ * @template T - The object type to analyze
+ * 
+ * @example
+ * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
+ * type OptKeys = OptionalKeys< Obj >; // "b" | "c"
+ */
+export type OptionalKeys< T > = { [ K in keyof T ]-?: {} extends Pick< T, K > ? K : never }[ keyof T ];
+
+/**
+ * Extract the keys of properties that are required
+ * Identifies properties that do not have undefined in their value type.
+ * 
+ * @template T - The object type to analyze
+ * 
+ * @example
+ * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
+ * type ReqKeys = RequiredKeys< Obj >; // "a" | "d"
+ */
+export type RequiredKeys< T > = { [ K in keyof T ]-?: {} extends Pick< T, K > ? never : K }[ keyof T ];
+
+/**
  * Extract specific properties as a partial type
  * Creates an optional subset of the target object properties.
  * 

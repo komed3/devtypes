@@ -83,7 +83,7 @@ Import from specific modules:
 
 ```ts
 // Good
-import { Merge } from 'devtypes/types/utils';
+import { Merge } from 'devtypes/types/collections';
 
 // Avoid
 import { Merge } from 'devtypes';
@@ -91,5 +91,5 @@ import { Merge } from 'devtypes';
 
 ## License
 
-**Copyright 2025 Paul Köhler (komed3).**  
+**Copyright 2025–2026 Paul Köhler (komed3).**  
 Distributed under the MIT license.
