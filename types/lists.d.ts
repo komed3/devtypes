@@ -1,19 +1,21 @@
 /**
- * List-like types
- * Types for list-like structures such as arrays, sets, maps, records, and iterables.
+ * List-like Types
+ * Utilities for working with list-like structures (arrays, records, sets, maps, iterables).
  * 
  * @module types/lists
  */
 
 /**
- * List-like structures: arrays, records, sets, maps and iterables.
- * This union is useful when an API accepts any iterable/collection of values.
- * - Includes mutable and readonly arrays
- * - Includes `Record` keyed collections
- * - Includes `Set` and `Map` variants
+ * Any list-like structure
+ * A union representing all common collection types in JavaScript.
+ * Useful when an API accepts any iterable or collection of values.
+ * 
+ * @template T - The element/value type
+ * @template I - The index/key type for keyed collections (defaults to string | number)
+ * 
  * @example
- * type MyList = ListLike<number>;
- * // number[] | ReadonlyArray<number> | ... | Iterable<number>
+ * type NumList = ListLike< number >;
+ * // number[] | ReadonlyArray< number > | Set< number > | Map< string | number, number > | ...
  */
 export type ListLike< T = any, I extends string | number = string | number > =
     | T[]
@@ -26,13 +28,17 @@ export type ListLike< T = any, I extends string | number = string | number > =
     | Iterable< T >;
 
 /**
- * Extract the element/value type from a `ListLike`
+ * Extract the element/value type from any ListLike structure
+ * Works with arrays, sets, maps, records, and iterables.
+ * 
+ * @template L - A ListLike type
+ * 
  * @example
- * type LE1 = ListElement<number[]>; // number
- * type LE2 = ListElement<ReadonlyArray<string>>; // string
+ * type LE1 = ListElement< number[] >;                  // number
+ * type LE2 = ListElement< Set< string > >;             // string
+ * type LE3 = ListElement< Record< string, boolean > >; // boolean
  */
-export type ListElement< L > =
-    L extends ( infer E )[] ? E
+export type ListElement< L > = L extends ( infer E )[] ? E
     : L extends ReadonlyArray< infer RE > ? RE
     : L extends Set< infer SE > ? SE
     : L extends ReadonlySet< infer RSE > ? RSE
@@ -43,30 +49,40 @@ export type ListElement< L > =
     : never;
 
 /**
- * Extract key/index type for list-like keyed collections (Record/Map)
- * Defaults to `string | number`
+ * Extract the key/index type from a keyed ListLike collection
+ * Works with records and maps; defaults to string | number for other types.
+ * 
+ * @template L - A ListLike type
+ * 
  * @example
- * type LI1 = ListLikeIndex<Record<string, number>>; // string
- * type LI2 = ListLikeIndex<Map<number, string>>; // number
+ * type LI1 = ListLikeIndex< Record< string, number > >; // string
+ * type LI2 = ListLikeIndex< Map< number, string > >;    // number
+ * type LI3 = ListLikeIndex< number[] >;                 // string | number
  */
-export type ListLikeIndex< L > =
-    L extends Record< infer K, any > ? K
-    : L extends Map< infer MK, any > ? MK
-    : number | string;
+export type ListLikeIndex< L > = L extends Record< infer K, any > ? K
+    : L extends Map< infer MK, any > ? MK : number | string;
 
 /**
- * True if T is a ListLike (conservative)
+ * Test if a type is ListLike (conservative check)
+ * Returns true for any recognizable list-like structure.
+ * 
+ * @template T - The type to test
+ * 
  * @example
- * type IL1 = IsListLike<number[]>; // true
- * type IL2 = IsListLike<Record<string, number>>; // true
- * type IL3 = IsListLike<string>; // false
+ * type IL1 = IsListLike< number[] >;                 // true
+ * type IL2 = IsListLike< Record< string, number > >; // true
+ * type IL3 = IsListLike< string >;                   // false
  */
 export type IsListLike< T > = T extends ListLike< any, any > ? true : false;
 
 /**
  * Convert any ListLike to an array of its elements
+ * Extracts the element type and wraps it in an array.
+ * 
+ * @template L - A ListLike type
+ * 
  * @example
- * type LA1 = ToArray<number[]>; // number[]
- * type LA2 = ToArray<Set<string>>; // string[]
+ * type LA1 = ToArray< number[] >;      // number[]
+ * type LA2 = ToArray< Set< string > >; // string[]
  */
 export type ToArray< L > = ListElement< L >[];
