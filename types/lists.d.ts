@@ -102,3 +102,85 @@ export type IsListLike< T > = T extends ListLike< any, any > ? true : false;
  * type B = ToArray< Set< string > >; // string[]
  */
 export type ToArray< L > = ListElement< L >[];
+
+/**
+ * Convert a list-like structure to a readonly array.
+ * 
+ * @since 1.1.0
+ * @remarks
+ * Extracts the element type and wraps it in a readonly array.
+ * 
+ * @template L - List-like type
+ * 
+ * @example
+ * type A = ToReadonlyArray< number[] >;      // ReadonlyArray< number >
+ * type B = ToReadonlyArray< Set< string > >; // ReadonlyArray< string >
+ */
+export type ToReadonlyArray< L > = ReadonlyArray< ListElement< L > >;
+
+/**
+ * Convert a list-like structure to a Set.
+ * 
+ * @since 1.1.0
+ * @remarks
+ * Extracts the element type and wraps it in a Set.
+ * 
+ * @template L - List-like type
+ * 
+ * @example
+ * type A = ToSet< number[] >;        // Set< number >
+ * type B = ToSet< Array< string > >; // Set< string >
+ */
+export type ToSet< L > = Set< ListElement< L > >;
+
+/**
+ * Convert a list-like structure to a Map.
+ * 
+ * @since 1.1.0
+ * @remarks
+ * For non-keyed collections, the key type defaults to `string | number`.
+ * 
+ * @template L - List-like type
+ * 
+ * @example
+ * type A = ToMap< Record< string, number > >; // Map< string, number >
+ * type B = ToMap< number[] >;                 // Map< string | number, number >
+ */
+export type ToMap< L > = Map< ListLikeIndex< L >, ListElement< L > >;
+
+/**
+ * Test whether a list-like structure is keyed.
+ * 
+ * @since 1.1.0
+ * @remarks
+ * Returns `true` for records and maps, `false` otherwise.
+ * 
+ * @template L - List-like type
+ * 
+ * @example
+ * type A = IsKeyedList< Record< string, number > >; // true
+ * type B = IsKeyedList< Map< number, string > >;    // true
+ * type C = IsKeyedList< number[] >;                 // false
+ */
+export type IsKeyedList< L > =
+    L extends Record< any, any >
+        ? true
+        : L extends Map< any, any >
+            ? true
+            : false;
+
+/**
+ * Test whether a list-like structure is index-based.
+ * 
+ * @since 1.1.0
+ * @remarks
+ * Returns `true` for arrays and readonly arrays.
+ * 
+ * @template L - List-like type
+ * 
+ * @example
+ * type A = IsIndexedList< number[] >; // true
+ * type B = IsIndexedList< ReadonlyArray< string > >; // true
+ * type C = IsIndexedList< Set< boolean > >; // false
+ */
+export type IsIndexedList< L > = L extends readonly any[] ? true : false;
