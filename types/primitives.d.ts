@@ -1,48 +1,73 @@
 /**
  * Primitive Types
- * Utilities for working with primitive types, literals, and type narrowing.
+ * 
+ * Utility types for working with JavaScript primitive values, literals,
+ * and advanced type narrowing.
  * 
  * @module types/primitives
+ * @since 1.0.0
  */
 
 import type { IsAny } from './base';
 
 /**
- * All primitive types
- * A union of all JavaScript primitive types.
+ * All JavaScript primitive types.
+ * 
+ * @remarks
+ * Includes all ECMAScript primitives as defined by the language specification.
  * 
  * @example
- * type P = Primitive; // string | number | boolean | symbol | null | undefined
+ * type P = Primitive;
+ * // string | number | boolean | symbol | null | undefined
  */
-export type Primitive = string | number | boolean | symbol | null | undefined;
+export type Primitive =
+    | string
+    | number
+    | boolean
+    | symbol
+    | null
+    | undefined;
 
 /**
- * All non-primitive types
+ * All non-primitive JavaScript types.
+ * 
+ * @remarks
+ * Represents values that are not primitives, including objects and functions.
  * 
  * @example
- * type NP = NonPrimitive; // object | Function
+ * type NP = NonPrimitive;
+ * // object | Function
  */
 export type NonPrimitive = object | Function;
 
 /**
- * Literal union with autocomplete
- * Creates a union that allows a literal value or any value of its base type,
- * while maintaining IntelliSense autocomplete for the literals.
+ * Literal union with IntelliSense autocomplete support.
  * 
- * @template T - The union of literal types
- * @template U - The base type of the literals (defaults to string)
+ * @remarks
+ * Creates a union that accepts a set of literal values while still allowing
+ * arbitrary values of the base type. This preserves editor autocomplete for
+ * the literals without restricting extensibility.
+ * 
+ * @template T - Union of literal types
+ * @template U - Base type of the literals (defaults to `string`)
  * 
  * @example
  * type Size = LiteralUnion< 'small' | 'medium' | 'large' >;
  * // 'small' | 'medium' | 'large' | (string & {})
  */
-export type LiteralUnion< T extends U, U = string > = T | ( U & Record< never, never > );
+export type LiteralUnion< T extends U, U = string > =
+    | T
+    | ( U & Record< never, never > );
 
 /**
- * Test if a type is a literal (string, number, or boolean literal)
- * Distinguishes between literal types and their general base types.
+ * Test whether a type is a literal type.
  * 
- * @template T - The type to test
+ * @remarks
+ * Distinguishes string, number, and boolean literals from their
+ * corresponding primitive base types. The `any` type always resolves
+ * to `false` to avoid false positives.
+ * 
+ * @template T - Type to test
  * 
  * @example
  * type A = IsLiteral< 'hello' >;  // true
@@ -50,21 +75,29 @@ export type LiteralUnion< T extends U, U = string > = T | ( U & Record< never, n
  * type C = IsLiteral< true >;     // true
  * type D = IsLiteral< string >;   // false
  */
-export type IsLiteral< T > = IsAny< T > extends true ? false : (
-    string extends T ? false : number extends T ? false : boolean extends T ? false : true
-);
+export type IsLiteral< T > =
+    IsAny< T > extends true ? false
+        : string extends T ? false
+        : number extends T ? false
+        : boolean extends T ? false
+        : true;
 
 /**
- * Convert primitive literals to their boxed object types
- * Maps primitive literal types to their corresponding wrapper objects.
+ * Convert primitive literal types to their boxed object counterparts.
  * 
- * @template T - The primitive literal type(s) to box
+ * @remarks
+ * Useful when interacting with APIs or type constraints that expect
+ * boxed primitives instead of their primitive forms.
+ * 
+ * @template T - Primitive literal type(s) to convert
  * 
  * @example
- * type Boxed = Box< 'hello' | 42 | true >; // String | Number | Boolean
+ * type Boxed = Box< 'hello' | 42 | true >;
+ * // String | Number | Boolean
  */
-export type Box< T > = T extends string ? String
-    : T extends number ? Number
-    : T extends boolean ? Boolean
-    : T extends Symbol ? Symbol
-    : T;
+export type Box< T > =
+    T extends string ? String
+        : T extends number ? Number
+        : T extends boolean ? Boolean
+        : T extends symbol ? Symbol
+        : T;
