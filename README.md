@@ -16,6 +16,10 @@ A comprehensive collection of high-performance TypeScript type utilities focused
 npm install devtypes
 ```
 
+## Documentation
+
+Read the full **[devtypes Documentation](https://komed3.github.io/devtypes/index.html)** for detailed usage instructions, examples, and API references.
+
 ## Quick Examples
 
 ### Object Type Manipulation
@@ -64,30 +68,36 @@ type PartialConfig = DeepPartial< Config >;
 type FullConfig = DeepRequired< Config >;
 ```
 
-## Documentation
+## Core Modules
 
-### Core Modules
-
-- **base** - Core type utilities
-- **collections** - Array and object operations
-- **combinators** - Union and tuple operations
-- **constraints** - Property requirement utilities
-- **functionals** - Function type utilities
-- **lists** - Tuple and array type helpers
-- **primitives** - Primitive type helpers
-- **utils** - General type transformations
+| Module | Purpose |
+|--------|---------|
+| **base** | Foundational types: conditionals, guards, type equality |
+| **primitives** | Primitive type utilities and literal handling |
+| **collections** | Deep transformations (merging, partial, required, readonly, mutable) |
+| **lists** | List-like structures (arrays, sets, maps, records, iterables) |
+| **combinators** | Union/tuple/intersection transformations |
+| **constraints** | Property requirement constraints and validation |
+| **functionals** | Function type utilities: curry, compose, promisify |
+| **classes** | Class-specific utilities: methods, properties, constructors |
+| **utils** | General-purpose transformations and key filtering |
 
 ## Performance Tips
 
-Import from specific modules:
+Import from specific modules for best IDE performance:
 
 ```ts
-// Good
-import { Merge } from 'devtypes/types/collections';
+// Good - direct import
+import { Merge } from 'devtypes/types/utils';
+import { MethodNames } from 'devtypes/types/classes';
 
-// Avoid
-import { Merge } from 'devtypes';
+// Avoid - star imports slow down IntelliSense
+import * as Types from 'devtypes';
 ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a pull request.
 
 ## License
 
