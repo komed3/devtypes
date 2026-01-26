@@ -1,4 +1,4 @@
-name: TSDoc Documentation Deployment
+name: TSDoc Deployment
 
 on:
   workflow_dispatch:
