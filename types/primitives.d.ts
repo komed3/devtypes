@@ -5,7 +5,7 @@
  * @module types/primitives
  */
 
-import { IsAny } from './base';
+import type { IsAny } from './base';
 
 /**
  * All primitive types

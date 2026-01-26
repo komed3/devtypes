@@ -5,7 +5,7 @@
  * @module types/collections
  */
 
-import { Simplify } from './base';
+import type { Simplify } from './base';
 
 /**
  * Extract the element type from an array or tuple

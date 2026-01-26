@@ -5,7 +5,7 @@
  * @module types/classes
  */
 
-import { IfEquals } from './base';
+import type { IfEquals } from './base';
 
 /**
  * Create a class constructor from instance properties.

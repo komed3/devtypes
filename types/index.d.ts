@@ -15,11 +15,11 @@
  * Import from specific modules to keep IntelliSense fast:
  * ```ts
  * // Good: Direct module imports
- * import { Merge } from './types/utils';
- * import { RequireExactlyOne } from './types/constraints';
+ * import type { Merge } from './types/collections';
+ * import type { RequireExactlyOne } from './types/constraints';
  * 
  * // Avoid: Importing everything
- * import { Merge, RequireExactlyOne } from './types';
+ * import type { Merge, RequireExactlyOne } from './types';
  * ```
  * 
  * @author Paul Köhler (komed3)
@@ -27,12 +27,12 @@
  * @license MIT
  */
 
-export * from './base';
-export * from './classes';
-export * from './collections';
-export * from './combinators';
-export * from './constraints';
-export * from './functionals';
-export * from './lists';
-export * from './primitives';
-export * from './utils';
+export type * from './base';
+export type * from './classes';
+export type * from './collections';
+export type * from './combinators';
+export type * from './constraints';
+export type * from './functionals';
+export type * from './lists';
+export type * from './primitives';
+export type * from './utils';
