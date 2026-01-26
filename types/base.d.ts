@@ -69,6 +69,21 @@ export type IsUnknown< T > = IsAny< T > extends true ? false : unknown extends T
 export type Equals< A, B > = ( < T >() => T extends A ? 1 : 2 ) extends ( < T >() => T extends B ? 1 : 2 ) ? true : false;
 
 /**
+ * Conditional type for equality
+ * Returns one of two types based on whether two types are equal.
+ * 
+ * @template X - The first type to compare
+ * @template Y - The second type to compare
+ * @template A - Type returned if X and Y are equal (defaults to X)
+ * @template B - Type returned if X and Y are not equal (defaults to never)
+ * 
+ * @example
+ * type A = IfEquals< string, string, number, boolean >; // number
+ * type B = IfEquals< string, number, number, boolean >; // boolean
+ */
+export type IfEquals< X, Y, A = X, B = never > = ( < T >() => T extends X ? 1 : 2 ) extends ( < T >() => T extends Y ? 1 : 2 ) ? A : B;
+
+/**
  * Maybe type: a value or null/undefined
  * Shorthand for optional union types.
  * 
