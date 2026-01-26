@@ -89,3 +89,42 @@ export type UnwrapPromise< T > = T extends Promise< infer U > ? U : T;
  */
 export type AwaitedReturnType< F > = F extends ( ...args: any[] ) =>
     infer R ? R extends Promise< infer U > ? U : R : never;
+
+/**
+ * Extract parameter types from a function (as a tuple)
+ * Retrieves all parameter types in order.
+ * 
+ * @template F - The function type to extract from
+ * 
+ * @example
+ * type Fn = ( a: string, b: number, c: boolean ) => void;
+ * type Params = Parameters< Fn >; // [ string, number, boolean ]
+ */
+export type Parameters< F extends Function > = F extends ( ...args: infer P ) =>
+    any ? P : never;
+
+/**
+ * Get the this binding type from a function
+ * Extracts the `this` context type if present.
+ * 
+ * @template F - The function type
+ * 
+ * @example
+ * type Fn = ( this: { x: number }, y: string ) => void;
+ * type ThisType = ThisParameterType< Fn >; // { x: number }
+ */
+export type ThisParameterType< F extends Function > = F extends ( this: infer T, ...args: any[] ) =>
+    any ? T : unknown;
+
+/**
+ * Remove the `this` parameter from a function
+ * Creates a new function type without the this binding.
+ * 
+ * @template F - The function type to modify
+ * 
+ * @example
+ * type Fn = ( this: { x: number }, y: string ) => void;
+ * type WithoutThis = OmitThisParameter< Fn >; // ( y: string ) => void
+ */
+export type OmitThisParameter< F extends Function > = F extends ( this: any, ...args: infer A ) =>
+    infer R ? ( ...args: A ) => R : F;
