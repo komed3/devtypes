@@ -225,3 +225,27 @@ export type DeepIntersection< T, D > = {
 } & {
     [ P in keyof D ]: P extends keyof T ? never : D[ P ]
 };
+
+/**
+ * (recursive)
+ * From an array of type, will return any type that intersect with another
+ * 
+ * @example
+ * Can be useful to highlight potential key conflicts from multiple sources
+ * type KeysA = 'a' | 'aa'
+ * type KeysB = 'b' | 'bb'
+ * type KeysX = 'x' | 'bb'
+ * type ChainedIntersectionType = ChainedIntersection<[KeysA, KeysB, KeysX]>
+ * // "bb"
+ * type ChainedIntersectionType2 = ChainedIntersection<[true, false, 1, true]>
+ * // true
+ * 
+ * @remarks
+ * Will return never if only one type is given
+ */
+export type ChainedIntersection<T extends any[]> =
+  T extends [infer F, infer S, ...infer R]
+    ? (F & S) | ChainedIntersection<[S, ...R]> | ChainedIntersection<[F, ...R]>
+    : T extends [infer F, infer S]
+        ? F & S
+        : never
