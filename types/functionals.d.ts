@@ -50,6 +50,22 @@ export type Compose< F extends Function, G extends Function > = F extends ( arg:
     infer R1 ? G extends ( arg: infer A ) => any ? ( arg: A extends R1 ? A : R1 ) => any : never : never;
 
 /**
+ * Compose multiple functions in sequence
+ * Chains several functions together, ensuring type compatibility.
+ * 
+ * @template Fns - An array of function types to compose
+ * 
+ * @example
+ * type F1 = ( x: number ) => string;
+ * type F2 = ( y: string ) => boolean;
+ * type F3 = ( z: boolean ) => Date;
+ * type ComposedMany = ComposeMany< [ F1, F2, F3 ] >; // ( arg: number ) => Date
+ */
+export type ComposeMany< Fns extends Function[] > = Fns extends [ infer F1, infer F2, ...infer Rest ]
+    ? ComposeMany< [ Compose< F1 & Function, F2 & Function >, ...Rest & Function[] ] >
+    : Fns extends [ infer F ] ? F : never;
+
+/**
  * Promisify a function type
  * Wraps a function's return type in a Promise.
  * 

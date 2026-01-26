@@ -7,7 +7,7 @@
  */
 
 /**
- * Conditional type helper
+ * Conditional type helper.
  * 
  * @template Cond - The condition to evaluate
  * @template Then - Type returned if condition is true
@@ -19,7 +19,7 @@
 export type If< Cond extends boolean, Then, Else = never > = Cond extends true ? Then : Else;
 
 /**
- * Type guard: detect `any`
+ * Type guard: detect `any`.
  * Distinguishes `any` from other types through distributive conditional logic.
  * 
  * @template T - The type to test
@@ -31,7 +31,7 @@ export type If< Cond extends boolean, Then, Else = never > = Cond extends true ?
 export type IsAny< T > = 0 extends ( 1 & T ) ? true : false;
 
 /**
- * Type guard: detect `never`
+ * Type guard: detect `never`.
  * Identifies the bottom type `never` using tuple-based detection.
  * 
  * @template T - The type to test
@@ -43,7 +43,7 @@ export type IsAny< T > = 0 extends ( 1 & T ) ? true : false;
 export type IsNever< T > = [ T ] extends [ never ] ? true : false;
 
 /**
- * Type guard: detect `unknown` (but not `any`)
+ * Type guard: detect `unknown` (but not `any`).
  * Distinguishes `unknown` from `any` and from concrete types using constraint checking.
  * 
  * @template T - The type to test
@@ -56,7 +56,7 @@ export type IsNever< T > = [ T ] extends [ never ] ? true : false;
 export type IsUnknown< T > = IsAny< T > extends true ? false : unknown extends T ? ( T extends {} ? false : true ) : false;
 
 /**
- * Fast equality test
+ * Fast equality test.
  * Works for most practical cases using function signature comparison.
  * 
  * @template A - The first type to compare
@@ -69,7 +69,7 @@ export type IsUnknown< T > = IsAny< T > extends true ? false : unknown extends T
 export type Equals< A, B > = ( < T >() => T extends A ? 1 : 2 ) extends ( < T >() => T extends B ? 1 : 2 ) ? true : false;
 
 /**
- * Conditional type for equality
+ * Conditional type for equality.
  * Returns one of two types based on whether two types are equal.
  * 
  * @template X - The first type to compare
@@ -84,7 +84,7 @@ export type Equals< A, B > = ( < T >() => T extends A ? 1 : 2 ) extends ( < T >(
 export type IfEquals< X, Y, A = X, B = never > = ( < T >() => T extends X ? 1 : 2 ) extends ( < T >() => T extends Y ? 1 : 2 ) ? A : B;
 
 /**
- * Maybe type: a value or null/undefined
+ * Maybe type: a value or null/undefined.
  * Shorthand for optional union types.
  * 
  * @template T - The value type
@@ -95,7 +95,7 @@ export type IfEquals< X, Y, A = X, B = never > = ( < T >() => T extends X ? 1 : 
 export type Maybe< T > = T | null | undefined;
 
 /**
- * Simplify a type structure for IntelliSense display
+ * Simplify a type structure for IntelliSense display.
  * Expands intersections and simplifies nested types for better IDE hover previews.
  * 
  * @template T - The type to simplify
@@ -107,7 +107,7 @@ export type Maybe< T > = T | null | undefined;
 export type Simplify< T > = T extends Function ? T : { [ K in keyof T ]: T[ K ] } & {};
 
 /**
- * Narrow a type to exclude its parent type
+ * Narrow a type to exclude its parent type.
  * Useful for refining literal types and narrowing union types.
  * 
  * @template T - The type to narrow
@@ -119,7 +119,7 @@ export type Simplify< T > = T extends Function ? T : { [ K in keyof T ]: T[ K ] 
 export type Narrow< T > = T extends string ? ( string extends T ? T : T ) : T extends number ? ( number extends T ? T : T ) : T;
 
 /**
- * Brand a type with a unique tag for nominal typing
+ * Brand a type with a unique tag for nominal typing.
  * Creates distinct types that are structurally equivalent but nominally different.
  * 
  * @template Base - The base type to brand
@@ -135,7 +135,7 @@ export type Brand< Base, Tag extends string, Key extends string = '__brand', Req
     Base & If< Required, { readonly [ K in Key ]: Tag }, { readonly [ K in Key ]?: Tag } >;
 
 /**
- * Cast a type to another while preserving assignability
+ * Cast a type to another while preserving assignability.
  * Attempts to keep the source type if possible, otherwise falls back to the target.
  * 
  * @template T - The source type to cast

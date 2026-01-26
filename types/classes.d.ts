@@ -8,7 +8,7 @@
 import { IfEquals } from './base';
 
 /**
- * Create a class constructor from instance properties
+ * Create a class constructor from instance properties.
  * Converts an interface/type to a constructor signature.
  * 
  * @template T - The instance type
@@ -21,7 +21,7 @@ import { IfEquals } from './base';
 export type Constructor< T > = { new ( ...args: any[] ) : T };
 
 /**
- * Create a abstract constructor (no instantiation check)
+ * Create a abstract constructor (no instantiation check).
  * Used for class hierarchies and type constraints.
  * 
  * @template T - The instance type
@@ -32,7 +32,7 @@ export type Constructor< T > = { new ( ...args: any[] ) : T };
 export type AbstractConstructor< T > = abstract new ( ...args: any[] ) => T;
 
 /**
- * Extract constructor parameters as a tuple
+ * Extract constructor parameters as a tuple.
  * Retrieves all parameter types from a class constructor.
  * 
  * @template C - A constructor function
@@ -45,7 +45,7 @@ export type AbstractConstructor< T > = abstract new ( ...args: any[] ) => T;
 export type ConstructorParameters< C extends Constructor< any > > = C extends { new ( ...args: infer P ): any } ? P : never;
 
 /**
- * Extract the instance type from a constructor function
+ * Extract the instance type from a constructor function.
  * Gets the type of objects created by a constructor.
  * 
  * @template C - A constructor function
@@ -57,7 +57,7 @@ export type ConstructorParameters< C extends Constructor< any > > = C extends { 
 export type InstanceType< C extends Constructor< any > > = C extends { new ( ...args: any[] ): infer I } ? I : never;
 
 /**
- * Extract method names from a class
+ * Extract method names from a class.
  * Returns a union of all method names (excluding readonly properties).
  * 
  * @template T - A class or object type
@@ -69,7 +69,7 @@ export type InstanceType< C extends Constructor< any > > = C extends { new ( ...
 export type MethodNames< T > = { [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? K : never }[ keyof T ];
 
 /**
- * Extract method types from a class as an object
+ * Extract method types from a class as an object.
  * Creates a record of all method signatures.
  * 
  * @template T - A class or object type
@@ -82,7 +82,7 @@ export type MethodNames< T > = { [ K in keyof T ]-?: T[ K ] extends ( ...args: a
 export type MethodsObject< T > = Pick< T, MethodNames< T > >;
 
 /**
- * Extract readonly property names from a class
+ * Extract readonly property names from a class.
  * Returns a union of all readonly properties.
  * 
  * @template T - A class or object type
@@ -96,7 +96,7 @@ export type ReadonlyPropertyNames< T > = { [ K in keyof T ]-?: T[ K ] extends ( 
 > }[ keyof T ];
 
 /**
- * Extract readonly properties from a class as an object
+ * Extract readonly properties from a class as an object.
  * Returns an object type of all readonly properties.
  * 
  * @template T - A class or object type
@@ -109,7 +109,7 @@ export type ReadonlyPropertyNames< T > = { [ K in keyof T ]-?: T[ K ] extends ( 
 export type ReadonlyPropertiesObject< T > = Pick< T, ReadonlyPropertyNames< T > >;
 
 /**
- * Extract writable (mutable) property names from a class
+ * Extract writable (mutable) property names from a class.
  * Returns a union of all non-readonly properties.
  * 
  * @template T - A class or object type
@@ -121,7 +121,7 @@ export type ReadonlyPropertiesObject< T > = Pick< T, ReadonlyPropertyNames< T > 
 export type WritablePropertyNames< T > = Exclude< keyof T, MethodNames< T > | ReadonlyPropertyNames< T > >;
 
 /**
- * Extract writable (mutable) properties from a class as an object
+ * Extract writable (mutable) properties from a class as an object.
  * Returns an object type of all writable properties.
  * 
  * @template T - A class or object type
@@ -134,7 +134,7 @@ export type WritablePropertyNames< T > = Exclude< keyof T, MethodNames< T > | Re
 export type WritablePropertiesObject< T > = Pick< T, WritablePropertyNames< T > >;
 
 /**
- * Create an object with property types extracted from a class
+ * Create an object with property types extracted from a class.
  * Useful for state management and property mapping.
  * 
  * @template T - A class or object type
@@ -147,7 +147,7 @@ export type WritablePropertiesObject< T > = Pick< T, WritablePropertyNames< T > 
 export type PropertyTypes< T > = Omit< T, MethodNames< T > >;
 
 /**
- * Extract static properties from a constructor
+ * Extract static properties from a constructor.
  * Returns types of static members.
  * 
  * @template T - A constructor function
@@ -162,7 +162,7 @@ export type StaticPropertyNames< T extends Function > = Exclude< {
 }[ keyof T ], 'prototype' >;
 
 /**
- * Extract static properties from a constructor as an object
+ * Extract static properties from a constructor as an object.
  * Returns an object type of all static properties.
  * 
  * @template T - A constructor function
@@ -175,7 +175,7 @@ export type StaticPropertyNames< T extends Function > = Exclude< {
 export type StaticPropertiesObject< T extends Function > = Pick< T, StaticPropertyNames< T > >;
 
 /**
- * Extract static methods from a constructor
+ * Extract static methods from a constructor.
  * Returns names of all static methods.
  * 
  * @template T - A constructor function
@@ -187,7 +187,7 @@ export type StaticPropertiesObject< T extends Function > = Pick< T, StaticProper
 export type StaticMethodNames< T extends Function > = { [ K in keyof T ]-?: T[ K ] extends Function ? K : never }[ keyof T ];
 
 /**
- * Extract static methods from a constructor as an object
+ * Extract static methods from a constructor as an object.
  * Returns an object type of all static methods.
  * 
  * @template T - A constructor function
@@ -200,7 +200,7 @@ export type StaticMethodNames< T extends Function > = { [ K in keyof T ]-?: T[ K
 export type StaticMethodsObject< T extends Function > = Pick< T, StaticMethodNames< T > >;
 
 /**
- * Make all properties of a class optional for partial construction
+ * Make all properties of a class optional for partial construction.
  * Useful for factory functions and builder patterns.
  * 
  * @template T - The class type
