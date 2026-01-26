@@ -5,18 +5,7 @@
  * @module types/classes
  */
 
-/**
- * Extract the instance type from a constructor function
- * Gets the type of objects created by a constructor.
- * 
- * @template C - A constructor function
- * 
- * @example
- * class User { id: number; name: string; }
- * type UserInstance = InstanceType< typeof User >; // User
- */
-export type InstanceType< C extends { new ( ...args: any[] ): any } > = C extends
-    { new ( ...args: any[] ): infer I } ? I : never;
+import { IfEquals } from './base';
 
 /**
  * Create a class constructor from instance properties
@@ -29,7 +18,7 @@ export type InstanceType< C extends { new ( ...args: any[] ): any } > = C extend
  * type UserCtor = Constructor< User >;
  * // new ( id: number, name: string ) => User
  */
-export type Constructor< T > = { new ( ...args: any[] ): T };
+export type Constructor< T > = { new ( ...args: any[] ) : T };
 
 /**
  * Create a abstract constructor (no instantiation check)
@@ -53,8 +42,19 @@ export type AbstractConstructor< T > = abstract new ( ...args: any[] ) => T;
  * type CtorParams = ConstructorParameters< typeof User >;
  * // [ id: number, name: string ]
  */
-export type ConstructorParameters< C extends { new ( ...args: any[] ): any } > = C extends
-    { new ( ...args: infer P ): any } ? P : never;
+export type ConstructorParameters< C extends Constructor< any > > = C extends { new ( ...args: infer P ): any } ? P : never;
+
+/**
+ * Extract the instance type from a constructor function
+ * Gets the type of objects created by a constructor.
+ * 
+ * @template C - A constructor function
+ * 
+ * @example
+ * class User { id: number; name: string; }
+ * type UserInstance = InstanceType< typeof User >; // User
+ */
+export type InstanceType< C extends Constructor< any > > = C extends { new ( ...args: any[] ): infer I } ? I : never;
 
 /**
  * Extract method names from a class
@@ -82,6 +82,58 @@ export type MethodNames< T > = { [ K in keyof T ]-?: T[ K ] extends ( ...args: a
 export type MethodsObject< T > = Pick< T, MethodNames< T > >;
 
 /**
+ * Extract readonly property names from a class
+ * Returns a union of all readonly properties.
+ * 
+ * @template T - A class or object type
+ * 
+ * @example
+ * class Config { readonly version = "1.0"; readonly name = "app"; }
+ * type ReadonlyProps = ReadonlyPropertyNames< Config >; // "version" | "name"
+ */
+export type ReadonlyPropertyNames< T > = { [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? never : IfEquals<
+    { [ P in K ]: T[ K ] }, { -readonly [ P in K ]: T[ K ] }, never, K
+> }[ keyof T ];
+
+/**
+ * Extract readonly properties from a class as an object
+ * Returns an object type of all readonly properties.
+ * 
+ * @template T - A class or object type
+ * 
+ * @example
+ * class Settings { readonly theme = "dark"; readonly language = "en"; }
+ * type ReadonlyPropsObj = ReadonlyPropertiesObject< Settings >;
+ * // { theme: string; language: string; }
+ */
+export type ReadonlyPropertiesObject< T > = Pick< T, ReadonlyPropertyNames< T > >;
+
+/**
+ * Extract writable (mutable) property names from a class
+ * Returns a union of all non-readonly properties.
+ * 
+ * @template T - A class or object type
+ * 
+ * @example
+ * class User { readonly id: number; name: string; }
+ * type WritableProps = WritablePropertyNames< User >; // "name"
+ */
+export type WritablePropertyNames< T > = Exclude< keyof T, MethodNames< T > | ReadonlyPropertyNames< T > >;
+
+/**
+ * Extract writable (mutable) properties from a class as an object
+ * Returns an object type of all writable properties.
+ * 
+ * @template T - A class or object type
+ * 
+ * @example
+ * class Profile { readonly id: number; bio: string; avatarUrl: string; }
+ * type WritablePropsObj = WritablePropertiesObject< Profile >;
+ * // { bio: string; avatarUrl: string; }
+ */
+export type WritablePropertiesObject< T > = Pick< T, WritablePropertyNames< T > >;
+
+/**
  * Create an object with property types extracted from a class
  * Useful for state management and property mapping.
  * 
@@ -93,19 +145,6 @@ export type MethodsObject< T > = Pick< T, MethodNames< T > >;
  * // { id: number; name: string; email: string; }
  */
 export type PropertyTypes< T > = Omit< T, MethodNames< T > >;
-
-/**
- * Make all properties of a class optional for partial construction
- * Useful for factory functions and builder patterns.
- * 
- * @template T - The class type
- * 
- * @example
- * class User { id: number; name: string; email: string; }
- * type PartialUser = PartialClass< User >;
- * // { id?: number; name?: string; email?: string; }
- */
-export type PartialClass< T > = Partial< Omit< T, MethodNames< T > > >;
 
 /**
  * Extract static properties from a constructor
@@ -159,3 +198,16 @@ export type StaticMethodNames< T extends Function > = { [ K in keyof T ]-?: T[ K
  * // { parse: () => ...; stringify: () => ...; }
  */
 export type StaticMethodsObject< T extends Function > = Pick< T, StaticMethodNames< T > >;
+
+/**
+ * Make all properties of a class optional for partial construction
+ * Useful for factory functions and builder patterns.
+ * 
+ * @template T - The class type
+ * 
+ * @example
+ * class User { id: number; name: string; email: string; }
+ * type PartialUser = PartialClass< User >;
+ * // { id?: number; name?: string; email?: string; }
+ */
+export type PartialClass< T > = Partial< Omit< T, MethodNames< T > > >;
