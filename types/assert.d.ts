@@ -300,3 +300,31 @@ export type AssertPromise< T extends Promise< any > > = T;
  * type C = AssertPromiseLike< number >;             // ✗ TS error
  */
 export type AssertPromiseLike< T extends PromiseLike< any > > = T;
+
+/**
+ * Weakly assert that a type is assignable to another type.
+ * 
+ * @remarks
+ * Performs a non-strict compile-time check that `T` is assignable to `D`.
+ * Unlike strict assert types, this does not enforce exact equality and
+ * does not produce an error unless the assignment is invalid.
+ * 
+ * This is useful for validating inferred or generic types without
+ * prematurely failing type evaluation.
+ * 
+ * Note that this check is directional: `T` must extend `D`.
+ * Supersets of `T` are not rejected by design.
+ * 
+ * @template T - The inferred or concrete type to validate
+ * @template D - The expected destination (super) type
+ * 
+ * @example
+ * type A = AssertTypeWeak< string, string | number >;  // ✓
+ * type B = AssertTypeWeak< 42, number >;               // ✓
+ * 
+ * type C = AssertTypeWeak< number, string >;           // ✗ TS error
+ * 
+ * // Superset behavior (intentional)
+ * type D = AssertTypeWeak< string, unknown >;          // ✓
+ */
+export type AssertTypeWeak< T extends D, D > = T;
