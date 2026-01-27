@@ -106,8 +106,8 @@ export type OmitNever< T > = Omit< T, {
  * 
  * @example
  * type Obj = { a: string; b?: number };
- * type Has_a = HasProperty< Obj, 'a' >; // true
- * type Has_c = HasProperty< Obj, 'c' >; // false
+ * type Has_a = HasProperty< Obj, 'a' >;  // true
+ * type Has_c = HasProperty< Obj, 'c' >;  // false
  */
 export type HasProperty< T, K extends PropertyKey > = K extends keyof T ? true : false;
 
@@ -123,8 +123,8 @@ export type HasProperty< T, K extends PropertyKey > = K extends keyof T ? true :
  * 
  * @example
  * type Obj = { a: string; b?: number; c: number | undefined };
- * type IsOpt_b = HasOptionalProperty< Obj, 'b' >; // true
- * type IsOpt_c = HasOptionalProperty< Obj, 'c' >; // false
+ * type IsOpt_b = HasOptionalProperty< Obj, 'b' >;  // true
+ * type IsOpt_c = HasOptionalProperty< Obj, 'c' >;  // false
  */
 export type HasOptionalProperty< T, K extends PropertyKey > =
     K extends keyof T ? {} extends Pick< T, K > ? true : false : false;
@@ -141,8 +141,44 @@ export type HasOptionalProperty< T, K extends PropertyKey > =
  * 
  * @example
  * type Obj = { a: string; b?: number; c: number | undefined };
- * type IsReq_a = HasRequiredProperty< Obj, 'a' >; // true
- * type IsReq_b = HasRequiredProperty< Obj, 'b' >; // false
+ * type IsReq_a = HasRequiredProperty< Obj, 'a' >;  // true
+ * type IsReq_b = HasRequiredProperty< Obj, 'b' >;  // false
  */
 export type HasRequiredProperty< T, K extends PropertyKey > =
     K extends keyof T ? {} extends Pick< T, K > ? false : true : false;
+
+/**
+ * Make a specific property readonly.
+ * 
+ * @remarks
+ * Marks only one property as readonly while keeping all others mutable.
+ * Useful for enforcing immutability at the type level.
+ * 
+ * @template T - The object type
+ * @template K - The key of the property to make readonly
+ * 
+ * @example
+ * type Obj = { a: string; b: number };
+ * type Result = ReadonlyProperty< Obj, 'a' >;
+ * // { readonly a: string; b: number }
+ */
+export type ReadonlyProperty< T, K extends keyof T > =
+    Omit< T, K > & Readonly< Pick< T, K > >;
+
+/**
+ * Make a specific property mutable (remove readonly).
+ * 
+ * @remarks
+ * Removes the readonly modifier from a single property while leaving others unchanged.
+ * Useful for controlled mutability in type-level object transformations.
+ * 
+ * @template T - The object type
+ * @template K - The key of the property to make mutable
+ * 
+ * @example
+ * type Obj = { readonly a: string; readonly b: number };
+ * type Result = MutableProperty< Obj, 'a' >;
+ * // { a: string; readonly b: number }
+ */
+export type MutableProperty< T, K extends keyof T > =
+    Omit< T, K > & { -readonly [ P in K ]: T[ P ] };
