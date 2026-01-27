@@ -109,6 +109,36 @@ export type Maybe< T > = T | null | undefined;
 export type Simplify< T > = T extends Function ? T : { [ K in keyof T ]: T[ K ] } & {};
 
 /**
+ * Expand object type for better IntelliSense display.
+ * 
+ * @remarks
+ * Flattens intersection types for clearer hover and auto-completion.
+ * Does not change the type but improves editor readability.
+ * 
+ * @template T - The type to expand
+ * 
+ * @example
+ * type Nested = { a: { b: { c: number } } };
+ * type Expanded = Expand< Nested >; // { a: { b: { c: number } } }
+ */
+export type Expand< T > = T extends object ? { [ K in keyof T ]: T[ K ] } & {} : T;
+
+/**
+ * Flatten array type for better IntelliSense display.
+ * 
+ * @remarks
+ * Improves readability of array types in hover information.
+ * Useful when working with deeply nested arrays or tuple types.
+ * 
+ * @template T - The type to flatten
+ * 
+ * @example
+ * type Arr = Array< { a: number } >;
+ * type FlatArr = Flatten< Arr >; // { a: number }[]
+ */
+export type Flatten< T > = T extends any[] ? { [ K in keyof T ]: T[ K ] } : T;
+
+/**
  * Narrow a type without widening literals.
  * 
  * @remarks
@@ -127,3 +157,32 @@ export type Narrow< T > =
         : T extends number
             ? ( number extends T ? T : T )
             : T;
+
+/**
+ * Compute chained intersections across multiple types.
+ * 
+ * @remarks
+ * Produces all pairwise and transitive intersections across a tuple
+ * of types. Useful for detecting overlapping keys or values.
+ * 
+ * Will return never if only one type is given.
+ * 
+ * Can be slow for large tuples due to combinatorial explosion.
+ * 
+ * @template T - Tuple of types
+ * 
+ * @example
+ * type KeysA = 'a' | 'aa'
+ * type KeysB = 'b' | 'bb'
+ * type KeysX = 'x' | 'bb'
+ * type Intersection1 = ChainedIntersection< [ KeysA, KeysB, KeysX ] >  // "bb"
+ * type Intersection2 = ChainedIntersection< [ true, false, 1, true ] > // true
+ */
+export type ChainedIntersection< T extends unknown[] > =
+    T extends [ infer F, infer S, ...infer R ]
+        ? ( F & S )
+            | ChainedIntersection< [ S, ...R ] >
+            | ChainedIntersection< [ F, ...R ] >
+        : T extends [ infer F, infer S ]
+            ? F & S
+            : never;
