@@ -11,6 +11,19 @@
 
 
 /**
+ * Generic plain object type.
+ * 
+ * @remarks
+ * Represents an object with string, number, or symbol keys and any value types.
+ * Useful as a base type for object manipulations and transformations.
+ * 
+ * @example
+ * type Obj = PlainObject;
+ * // Record< string | number | symbol, any >
+ */
+export type PlainObject = Record< string | number | symbol, any >;
+
+/**
  * Extract keys of an object whose values match a type.
  * 
  * @remarks
