@@ -1,9 +1,9 @@
 /**
- * Collection Types
+ * Merging Types
  * 
  * Utility types for deep merging and manipulating object types.
  * 
- * @module devtypes/collection
+ * @module devtypes/merge
  * @author komed3
  * @license MIT
  */
