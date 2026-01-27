@@ -1,8 +1,8 @@
 /**
  * Base Types
  * 
- * Module includes basic concepts such as conditional logic, type branding, casting,
- * and basic transformations.
+ * Module includes basic concepts such as conditional logic (equality), type branding
+ * and casting.
  * 
  * @module devtypes/base
  * @author komed3
@@ -21,7 +21,7 @@
  * @template Else - Type returned if the condition is `false` (defaults to `never`)
  * 
  * @example
- * type Result = If< true, string, number >; // string
+ * type Result = If< true, string, number >;  // string
  */
 export type If< Cond extends boolean, Then, Else = never > =
     Cond extends true ? Then : Else;
@@ -40,8 +40,8 @@ export type If< Cond extends boolean, Then, Else = never > =
  * @template B - Type returned if `X` and `Y` are not equal (defaults to `never`)
  * 
  * @example
- * type A = IfEquals< string, string, number, boolean >; // number
- * type B = IfEquals< string, number, number, boolean >; // boolean
+ * type A = IfEquals< string, string, number, boolean >;  // number
+ * type B = IfEquals< string, number, number, boolean >;  // boolean
  */
 export type IfEquals< X, Y, A = X, B = never > =
     ( < T >() => T extends X ? 1 : 2 ) extends
@@ -53,13 +53,34 @@ export type IfEquals< X, Y, A = X, B = never > =
  * 
  * @remarks
  * Compares two types for equality and resolves to `true` or `false`.
- * Uses `{@link IfEquals}` internally for the comparison logic.
  * 
  * @template A - First type to compare
  * @template B - Second type to compare
  * 
  * @example
- * type A = Equals< string, string >; // true
- * type B = Equals< string, number >; // false
+ * type A = Equals< string, string >;  // true
+ * type B = Equals< string, number >;  // false
  */
 export type Equals< A, B > = IfEquals< A, B, true, false >;
+
+/**
+ * Multiple type equality test.
+ * 
+ * @remarks
+ * Compares a tuple of types for equality and resolves to `true` if all types are equal,
+ * or `false` if any type differs.
+ * 
+ * @template T - Tuple of types to compare
+ * 
+ * @example
+ * type A = EqualsMany< [ string, string, string ] >;   // true
+ * type B = EqualsMany< [ boolean, number, number ] >;  // false
+ */
+export type EqualsMany< T extends readonly any[] > =
+    T extends readonly [ infer A, infer B, ...infer Rest ]
+        ? If<
+            Equals< A, B >,
+            EqualsMany< [ B, ...Rest ] >,
+            false
+        >
+        : true;
