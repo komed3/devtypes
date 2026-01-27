@@ -25,7 +25,8 @@ Read the full **[devtypes Documentation](https://komed3.github.io/devtypes/index
 ### Object Type Manipulation
 
 ```ts
-import type { Merge, RequireExactlyOne } from 'devtypes';
+import type { Merge } from 'devtypes/collections';
+import type { RequireExactlyOne } from 'devtypes/constraints';
 
 type UserBase = { id: number; name: string; email?: string };
 type UserAuth = { email: string; password: string };
@@ -44,7 +45,7 @@ type LoginCredentials = RequireExactlyOne<
 ### Deep Utilities
 
 ```ts
-import type { DeepPartial, DeepRequired } from 'devtypes';
+import type { DeepPartial, DeepRequired } from 'devtypes/collections';
 
 interface Config {
     server: {
