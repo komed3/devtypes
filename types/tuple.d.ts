@@ -56,3 +56,63 @@ export type TupleAppend< T extends readonly any[], V > = [ ...T, V ];
  * // [ boolean, number, string ]
  */
 export type TuplePrepend< T extends readonly any[], V > = [ V, ...T ];
+
+/**
+ * Get the first element of a tuple.
+ * 
+ * @remarks
+ * Extracts the type of the first element from a tuple type.
+ * 
+ * @template T - Tuple type
+ * 
+ * @example
+ * type H = TupleHead< [ number, string, boolean ] >;  // number
+ */
+export type TupleHead< T extends readonly any[] > =
+    T extends readonly [ infer H, ...any[] ] ? H : never;
+
+/**
+ * Get all but the first element of a tuple.
+ * 
+ * @remarks
+ * Extracts a new tuple type containing all elements except the first.
+ * 
+ * @template T - Tuple type
+ * 
+ * @example
+ * type H = TupleTail< [ number, string, boolean ] >;
+ * // [ string, boolean ]
+ */
+export type TupleTail< T extends readonly any[] > =
+    T extends readonly [ any, ...infer R ] ? R : [];
+
+/**
+ * Get the length of a tuple.
+ * 
+ * @remarks
+ * Preserves literal length information for fixed tuples.
+ * 
+ * @template T - Tuple type
+ * 
+ * @example
+ * type L = TupleLength< [ string, string, number ] >;  // 3
+ */
+export type TupleLength< T extends readonly any[] > = T[ 'length' ];
+
+/**
+ * Reverse a tuple.
+ * 
+ * @remarks
+ * Produces a new tuple with elements in reverse order.
+ * Works with readonly tuples.
+ * 
+ * @template T - Tuple type
+ * 
+ * @example
+ * type R = TupleReverse< [ number, string, boolean ] >;
+ * // [ boolean, string, number ]
+ */
+export type TupleReverse< T extends readonly any[], R extends readonly any[] = [] > =
+    T extends readonly [ infer H, ...infer Rest ]
+        ? TupleReverse< Rest, readonly [ H, ...R ] >
+        : R;
