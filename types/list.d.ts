@@ -58,6 +58,21 @@ export type ListElement< L > =
         : never;
 
 /**
+ * Extract the element type from an array or tuple.
+ * 
+ * @remarks
+ * Resolves to the contained element type of readonly or mutable arrays.
+ * Returns `never` for non-array inputs.
+ * 
+ * @template T - Array or tuple type
+ * 
+ * @example
+ * type Arr = number[];
+ * type Elem = ElementOf< Arr >;  // number
+ */
+export type ElementOf< T > = T extends readonly ( infer E )[] ? E : never;
+
+/**
  * Extract the key or index type from a keyed list-like structure.
  * 
  * @remarks
