@@ -8,6 +8,8 @@
  * @license MIT
  */
 
+import type { ListLike } from './list';
+
 
 /**
  * Type guard: detect whether a type `T` extends type `U`.
@@ -97,3 +99,18 @@ export type IsLiteral< T > =
         : number extends T ? false
         : boolean extends T ? false
         : true;
+
+/**
+ * Type guard: detect whether a type is a list-like.
+ * 
+ * @remarks
+ * Conservative structural check against known list-like shapes.
+ * 
+ * @template T - Type to test
+ *
+ * @example
+ * type A = IsListLike< number[] >;                  // true
+ * type B = IsListLike< Record< string, number > >;  // true
+ * type C = IsListLike< string >;                    // false
+ */
+export type IsListLike< T > = T extends ListLike< any, any > ? true : false;
