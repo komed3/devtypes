@@ -101,6 +101,26 @@ export type IsLiteral< T > =
         : true;
 
 /**
+ * Type guard: detect whether a type is not a literal type.
+ * 
+ * @remarks
+ * Logical negation of {@link IsLiteral}. The `any` type always resolves
+ * to `false` to avoid false positives.
+ * 
+ * @template T - Type to test
+ * 
+ * @example
+ * type A = IsNonLiteral< string >;  // true
+ * type B = IsNonLiteral< 'a' >;     // false
+ */
+export type IsNonLiteral< T > =
+    IsAny< T > extends true
+        ? false
+        : IsLiteral< T > extends true
+            ? false
+            : true;
+
+/**
  * Type guard: detect whether a type is a list-like.
  * 
  * @remarks
@@ -114,6 +134,27 @@ export type IsLiteral< T > =
  * type C = IsListLike< string >;                    // false
  */
 export type IsListLike< T > = T extends ListLike< any, any > ? true : false;
+
+/**
+ * Type guard: detect whether a type is a union.
+ * 
+ * @remarks
+ * Resolves to `true` if `T` is a union type, otherwise `false`.
+ * 
+ * @template T - Type to test
+ * 
+ * @example
+ * type A = IsUnion< string | number >;  // true
+ * type B = IsUnion< string >;           // false
+ */
+export type IsUnion< T, U = T > =
+    IsNever< T > extends true
+        ? false
+        : T extends any
+            ? [ U ] extends [ T ]
+                ? false
+                : true
+            : false;
 
 /**
  * Type guard: detect whether a type is a tuple.
@@ -149,6 +190,50 @@ export type IsTuple< T > =
 export type IsNonEmptyTuple< T > =
     IsTuple< T > extends true
         ? T extends readonly []
+            ? false
+            : true
+        : false;
+
+/**
+ * Type guard: detect whether a type is a plain object.
+ * 
+ * @remarks
+ * Excludes primitives, functions, arrays and tuples by checking
+ * structural constraints to identify plain object types.
+ * 
+ * @template T - Type to test
+ * 
+ * @example
+ * type A = IsObject< { a: number } >;  // true
+ * type B = IsObject< number[] >;       // false
+ */
+export type IsObject< T > =
+    IsAny< T > extends true
+        ? false
+        : T extends object
+            ? T extends Function
+                ? false
+                : T extends readonly any[]
+                    ? false
+                    : true
+            : false;
+
+/**
+ * Type guard: detect whether a type is a non-empty object.
+ * 
+ * @remarks
+ * Checks the given type is a plain object and verifies that its
+ * key set is non-empty.
+ * 
+ * @template T - Type to test
+ * 
+ * @example
+ * type A = IsNonEmptyObject< { a: number } >;  // true
+ * type B = IsNonEmptyObject< {} >;             // false
+ */
+export type IsNonEmptyObject< T > =
+    IsObject< T > extends true
+        ? keyof T extends never
             ? false
             : true
         : false;
