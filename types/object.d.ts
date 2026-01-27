@@ -195,3 +195,55 @@ export type ReadonlyProperty< T, K extends keyof T > =
  */
 export type MutableProperty< T, K extends keyof T > =
     Omit< T, K > & { -readonly [ P in K ]: T[ P ] };
+
+/**
+ * Build all nested property paths using dot notation.
+ * 
+ * @remarks
+ * Generates a union of valid access paths up to a configurable recursion
+ * depth. Path order is not guaranteed.
+ * 
+ * @template T - Object type to analyze
+ * @template D - Maximum recursion depth (defaults to 5)
+ * 
+ * @example
+ * type User = { id: number; profile: { name: string; address: { city: string } } };
+ * type Paths = Paths< User >;
+ * // "id" | "profile" | "profile.name" | "profile.address" | "profile.address.city"
+ */
+export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
+    ? never : T extends object
+        ? { [ K in keyof T ]-?: K extends string | number
+            ? T[ K ] extends readonly any[]
+                ? K : T[ K ] extends object
+                    ? K | Join< K, Paths< T[ K ], Prev[ D ] > > : K
+            : never }[ keyof T ]
+        : '';
+
+/** @internal */
+type Join< K, P > = K extends string | number
+    ? P extends string | number
+        ? `${ K & ( string | number ) }.${ P & ( string | number ) }`
+        : never
+    : never;
+
+/** @internal */
+type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+
+/**
+ * Resolve the value type at a given property path.
+ * 
+ * @remarks
+ * Supports dot-separated paths and resolves deeply nested property types.
+ * Returns `never` for invalid paths.
+ * 
+ * @template T - Object type to traverse
+ * @template P - Dot-separated property path
+ * 
+ * @example
+ * type User = { id: number; profile: { name: string; address: { city: string } } };
+ * type City = PathValue< User, "profile.address.city" >;  // string
+ */
+export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer Rest }`
+    ? K extends keyof T ? PathValue< T[ K ], Rest > : never
+    : P extends keyof T ? T[ P ] : never;
