@@ -15,25 +15,31 @@
  * Import from specific modules to keep IntelliSense fast:
  * ```ts
  * // Good: Direct module imports
- * import type { Merge } from 'devtypes/collections';
- * import type { RequireExactlyOne } from 'devtypes/constraints';
+ * import type { Merge } from 'devtypes/merge';
+ * import type { RequireExactlyOne } from 'devtypes/constraint';
  * 
  * // Avoid: Importing everything
  * import type { Merge, RequireExactlyOne } from 'devtypes';
  * import type * from 'devtypes';
  * ```
  * 
+ * @package devtypes
  * @author Paul Köhler (komed3)
- * @version 1.1.0
+ * @version 2.0.0
  * @license MIT
  */
 
-export type * from './base';
-export type * from './classes';
-export type * from './collections';
-export type * from './combinators';
-export type * from './constraints';
-export type * from './functionals';
-export type * from './lists';
-export type * from './primitives';
-export type * from './utils';
+export type * from './assert';
+export type * from './class';
+export type * from './condition';
+export type * from './constraint';
+export type * from './function';
+export type * from './guard';
+export type * from './list';
+export type * from './merge';
+export type * from './object';
+export type * from './primitive';
+export type * from './transform';
+export type * from './tuple';
+export type * from './union';
+export type * from './util';

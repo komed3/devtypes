@@ -1,14 +1,13 @@
 /**
  * Primitive Types
  * 
- * Utility types for working with JavaScript primitive values, literals,
- * and advanced type narrowing.
+ * Utility types for working with JavaScript primitive values and literals.
  * 
- * @module types/primitives
- * @since 1.0.0
+ * @module devtypes/primitive
+ * @author komed3
+ * @license MIT
  */
 
-import type { IsAny } from './base';
 
 /**
  * All JavaScript primitive types.
@@ -20,13 +19,7 @@ import type { IsAny } from './base';
  * type P = Primitive;
  * // string | number | boolean | symbol | null | undefined
  */
-export type Primitive =
-    | string
-    | number
-    | boolean
-    | symbol
-    | null
-    | undefined;
+export type Primitive = string | number | boolean | symbol | null | undefined;
 
 /**
  * All non-primitive JavaScript types.
@@ -35,8 +28,7 @@ export type Primitive =
  * Represents values that are not primitives, including objects and functions.
  * 
  * @example
- * type NP = NonPrimitive;
- * // object | Function
+ * type NP = NonPrimitive;  // object | Function
  */
 export type NonPrimitive = object | Function;
 
@@ -53,34 +45,9 @@ export type NonPrimitive = object | Function;
  * 
  * @example
  * type Size = LiteralUnion< 'small' | 'medium' | 'large' >;
- * // 'small' | 'medium' | 'large' | (string & {})
+ * // 'small' | 'medium' | 'large' | ( string & {} )
  */
-export type LiteralUnion< T extends U, U = string > =
-    | T
-    | ( U & Record< never, never > );
-
-/**
- * Test whether a type is a literal type.
- * 
- * @remarks
- * Distinguishes string, number, and boolean literals from their
- * corresponding primitive base types. The `any` type always resolves
- * to `false` to avoid false positives.
- * 
- * @template T - Type to test
- * 
- * @example
- * type A = IsLiteral< 'hello' >;  // true
- * type B = IsLiteral< 42 >;       // true
- * type C = IsLiteral< true >;     // true
- * type D = IsLiteral< string >;   // false
- */
-export type IsLiteral< T > =
-    IsAny< T > extends true ? false
-        : string extends T ? false
-        : number extends T ? false
-        : boolean extends T ? false
-        : true;
+export type LiteralUnion< T extends U, U = string > = T | ( U & Record< never, never > );
 
 /**
  * Convert primitive literal types to their boxed object counterparts.

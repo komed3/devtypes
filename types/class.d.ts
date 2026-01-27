@@ -1,14 +1,17 @@
 /**
  * Class Types
  * 
- * Utilities for class-based type manipulation, constructor extraction, and property
- * mapping. Will be useful when working with class hierarchies and OOP patterns in TypeScript.
+ * Utilities for class-based type manipulation, constructor extraction,
+ * and property mapping. Will be useful when working with class hierarchies
+ * and OOP patterns in TypeScript.
  * 
- * @module types/classes
- * @since 1.1.0
+ * @module devtypes/class
+ * @author komed3
+ * @license MIT
  */
 
-import type { IfEquals } from './base';
+import type { IfEquals } from './condition';
+
 
 /**
  * Create a class constructor from instance properties.

@@ -1,11 +1,27 @@
 /**
- * Utility Types
+ * Object-like Types
  * 
- * Common utilities for object transformation, key filtering, and type manipulation.
+ * Types and utilities for working with object-like structures, including
+ * plain objects, arrays, maps, sets, and other complex structures.
  * 
- * @module types/utils
- * @since 1.0.0
+ * @module devtypes/object
+ * @author komed3
+ * @license MIT
  */
+
+
+/**
+ * Generic plain object type.
+ * 
+ * @remarks
+ * Represents an object with string, number, or symbol keys and any value types.
+ * Useful as a base type for object manipulations and transformations.
+ * 
+ * @example
+ * type Obj = PlainObject;
+ * // Record< string | number | symbol, any >
+ */
+export type PlainObject = Record< string | number | symbol, any >;
 
 /**
  * Extract keys of an object whose values match a type.
@@ -19,7 +35,7 @@
  * 
  * @example
  * type Obj = { a: number; b: string; c: number; d: boolean };
- * type NumKeys = KeysByValue< Obj, number >; // "a" | "c"
+ * type NumKeys = KeysByValue< Obj, number >;  // "a" | "c"
  */
 export type KeysByValue< T, V > = {
     [ K in keyof T ]-?: T[ K ] extends V ? K : never
@@ -37,7 +53,7 @@ export type KeysByValue< T, V > = {
  * 
  * @example
  * type Obj = { a: number; b: string; c: number; d: boolean };
- * type NumProps = PickByValue< Obj, number >; // { a: number; c: number }
+ * type NumProps = PickByValue< Obj, number >;  // { a: number; c: number }
  */
 export type PickByValue< T, V > = Pick< T, KeysByValue< T, V > >;
 
@@ -53,99 +69,13 @@ export type PickByValue< T, V > = Pick< T, KeysByValue< T, V > >;
  * 
  * @example
  * type Obj = { a: number; b: string; c: number; d: boolean };
- * type NonNumProps = OmitByValue< Obj, number >; // { b: string; d: boolean }
+ * type NonNumProps = OmitByValue< Obj, number >;  // { b: string; d: boolean }
  */
 export type OmitByValue< T, V > = Omit< T, KeysByValue< T, V > >;
 
 /**
- * Expand object type for better IntelliSense display.
- * 
- * @remarks
- * Flattens intersection types for clearer hover and auto-completion.
- * Does not change the type but improves editor readability.
- * 
- * @template T - The type to expand
- * 
- * @example
- * type Nested = { a: { b: { c: number } } };
- * type Expanded = Expand< Nested >; // { a: { b: { c: number } } }
- */
-export type Expand< T > = T extends object ? { [ K in keyof T ]: T[ K ] } & {} : T;
-
-/**
- * Flatten array type for better IntelliSense display.
- * 
- * @remarks
- * Improves readability of array types in hover information.
- * Useful when working with deeply nested arrays or tuple types.
- * 
- * @template T - The type to flatten
- * 
- * @example
- * type Arr = Array< { a: number } >;
- * type FlatArr = Flatten< Arr >; // { a: number }[]
- */
-export type Flatten< T > = T extends any[] ? { [ K in keyof T ]: T[ K ] } : T;
-
-/**
- * Exact type matching: ensure no extra properties.
- * 
- * @remarks
- * Validates that `T` matches exactly the shape of `Shape`.
- * Useful for type-level validation or enforcing strict interfaces.
- * 
- * @template T - The type to validate
- * @template Shape - The exact shape to match
- * 
- * @example
- * type A = Exact< { a: number }, { a: number } >;            // { a: number }
- * type B = Exact< { a: number; b: number }, { a: number } >; // never
- */
-export type Exact< T, Shape > =
-    T extends Shape
-        ? Exclude< keyof T, keyof Shape > extends never
-            ? T
-            : never
-        : never;
-
-/**
- * Pick specific members from a union by type.
- * 
- * @since 1.1.0
- * @remarks
- * Extracts only the union members that extend a given type.
- * Useful for filtering union types without modifying the original type.
- * 
- * @template U - A union type
- * @template T - The type to match union members against
- * 
- * @example
- * type U = string | number | boolean | null;
- * type Filtered = UnionPick< U, string | number >; // string | number
- */
-export type UnionPick< U, T > = U extends T ? U : never;
-
-/**
- * Omit specific members from a union by type.
- * 
- * @since 1.1.0
- * @remarks
- * Excludes union members that extend a given type.
- * Complementary to {@link UnionPick}, useful for narrowing unions.
- * 
- * @template U - A union type
- * @template T - The type to exclude from the union
- * 
- * @example
- * type U = string | number | boolean | null;
- * type Filtered = UnionOmit< U, string | null >; // number | boolean
- */
-export type UnionOmit< U, T > = U extends T ? never : U;
-
-/**
  * Pick properties with `never` value type.
  * 
- * @since 1.1.0
  * @remarks
  * Extracts placeholder or impossible properties from a type.
  * Useful for discriminated unions or type-level validation.
@@ -154,7 +84,7 @@ export type UnionOmit< U, T > = U extends T ? never : U;
  * 
  * @example
  * type Obj = { a: string; b: never; c: number; d: never };
- * type Result = PickNever< Obj >; // { b: never; d: never }
+ * type Result = PickNever< Obj >;  // { b: never; d: never }
  */
 export type PickNever< T > = Pick< T, {
     [ K in keyof T ]-?: T[ K ] extends never ? K : never
@@ -163,7 +93,6 @@ export type PickNever< T > = Pick< T, {
 /**
  * Omit properties with `never` value type.
  * 
- * @since 1.1.0
  * @remarks
  * Removes placeholder or impossible properties from a type.
  * Often used to clean up intermediate mapped types.
@@ -172,7 +101,7 @@ export type PickNever< T > = Pick< T, {
  * 
  * @example
  * type Obj = { a: string; b: never; c: number; d: never };
- * type Result = OmitNever< Obj >; // { a: string; c: number }
+ * type Result = OmitNever< Obj >;  // { a: string; c: number }
  */
 export type OmitNever< T > = Omit< T, {
     [ K in keyof T ]-?: T[ K ] extends never ? K : never
@@ -181,7 +110,6 @@ export type OmitNever< T > = Omit< T, {
 /**
  * Test if an object has a specific property.
  * 
- * @since 1.1.0
  * @remarks
  * Distinguishes between properties that are missing vs. undefined.
  * Useful for generic type checks in mapped or conditional types.
@@ -191,15 +119,14 @@ export type OmitNever< T > = Omit< T, {
  * 
  * @example
  * type Obj = { a: string; b?: number };
- * type Has_a = HasProperty< Obj, 'a' >; // true
- * type Has_c = HasProperty< Obj, 'c' >; // false
+ * type Has_a = HasProperty< Obj, 'a' >;  // true
+ * type Has_c = HasProperty< Obj, 'c' >;  // false
  */
 export type HasProperty< T, K extends PropertyKey > = K extends keyof T ? true : false;
 
 /**
  * Test if an object has an optional property.
  * 
- * @since 1.1.0
  * @remarks
  * Returns `true` only for properties declared with `?`.
  * Does not consider union types that include undefined.
@@ -209,8 +136,8 @@ export type HasProperty< T, K extends PropertyKey > = K extends keyof T ? true :
  * 
  * @example
  * type Obj = { a: string; b?: number; c: number | undefined };
- * type IsOpt_b = HasOptionalProperty< Obj, 'b' >; // true
- * type IsOpt_c = HasOptionalProperty< Obj, 'c' >; // false
+ * type IsOpt_b = HasOptionalProperty< Obj, 'b' >;  // true
+ * type IsOpt_c = HasOptionalProperty< Obj, 'c' >;  // false
  */
 export type HasOptionalProperty< T, K extends PropertyKey > =
     K extends keyof T ? {} extends Pick< T, K > ? true : false : false;
@@ -218,7 +145,6 @@ export type HasOptionalProperty< T, K extends PropertyKey > =
 /**
  * Test if an object has a required property.
  * 
- * @since 1.1.0
  * @remarks
  * Returns `true` for properties that cannot be undefined.
  * Complementary to {@link HasOptionalProperty}.
@@ -228,8 +154,8 @@ export type HasOptionalProperty< T, K extends PropertyKey > =
  * 
  * @example
  * type Obj = { a: string; b?: number; c: number | undefined };
- * type IsReq_a = HasRequiredProperty< Obj, 'a' >; // true
- * type IsReq_b = HasRequiredProperty< Obj, 'b' >; // false
+ * type IsReq_a = HasRequiredProperty< Obj, 'a' >;  // true
+ * type IsReq_b = HasRequiredProperty< Obj, 'b' >;  // false
  */
 export type HasRequiredProperty< T, K extends PropertyKey > =
     K extends keyof T ? {} extends Pick< T, K > ? false : true : false;
@@ -237,7 +163,6 @@ export type HasRequiredProperty< T, K extends PropertyKey > =
 /**
  * Make a specific property readonly.
  * 
- * @since 1.1.0
  * @remarks
  * Marks only one property as readonly while keeping all others mutable.
  * Useful for enforcing immutability at the type level.
@@ -247,7 +172,8 @@ export type HasRequiredProperty< T, K extends PropertyKey > =
  * 
  * @example
  * type Obj = { a: string; b: number };
- * type Result = ReadonlyProperty< Obj, 'a' >; // { readonly a: string; b: number }
+ * type Result = ReadonlyProperty< Obj, 'a' >;
+ * // { readonly a: string; b: number }
  */
 export type ReadonlyProperty< T, K extends keyof T > =
     Omit< T, K > & Readonly< Pick< T, K > >;
@@ -255,7 +181,6 @@ export type ReadonlyProperty< T, K extends keyof T > =
 /**
  * Make a specific property mutable (remove readonly).
  * 
- * @since 1.1.0
  * @remarks
  * Removes the readonly modifier from a single property while leaving others unchanged.
  * Useful for controlled mutability in type-level object transformations.
@@ -265,7 +190,60 @@ export type ReadonlyProperty< T, K extends keyof T > =
  * 
  * @example
  * type Obj = { readonly a: string; readonly b: number };
- * type Result = MutableProperty< Obj, 'a' >; // { a: string; readonly b: number }
+ * type Result = MutableProperty< Obj, 'a' >;
+ * // { a: string; readonly b: number }
  */
 export type MutableProperty< T, K extends keyof T > =
     Omit< T, K > & { -readonly [ P in K ]: T[ P ] };
+
+/**
+ * Build all nested property paths using dot notation.
+ * 
+ * @remarks
+ * Generates a union of valid access paths up to a configurable recursion
+ * depth. Path order is not guaranteed.
+ * 
+ * @template T - Object type to analyze
+ * @template D - Maximum recursion depth (defaults to 5)
+ * 
+ * @example
+ * type User = { id: number; profile: { name: string; address: { city: string } } };
+ * type Paths = Paths< User >;
+ * // "id" | "profile" | "profile.name" | "profile.address" | "profile.address.city"
+ */
+export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
+    ? never : T extends object
+        ? { [ K in keyof T ]-?: K extends string | number
+            ? T[ K ] extends readonly any[]
+                ? K : T[ K ] extends object
+                    ? K | Join< K, Paths< T[ K ], Prev[ D ] > > : K
+            : never }[ keyof T ]
+        : '';
+
+/** @internal */
+type Join< K, P > = K extends string | number
+    ? P extends string | number
+        ? `${ K & ( string | number ) }.${ P & ( string | number ) }`
+        : never
+    : never;
+
+/** @internal */
+type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+
+/**
+ * Resolve the value type at a given property path.
+ * 
+ * @remarks
+ * Supports dot-separated paths and resolves deeply nested property types.
+ * Returns `never` for invalid paths.
+ * 
+ * @template T - Object type to traverse
+ * @template P - Dot-separated property path
+ * 
+ * @example
+ * type User = { id: number; profile: { name: string; address: { city: string } } };
+ * type City = PathValue< User, "profile.address.city" >;  // string
+ */
+export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer Rest }`
+    ? K extends keyof T ? PathValue< T[ K ], Rest > : never
+    : P extends keyof T ? T[ P ] : never;

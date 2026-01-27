@@ -4,8 +4,11 @@
  * Higher-order type utilities for function manipulation, currying, composition,
  * and promise handling.
  * 
- * @module types/functionals
- * @since 1.0.0
+ * Includes additional utilities for parameter and this-type extraction.
+ * 
+ * @module devtypes/function
+ * @author komed3
+ * @license MIT
  */
 
 /**
@@ -28,23 +31,6 @@ export type Curry< F > =
             ? ( a: A ) => Curry< ( ...args: Rest ) => R >
             : R
         : never;
-
-/**
- * Extract parameter types from a curried function.
- * 
- * @remarks
- * Builds a tuple of all parameter types from a curried function recursively.
- * Used for type-level analysis of curried signatures.
- * 
- * @template F - Curried function type
- * 
- * @example
- * type CurriedFn = ( a: string ) => ( b: number ) => ( c: boolean ) => void;
- * type Params = CurriedParams< CurriedFn >;
- * // [ string, number, boolean ]
- */
-export type CurriedParams< F > =
-    F extends ( a: infer A ) => infer R ? [ A, ...CurriedParams< R > ] : [];
 
 /**
  * Compose two functions.
@@ -77,7 +63,6 @@ export type Compose< F extends ( arg: any ) => any, G extends ( arg: any ) => an
  * 
  * @template Fns - Array of function types to compose
  * 
- * @since 1.1.0
  * @example
  * type F1 = ( x: number ) => string;
  * type F2 = ( y: string ) => boolean;
@@ -154,7 +139,6 @@ export type AwaitedReturnType< F > =
 /**
  * Extract parameter types from a function.
  * 
- * @since 1.1.0
  * @remarks
  * Retrieves all parameter types as a tuple in declaration order.
  * 
@@ -167,9 +151,25 @@ export type AwaitedReturnType< F > =
 export type Parameters< F extends Function > = F extends ( ...args: infer P ) => any ? P : never;
 
 /**
+ * Extract parameter types from a curried function.
+ * 
+ * @remarks
+ * Builds a tuple of all parameter types from a curried function recursively.
+ * Used for type-level analysis of curried signatures.
+ * 
+ * @template F - Curried function type
+ * 
+ * @example
+ * type CurriedFn = ( a: string ) => ( b: number ) => ( c: boolean ) => void;
+ * type Params = CurriedParameters< CurriedFn >;
+ * // [ string, number, boolean ]
+ */
+export type CurriedParameters< F > =
+    F extends ( a: infer A ) => infer R ? [ A, ...CurriedParameters< R > ] : [];
+
+/**
  * Get the this binding type from a function.
  * 
- * @since 1.1.0
  * @remarks
  * Extracts the `this` context type if present, or `unknown` if absent.
  * 
@@ -185,7 +185,6 @@ export type ThisParameterType< F extends Function > =
 /**
  * Remove the `this` parameter from a function.
  * 
- * @since 1.1.0
  * @remarks
  * Produces a new function type without the this binding.
  * 
