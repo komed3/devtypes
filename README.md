@@ -89,8 +89,8 @@ Import from specific modules for best IDE performance:
 
 ```ts
 // Good - direct import
-import type { Merge } from 'devtypes/types/utils';
-import type { MethodNames } from 'devtypes/types/classes';
+import type { Merge } from 'devtypes/utils';
+import type { MethodNames } from 'devtypes/classes';
 
 // Avoid - star imports slow down IntelliSense
 import * as Types from 'devtypes';
