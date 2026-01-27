@@ -61,19 +61,22 @@ export type ListElement< L > =
  * Extract the key or index type from a keyed list-like structure.
  * 
  * @remarks
- * For arrays and other non-keyed collections, this defaults to
- * `string | number`.
+ * For arrays and other non-keyed collections, this defaults to `string | number`.
+ * If the structure is not keyed, the type resolves to `never`.
  * 
  * @template L - List-like type
  * 
  * @example
  * type I1 = ListLikeIndex< Record< string, number > >;  // string
  * type I2 = ListLikeIndex< Map< number, string > >;     // number
- * type I3 = ListLikeIndex< number[] >;                  // string | number
+ * type I3 = ListLikeIndex< number[] >;                  // number
  */
 export type ListLikeIndex< L > =
-    L extends Record< infer K, any > ? K
-        : L extends Map< infer MK, any > ? MK
+    L extends readonly any[] ? number
+        : L extends ReadonlyMap< infer K, any > ? K
+        : L extends Map< infer K, any > ? K
+        : L extends Record< infer K, any > ? K
+        : L extends Set< any > | ReadonlySet< any > | Iterable< any > ? never
         : string | number;
 
 /**
@@ -146,11 +149,11 @@ export type ToMap< L > = Map< ListLikeIndex< L >, ListElement< L > >;
  * type C = IsKeyedList< number[] >;                  // false
  */
 export type IsKeyedList< L > =
-    L extends Record< any, any >
-        ? true
-        : L extends Map< any, any >
-            ? true
-            : false;
+    L extends readonly any[] ? false
+        : L extends ReadonlyMap< any, any > ? true
+        : L extends Map< any, any > ? true
+        : L extends Record< any, any > ? true
+        : false;
 
 /**
  * Test whether a list-like structure is index-based.
