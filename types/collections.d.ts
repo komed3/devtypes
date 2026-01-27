@@ -253,6 +253,37 @@ export type DeepMerge< Left, Right > = {
 } & {};
 
 /**
+ * Strict deep merge of two object types.
+ * 
+ * @since 1.1.0
+ * @remarks
+ * Similar to {@link DeepMerge} but preserves array types from the left-hand
+ * side by injecting right-hand properties into array element types.
+ * 
+ * @template Left - Base object type
+ * @template Right - Overriding object type
+ * 
+ * @example
+ * type A = { a: { x: { foo: true } } };
+ * type B = { a: { x: { foo: number, bar: string } } };
+ * type Merged = < A, B >;
+ * // { a: { x: { foo: true, bar: string } } }
+ */
+export type DeepMergeStrict< Left, Right > =
+    Left extends Array< infer U >
+        ? DeepMergeStrict< U, Right >[]
+        : Left extends ReadonlyArray< infer U >
+            ? ReadonlyArray< DeepMergeStrict< U, Right > >
+            : Left extends object
+                ? Right extends object
+                    ? { [ K in keyof Left ]: K extends keyof Right
+                            ? DeepMergeStrict< Left[ K ], Right[ K ] >
+                            : DeepMergeStrict< Left[ K ], Right > } & {
+                        [ K in Exclude< keyof Right, keyof Left > ]: Right[ K ] }
+                    : Left
+                : Left;
+
+/**
  * Merge multiple object types sequentially.
  * 
  * @remarks
@@ -275,8 +306,8 @@ export type MergeMany< T extends unknown[] > =
  * 
  * @since 1.1.0
  * @remarks
- * Injects the provided type into every nested object unless the property
- * already exists at that level.
+ * Injects properties from type D into every nested object within T.
+ * Handles arrays and readonly arrays by injecting into their element types.
  * 
  * Properties in T are never overwritten by properties from D.
  * 
@@ -287,19 +318,24 @@ export type MergeMany< T extends unknown[] > =
  * type Nested = { level_1: { level_2: { } } };
  * type Metadata = { metadata?: string };
  * type DeepIntersected = DeepIntersection< Nested, Metadata >;
- * // { level_1: { level_2: { metadata?: string } } }
+ * // { level_1: { level_2: { metadata?: string }, metadata?: string }, metadata?: string }
  */
-export type DeepInject< T, D > = {
-    [ P in keyof T ]: T[ P ] extends Array< infer U >
+export type DeepInject< T, D > =
+    T extends Array< infer U >
         ? DeepInject< U, D >[]
-        : T[ P ] extends ReadonlyArray< infer U >
+        : T extends ReadonlyArray< infer U >
             ? ReadonlyArray< DeepInject< U, D > >
-            : T[ P ] extends object
-                ? DeepInject< T[ P ], D >
-                : T[ P ];
-} & {
-    [ P in keyof D ]: P extends keyof T ? never : D[ P ]
-};
+            : T extends object
+                ? { [ K in keyof T ]: T[ K ] extends object
+                        ? DeepInject< T[ K ], D >
+                        : T[ K ] } & {
+                    [ K in Exclude< {
+                        [ K in keyof D ]-?: {} extends Pick< D, K > ? K : never
+                    }[ keyof D ], keyof T > ]?: D[ K ] } & {
+                    [ K in Exclude< {
+                        [ K in keyof D ]-?: {} extends Pick< D, K > ? never : K
+                    }[ keyof D ], keyof T > ]-?: D[ K ] }
+                : T;
 
 /**
  * Compute chained intersections across multiple types.
