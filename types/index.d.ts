@@ -15,11 +15,12 @@
  * Import from specific modules to keep IntelliSense fast:
  * ```ts
  * // Good: Direct module imports
- * import type { Merge } from './types/collections';
- * import type { RequireExactlyOne } from './types/constraints';
+ * import type { Merge } from 'devtypes/collections';
+ * import type { RequireExactlyOne } from 'devtypes/constraints';
  * 
  * // Avoid: Importing everything
- * import type { Merge, RequireExactlyOne } from './types';
+ * import type { Merge, RequireExactlyOne } from 'devtypes';
+ * import type * from 'devtypes';
  * ```
  * 
  * @author Paul Köhler (komed3)
