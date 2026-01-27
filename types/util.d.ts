@@ -1,0 +1,129 @@
+/**
+ * Utility Types
+ * 
+ * This module provides a collection of advanced utility types for TypeScript
+ * development. These types facilitate nominal typing, type casting, boxing of
+ * primitives, optional values, type simplification, and type narrowing.
+ * 
+ * @module devtypes/util
+ * @author komed3
+ * @license MIT
+ */
+
+import type { If } from './condition';
+
+
+/**
+ * Brand a type for nominal typing.
+ * 
+ * @remarks
+ * Creates a nominally distinct type by intersecting a base type with a
+ * readonly marker property. This prevents accidental mixing of otherwise
+ * structurally compatible types.
+ * 
+ * @template Base - Base type to brand
+ * @template Tag - Unique string literal identifying the brand
+ * @template Key - Property name used as the brand marker (defaults to `__brand`)
+ * @template Required - Whether the marker is required (defaults to `false`)
+ * 
+ * @example
+ * type UserID = Brand< number, 'UserID' >;
+ * const id: UserID = 123 as UserID;
+ */
+export type Brand<
+    Base, Tag extends string, Key extends string = '__brand',
+    Required extends boolean = false
+> =
+    Base & If<
+        Required,
+        { readonly [ K in Key ]: Tag },
+        { readonly [ K in Key ]?: Tag }
+    >;
+
+/**
+ * Cast a type while preserving assignability.
+ * 
+ * @remarks
+ * Keeps the source type if it is assignable to the target type; otherwise,
+ * resolves to the target type.
+ * 
+ * @template T - Source type
+ * @template U - Target type
+ * 
+ * @example
+ * type A = Cast< string, string | number >;   // string
+ * type B = Cast< number, string | number >;   // number
+ * type C = Cast< boolean, string | number >;  // string | number
+ */
+export type Cast< T, U > = T extends U ? T : U;
+
+/**
+ * Convert primitive literal types to their boxed object counterparts.
+ * 
+ * @remarks
+ * Useful when interacting with APIs or type constraints that expect
+ * boxed primitives instead of their primitive forms.
+ * 
+ * @template T - Primitive literal type(s) to convert
+ * 
+ * @example
+ * type Boxed = Box< 'hello' | 42 | true >;
+ * // String | Number | Boolean
+ */
+export type Box< T > =
+    T extends string ? String
+        : T extends number ? Number
+        : T extends boolean ? Boolean
+        : T extends symbol ? Symbol
+        : T;
+
+/**
+ * Optional value type.
+ * 
+ * @remarks
+ * Represents a value that may be `null` or `undefined`. Useful as a concise
+ * shorthand for optional union types.
+ * 
+ * @template T - Value type
+ * 
+ * @example
+ * type A = Maybe< string >;
+ * // string | null | undefined
+ */
+export type Maybe< T > = T | null | undefined;
+
+/**
+ * Simplify a type for improved IntelliSense display.
+ * 
+ * @remarks
+ * Expands intersections and flattens mapped types to produce cleaner IDE
+ * hover tooltips. Functions are left untouched.
+ * 
+ * @template T - Type to simplify
+ * 
+ * @example
+ * type Complex = { a: string } & { b: number } & { c: boolean };
+ * type Simple = Simplify< Complex >;
+ * // { a: string; b: number; c: boolean }
+ */
+export type Simplify< T > = T extends Function ? T : { [ K in keyof T ]: T[ K ] } & {};
+
+/**
+ * Narrow a type without widening literals.
+ * 
+ * @remarks
+ * Preserves literal types while leaving their corresponding base types
+ * unchanged. Primarily useful as a semantic marker in public APIs.
+ * 
+ * @template T - Type to narrow
+ * 
+ * @example
+ * type A = Narrow< 'hello' >;  // 'hello'
+ * type B = Narrow< string >;   // string
+ */
+export type Narrow< T > =
+    T extends string
+        ? ( string extends T ? T : T )
+        : T extends number
+            ? ( number extends T ? T : T )
+            : T;
