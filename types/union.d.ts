@@ -111,3 +111,73 @@ export type UnionPick< U, T > = U extends T ? U : never;
  * type Filtered = UnionOmit< U, string | null >;  // number | boolean
  */
 export type UnionOmit< U, T > = U extends T ? never : U;
+
+/**
+ * Extract all keys from a union of object types.
+ * 
+ * @remarks
+ * Produces the union of keys that appear in at least one member
+ * of the union.
+ * 
+ * @template U - Union of object types
+ * 
+ * @example
+ * type U = { a: string } | { b: number };
+ * type K = UnionKeys< U >;  // 'a' | 'b'
+ */
+export type UnionKeys< U > = U extends any ? keyof U : never;
+
+/**
+ * Extract all value types from a union of object types.
+ * 
+ * @remarks
+ * Produces a union of all property value types across all members.
+ * 
+ * @template U - Union of object types
+ * 
+ * @example
+ * type U = { a: string } | { b: number };
+ * type V = UnionValues< U >;  // string | number
+ */
+export type UnionValues< U > = U extends any ? U[ keyof U ] : never;
+
+/**
+ * Merge a union of object types into a single object type.
+ * 
+ * @remarks
+ * All properties from all union members are combined.
+ * Properties not present in every member become optional.
+ * 
+ * This is a structural merge and may lose discriminant information.
+ * 
+ * @template U - Union of object types
+ * 
+ * @example
+ * type U = { a: string } | { b: number };
+ * type M = UnionMerge< U >;
+ * // { a?: string; b?: number }
+ */
+export type UnionMerge< U > = {
+    [ K in UnionKeys< U > ]?: U extends any
+        ? K extends keyof U
+            ? U[ K ]
+            : never
+        : never;
+};
+
+/**
+ * Check if a union type includes a specific type.
+ * 
+ * @remarks
+ * Evaluates to `true` if the type `T` is assignable to the union `U`,
+ * otherwise evaluates to `false`.
+ * 
+ * @template U - A union type
+ * @template T - The type to check for membership in the union
+ * 
+ * @example
+ * type U = string | number | boolean;
+ * type HasString = UnionHas< U, string >;  // true
+ * type HasDate = UnionHas< U, Date >;      // false
+ */
+export type UnionHas< U, T > = [ T ] extends [ U ] ? true : false;
