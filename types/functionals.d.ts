@@ -2,7 +2,7 @@
  * Functional Types
  * 
  * Higher-order type utilities for function manipulation, currying, composition,
- * and promise handling. All helpers operate purely at the type level.
+ * and promise handling.
  * 
  * @module types/functionals
  * @since 1.0.0
