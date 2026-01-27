@@ -132,3 +132,43 @@ export type TupleReverse< T extends readonly any[], R extends readonly any[] = [
     T extends readonly [ infer H, ...infer Rest ]
         ? TupleReverse< Rest, readonly [ H, ...R ] >
         : R;
+
+/**
+ * Zip two tuples into a tuple of pairs.
+ * 
+ * @remarks
+ * Combines two tuples by pairing elements at corresponding positions.
+ * Stops at the shorter tuple length.
+ * 
+ * @template A - First tuple
+ * @template B - Second tuple
+ * 
+ * @example
+ * type Z = TupleZip< [ 1, 2 ], [ 'a', 'b', 'c' ] >;
+ * // [ [ 1, 'a' ], [ 2, 'b' ] ]
+ */
+export type TupleZip< A extends readonly any[], B extends readonly any[] > =
+    A extends readonly [ infer AH, ...infer AT ]
+        ? B extends readonly [ infer BH, ...infer BT ]
+            ? readonly [ readonly [ AH, BH ], ...TupleZip< AT, BT > ]
+            : readonly []
+        : readonly [];
+
+/**
+ * Flatten a tuple recursively.
+ * 
+ * @remarks
+ * Will recursively flatten nested tuples into a single-level tuple.
+ * Only flattens tuple types, not general arrays.
+ * 
+ * @template T - Tuple type
+ * 
+ * @example
+ * type F = TupleFlatten< [ 1, [ 2, [ 3 ] ], 4 ] >;  // [ 1, 2, 3, 4 ]
+ */
+export type TupleFlatten< T extends readonly any[] > =
+    T extends readonly [ infer H, ...infer R ]
+        ? H extends readonly any[]
+            ? readonly [ ...TupleFlatten< H >, ...TupleFlatten< R > ]
+            : readonly [ H, ...TupleFlatten< R > ]
+        : readonly [];

@@ -114,3 +114,41 @@ export type IsLiteral< T > =
  * type C = IsListLike< string >;                    // false
  */
 export type IsListLike< T > = T extends ListLike< any, any > ? true : false;
+
+/**
+ * Type guard: detect whether a type is a tuple.
+ * 
+ * @remarks
+ * Distinguishes tuples from arrays by inspecting the length property.
+ * 
+ * @template T - Type to check
+ * 
+ * @example
+ * type A = IsTuple< [ string, number ] >;  // true
+ * type B = IsTuple< number[] >;            // false
+ */
+export type IsTuple< T > =
+    T extends readonly any[]
+        ? number extends T[ 'length' ]
+            ? false
+            : true
+        : false;
+
+/**
+ * Type guard: check whether a type is a non-empty tuple.
+ * 
+ * @remarks
+ * Combines tuple detection with an emptiness check.
+ * 
+ * @template T - Type to check
+ * 
+ * @example
+ * type A = IsNonEmptyTuple< [ number ] >;  // true
+ * type B = IsNonEmptyTuple< [] >;          // false
+ */
+export type IsNonEmptyTuple< T > =
+    IsTuple< T > extends true
+        ? T extends readonly []
+            ? false
+            : true
+        : false;
