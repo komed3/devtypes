@@ -13,6 +13,7 @@
  * 
  * @remarks
  * Transforms a multi-argument function into a sequence of unary functions.
+ * Used for functional programming patterns.
  * 
  * @template F - Function type to curry
  * 
@@ -33,6 +34,7 @@ export type Curry< F > =
  * 
  * @remarks
  * Builds a tuple of all parameter types from a curried function recursively.
+ * Used for type-level analysis of curried signatures.
  * 
  * @template F - Curried function type
  * 
@@ -99,6 +101,7 @@ export type ComposeMany< Fns extends Array< ( ...args: any[] ) => any > > =
  * 
  * @remarks
  * Wraps a function's return type in a Promise, preserving argument types.
+ * Will result in `never` if input is not a function.
  * 
  * @template F - Function type to promisify
  * 
@@ -131,6 +134,7 @@ export type UnwrapPromise< T > = T extends Promise< infer U > ? U : T;
  * 
  * @remarks
  * Combines return type extraction with automatic Promise unwrapping.
+ * It's come in handy when dealing with async functions.
  * 
  * @template F - Function type
  * 
