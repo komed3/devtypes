@@ -48,3 +48,23 @@ export type NonPrimitive = object | Function;
  * // 'small' | 'medium' | 'large' | ( string & {} )
  */
 export type LiteralUnion< T extends U, U = string > = T | ( U & Record< never, never > );
+
+/**
+ * Convert primitive literal types to their boxed object counterparts.
+ * 
+ * @remarks
+ * Useful when interacting with APIs or type constraints that expect
+ * boxed primitives instead of their primitive forms.
+ * 
+ * @template T - Primitive literal type(s) to convert
+ * 
+ * @example
+ * type Boxed = Box< 'hello' | 42 | true >;
+ * // String | Number | Boolean
+ */
+export type Box< T > =
+    T extends string ? String
+        : T extends number ? Number
+        : T extends boolean ? Boolean
+        : T extends symbol ? Symbol
+        : T;
