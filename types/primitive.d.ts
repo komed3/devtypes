@@ -8,6 +8,7 @@
  * @license MIT
  */
 
+
 /**
  * All JavaScript primitive types.
  * 
