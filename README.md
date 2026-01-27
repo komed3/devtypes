@@ -1,6 +1,6 @@
 # TypeScript Advanced Type Utilities
 
-A comprehensive collection of high-performance TypeScript type utilities focused on type safety and developer experience.
+A comprehensive collection of **more than 140 high-performance TypeScript type utilities** focused on type safety and developer experience.
 
 ## Features
 
@@ -25,8 +25,8 @@ Read the full **[devtypes Documentation](https://komed3.github.io/devtypes/index
 ### Object Type Manipulation
 
 ```ts
-import type { Merge } from 'devtypes/collections';
-import type { RequireExactlyOne } from 'devtypes/constraints';
+import type { Merge } from 'devtypes/merge';
+import type { RequireExactlyOne } from 'devtypes/constraint';
 
 type UserBase = { id: number; name: string; email?: string };
 type UserAuth = { email: string; password: string };
@@ -45,7 +45,7 @@ type LoginCredentials = RequireExactlyOne<
 ### Deep Utilities
 
 ```ts
-import type { DeepPartial, DeepRequired } from 'devtypes/collections';
+import type { DeepPartial, DeepRequired } from 'devtypes/transform';
 
 interface Config {
     server: {
@@ -73,15 +73,20 @@ type FullConfig = DeepRequired< Config >;
 
 | Module | Purpose |
 |--------|---------|
-| **base** | Foundational types: conditionals, guards, type equality |
-| **primitives** | Primitive type utilities and literal handling |
-| **collections** | Deep transformations (merging, partial, required, readonly, mutable) |
-| **lists** | List-like structures (arrays, sets, maps, records, iterables) |
-| **combinators** | Union/tuple/intersection transformations |
-| **constraints** | Property requirement constraints and validation |
-| **functionals** | Function type utilities: curry, compose, promisify |
-| **classes** | Class-specific utilities: methods, properties, constructors |
-| **utils** | General-purpose transformations and key filtering |
+| **assert** | Assertion utilities for compile-time checks |
+| **class** | Class-specific utilities: methods, properties, constructors |
+| **condition** | Conditional type utilities (If and Equals) |
+| **constraint** | Property requirement constraints and validation |
+| **function** | Function type utilities: curry, compose, promisify |
+| **guard** | Type guard utilities for runtime type checking |
+| **list** | List-like structures (arrays, sets, maps, records, iterables) |
+| **merge** | (Deep) merging and intersection of types |
+| **object** | Object type manipulation and property utilities |
+| **primitive** | Primitive type utilities and literal handling |
+| **transform** | (Deep) transformations for objects, arrays, and nested structures |
+| **tuple** | Tuple-specific utilities and manipulations |
+| **union** | Union type utilities: exclusion, extraction, conversion |
+| **util** | Generic utility types: branding, boxing, casting, simplification |
 
 ## Performance Tips
 
@@ -89,8 +94,8 @@ Import from specific modules for best IDE performance:
 
 ```ts
 // Good - direct import
-import type { Merge } from 'devtypes/utils';
-import type { MethodNames } from 'devtypes/classes';
+import type { Brand } from 'devtypes/util';
+import type { MethodNames } from 'devtypes/class';
 
 // Avoid - star imports slow down IntelliSense
 import * as Types from 'devtypes';
