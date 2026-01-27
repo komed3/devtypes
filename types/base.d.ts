@@ -80,6 +80,7 @@ export type IsUnknown< T > =
 /**
  * Conditional type based on type equality.
  * 
+ * @since 1.1.0
  * @remarks
  * Resolves to one of two branches depending on whether two types are equal.
  * Internal implementation uses function signature variance for comparison.
