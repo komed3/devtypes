@@ -59,3 +59,90 @@ export type PickByValue< T, V > = Pick< T, KeysByValue< T, V > >;
  * type NonNumProps = OmitByValue< Obj, number >;  // { b: string; d: boolean }
  */
 export type OmitByValue< T, V > = Omit< T, KeysByValue< T, V > >;
+
+/**
+ * Pick properties with `never` value type.
+ * 
+ * @remarks
+ * Extracts placeholder or impossible properties from a type.
+ * Useful for discriminated unions or type-level validation.
+ * 
+ * @template T - The object type to filter
+ * 
+ * @example
+ * type Obj = { a: string; b: never; c: number; d: never };
+ * type Result = PickNever< Obj >;  // { b: never; d: never }
+ */
+export type PickNever< T > = Pick< T, {
+    [ K in keyof T ]-?: T[ K ] extends never ? K : never
+}[ keyof T ] >;
+
+/**
+ * Omit properties with `never` value type.
+ * 
+ * @remarks
+ * Removes placeholder or impossible properties from a type.
+ * Often used to clean up intermediate mapped types.
+ * 
+ * @template T - The object type to filter
+ * 
+ * @example
+ * type Obj = { a: string; b: never; c: number; d: never };
+ * type Result = OmitNever< Obj >;  // { a: string; c: number }
+ */
+export type OmitNever< T > = Omit< T, {
+    [ K in keyof T ]-?: T[ K ] extends never ? K : never
+}[ keyof T ] >;
+
+/**
+ * Test if an object has a specific property.
+ * 
+ * @remarks
+ * Distinguishes between properties that are missing vs. undefined.
+ * Useful for generic type checks in mapped or conditional types.
+ * 
+ * @template T - The object type
+ * @template K - The property key to check
+ * 
+ * @example
+ * type Obj = { a: string; b?: number };
+ * type Has_a = HasProperty< Obj, 'a' >; // true
+ * type Has_c = HasProperty< Obj, 'c' >; // false
+ */
+export type HasProperty< T, K extends PropertyKey > = K extends keyof T ? true : false;
+
+/**
+ * Test if an object has an optional property.
+ * 
+ * @remarks
+ * Returns `true` only for properties declared with `?`.
+ * Does not consider union types that include undefined.
+ * 
+ * @template T - The object type
+ * @template K - The property key to check
+ * 
+ * @example
+ * type Obj = { a: string; b?: number; c: number | undefined };
+ * type IsOpt_b = HasOptionalProperty< Obj, 'b' >; // true
+ * type IsOpt_c = HasOptionalProperty< Obj, 'c' >; // false
+ */
+export type HasOptionalProperty< T, K extends PropertyKey > =
+    K extends keyof T ? {} extends Pick< T, K > ? true : false : false;
+
+/**
+ * Test if an object has a required property.
+ * 
+ * @remarks
+ * Returns `true` for properties that cannot be undefined.
+ * Complementary to {@link HasOptionalProperty}.
+ * 
+ * @template T - The object type
+ * @template K - The property key to check
+ * 
+ * @example
+ * type Obj = { a: string; b?: number; c: number | undefined };
+ * type IsReq_a = HasRequiredProperty< Obj, 'a' >; // true
+ * type IsReq_b = HasRequiredProperty< Obj, 'b' >; // false
+ */
+export type HasRequiredProperty< T, K extends PropertyKey > =
+    K extends keyof T ? {} extends Pick< T, K > ? false : true : false;
