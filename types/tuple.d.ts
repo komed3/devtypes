@@ -26,6 +26,22 @@
 export type TupleToUnion< T extends readonly any[] > = T[ number ];
 
 /**
+ * Concatenate two tuples.
+ * 
+ * @remarks
+ * Creates a new tuple type by appending the elements of the second tuple
+ * to the end of the first tuple.
+ * 
+ * @template A - First tuple
+ * @template B - Second tuple
+ * 
+ * @example
+ * type C = TupleConcat< [ 1, 2 ], [ 3, 4 ] >;  // [ 1, 2, 3, 4 ]
+ */
+export type TupleConcat< A extends readonly any[], B extends readonly any[] > =
+    readonly [ ...A, ...B ];
+
+/**
  * Append an element to the end of a tuple.
  * 
  * @remarks
