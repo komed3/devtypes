@@ -36,5 +36,11 @@
   ],
   "engines": {
     "node": ">=18.0.0"
+  },
+  "scripts": {
+    "docs": "typedoc --logLevel Verbose --options typedoc.json"
+  },
+  "devDependencies": {
+    "typedoc": "^0.28.16"
   }
 }
