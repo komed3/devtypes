@@ -1,0 +1,13 @@
+{
+  "entryPoints": [ "./types/*" ],
+  "exclude" : [ "./types/index.ts" ],
+  "entryPointStrategy": "resolve",
+  "out": "docs",
+  "githubPages": true,
+  "searchInComments": true,
+  "searchInDocuments": true,
+  "includeVersion": true,
+  "excludeInternal": true,
+  "customFooterHtml": "Copyright 2025–2026 Paul Köhler (komed3) — Distributed under the MIT license.",
+  "favicon": "favicon.ico"
+}

@@ -26,15 +26,14 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: "npm"
+          cache: npm
 
       - name: TSDoc Action
         uses: erikyo/tsdoc-action@v1
         with:
-          source_dir: ./types/*
-          output_dir: ./docs
-          options: tsconfig.json
-          front_page: README.md
+          source_dir: "./types/*"
+          output_dir: "./docs"
+          options: "typedoc.json"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
