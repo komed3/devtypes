@@ -274,52 +274,48 @@ export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer 
  * //   };
  * // }
  */
-
-export type ChainMapped<K extends string[], T> = 
-    K extends [infer F extends string, ...infer R extends string[]]
-        ? { [key in F]: ChainMapped<R, T> }
-        : T
+export type ChainMapped< K extends string[], T > =
+    K extends [ infer F extends string, ...infer R extends string[] ]
+        ? { [ K in F ]: ChainMapped< R, T > }
+        : T;
 
 /**
- * Constructs an object whose properties keys are Keys and property values are T
+ * Constructs an object whose properties keys are `Keys` and property values are `T`.
+ * 
  * @remarks
- * This type is like the base utility type Record but Keys are enforced to be strings.
- * Which makes the object safely accessible by string based properties.
+ * This type resembles `Record`, but enforces that `Keys` must be strings,
+ * allowing safe access to the object through `string` based properties.
  * 
- * This is because object normally are accessible by 'string' | 'number' | 'symbol' types
- * Which makes iterating an Object properties with a string throwing an error.
+ * The reason for this is that objects are typically accessible using
+ * `'string' | 'number' | 'symbol'` types, which can lead to errors when
+ * trying to iterate over object properties with a `string`.
  * 
- * Also it reduces the amount of boilerplate by not having to create a new type
- * for anything that require a list of properties to be fully implemented
- * with a good code completion support
+ * Additionally, it minimizes boilerplate code by eliminating the need to
+ * create a new type for any situation that requires a complete list of
+ * properties, ensuring excellent code completion support.
  * 
- * @param Keys - a string type, likely string template.
- * @param T - Any type that can fit into an object.
+ * @param Keys - A string type, likely `string` template
+ * @param T - Any type that can fit into an object
  * 
  * @example
- * const isInformationPublic: Mapped<'username' | 'email', boolean> = {
- *     username: true,
- *     email: false
- * };
+ * type IsInformationPublic = Mapped< 'username' | 'email', boolean >;
+ * // { username: true, email: false }
  */
-export type Mapped<Keys extends string, T> = {
-    [key in Keys]: T 
-}
+export type Mapped< Keys extends string, T > = { [ K in Keys ]: T };
 
 /**
- * Constructs an object whose properties are optional and which keys are Keys and property values are T
+ * Constructs an object whose properties are optional and which keys are `Keys`
+ * and property values are `T`.
  * 
  * @remarks 
  * Complementary to {@link Mapped}.
  * 
- * @param Keys - a string type, likely string template.
- * @param T - Any type that can fit into an object.
+ * @param Keys - A string type, likely `string` template
+ * @param T - Any type that can fit into an object
  * 
  * @example
- * const stringValidator: PartiallyMapped<'username' | 'email', (field: string)=>boolean> = {
- *     username: (field: string)=>regex.validate('username', field),
+ * const stringValidator: PartiallyMapped< 'username' | 'email', ( field: string ) => boolean > = {
+ *   username: ( field: string ) => regex.validate( 'username', field )
  * };
  */
-export type PartiallyMapped<Keys extends string, T> = {
-    [key in Keys]?: T 
-}
+export type PartiallyMapped< Keys extends string, T > = { [ K in Keys ]?: T };
