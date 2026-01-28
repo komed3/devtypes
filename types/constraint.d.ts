@@ -4,9 +4,11 @@
  * Utility types for enforcing structural constraints on object types,
  * including required/optional properties and mutually exclusive fields.
  * 
- * @module types/constraints
- * @since 1.0.0
+ * @module devtypes/constraint
+ * @author komed3
+ * @license MIT
  */
+
 
 /**
  * Extract the keys of optional properties.
@@ -19,11 +21,11 @@
  * 
  * @example
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
- * type OptKeys = OptionalKeys< Obj >;
- * // "b" | "c"
+ * type OptKeys = OptionalKeys< Obj >;  // "b" | "c"
  */
-export type OptionalKeys< T > =
-    { [ K in keyof T ]-?: {} extends Pick< T, K > ? K : never }[ keyof T ];
+export type OptionalKeys< T > = {
+    [ K in keyof T ]-?: {} extends Pick< T, K > ? K : never
+}[ keyof T ];
 
 /**
  * Extract the keys of required properties.
@@ -35,11 +37,11 @@ export type OptionalKeys< T > =
  * 
  * @example
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
- * type ReqKeys = RequiredKeys< Obj >;
- * // "a" | "d"
+ * type ReqKeys = RequiredKeys< Obj >;  // "a" | "d"
  */
-export type RequiredKeys< T > =
-    { [ K in keyof T ]-?: {} extends Pick< T, K > ? never : K }[ keyof T ];
+export type RequiredKeys< T > = {
+    [ K in keyof T ]-?: {} extends Pick< T, K > ? never : K
+}[ keyof T ];
 
 /**
  * Extract specific properties as optional.
@@ -70,8 +72,7 @@ export type ExtractFrom< T, K extends keyof T > = Partial< Pick< T, K > >;
  * 
  * @example
  * type User = { id: number; name: string; email?: string; phone?: string };
- * type UserID = RequireFrom< User, 'id' >;
- * // { id: number }
+ * type UserID = RequireFrom< User, 'id' >;  // { id: number }
  */
 export type RequireFrom< T, K extends keyof T > = Required< Pick< T, K > >;
 
@@ -122,7 +123,6 @@ export type RequireAtLeastOne< T, K extends keyof T = keyof T > =
 /**
  * Require none of the specified properties.
  * 
- * @since 1.1.0
  * @remarks
  * Explicitly disallows a set of properties by forcing them to `never`.
  * Useful for mutually exclusive object shapes.
@@ -135,14 +135,11 @@ export type RequireAtLeastOne< T, K extends keyof T = keyof T > =
  * type Result = RequireNone< Test, 'a' | 'b' >;
  * // { c: boolean; a?: never; b?: never; }
  */
-export type RequireNone< T, K extends keyof T > =
-    Omit< T, K > &
-    Partial< Record< K, never > >;
+export type RequireNone< T, K extends keyof T > = Omit< T, K > & Partial< Record< K, never > >;
 
 /**
  * Require all or none of a set of properties.
  * 
- * @since 1.1.0
  * @remarks
  * Either all specified properties must be present, or none of them.
  * 
@@ -160,11 +157,10 @@ export type RequireAllOrNone< T, K extends keyof T > =
 
 /**
  * Make specific properties non-nullable.
- *
- * @since 1.1.0
+ * 
  * @remarks
  * Removes `null` and `undefined` from the selected property value types.
- *
+ * 
  * @template T - Source object type
  * @template K - Keys to make non-nullable
  * 
@@ -174,16 +170,15 @@ export type RequireAllOrNone< T, K extends keyof T > =
  * // { id: number; name?: string; email: string | null; }
  */
 export type NonNullableProps< T, K extends keyof T > =
-    Omit< T, K > &
-    { [ P in K ]: NonNullable< T[ P ] > };
+    Omit< T, K > & { [ P in K ]: NonNullable< T[ P ] > };
 
 /**
  * Create a strict object subset.
- *
+ * 
  * @remarks
  * Builds a new object type consisting only of explicitly required and
  * optional properties. All other properties are excluded.
- *
+ * 
  * @template T - Source object type
  * @template R - Keys that must be required
  * @template O - Keys that should be optional
@@ -194,5 +189,4 @@ export type NonNullableProps< T, K extends keyof T > =
  * // { id: number; email?: string; phone?: string }
  */
 export type StrictSubset< T extends object, R extends keyof T, O extends keyof T > =
-    RequireFrom< T, R > &
-    ExtractFrom< T, O >;
+    RequireFrom< T, R > & ExtractFrom< T, O >;
