@@ -9,6 +9,7 @@
  */
 
 import type { ListLike } from './list';
+import { JSONPrimitive } from './primitive';
 
 
 /**
@@ -238,8 +239,33 @@ export type IsNonEmptyObject< T > =
             : true
         : false;
 
-type JSONPrimitive = string | number | boolean | null | undefined;
-type JSONPrimitiveNotAssigneable = bigint | symbol | Function;
+export type IsJSONSerializable< T > =
+    T extends JSONPrimitive ? true
+        : T extends bigint | symbol ? false
+        : T extends readonly ( infer U )[] ? IsJSONSerializable< U >
+        : T extends object ? false extends {
+            [ K in keyof T ]: IsJSONSerializable< T[ K ] >
+        }[ keyof T ] ? false : true
+        : true;
+
+export type IsJSONSerializableStrict< T > =
+    T extends ( ...args: any[] ) => any ? false
+        : T extends bigint | symbol | undefined ? false
+        : T extends JSONPrimitive ? true
+        : T extends readonly ( infer U )[] ? IsJSONSerializableStrict< U >
+        : T extends object ? false extends {
+            [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
+        }[ keyof T ] ? false : true
+        : false;
+
+
+
+
+
+
+
+
+
 /**
  * Ensure safe JSON serialization for any type
  * 
