@@ -18,7 +18,7 @@ npm install devtypes
 
 ## Documentation
 
-Read the full **[devtypes Documentation](https://komed3.github.io/devtypes/index.html)** for detailed usage instructions, examples, and API references.
+Read the full **[devtypes Documentation](https://komed3.github.io/devtypes)** for detailed usage instructions, examples, and API references.
 
 ## Quick Examples
 
@@ -73,20 +73,20 @@ type FullConfig = DeepRequired< Config >;
 
 | Module | Purpose |
 |--------|---------|
-| **assert** | Assertion utilities for compile-time checks |
-| **class** | Class-specific utilities: methods, properties, constructors |
-| **condition** | Conditional type utilities (If and Equals) |
-| **constraint** | Property requirement constraints and validation |
-| **function** | Function type utilities: curry, compose, promisify |
-| **guard** | Type guard utilities for runtime type checking |
-| **list** | List-like structures (arrays, sets, maps, records, iterables) |
-| **merge** | (Deep) merging and intersection of types |
-| **object** | Object type manipulation and property utilities |
-| **primitive** | Primitive type utilities and literal handling |
-| **transform** | (Deep) transformations for objects, arrays, and nested structures |
-| **tuple** | Tuple-specific utilities and manipulations |
-| **union** | Union type utilities: exclusion, extraction, conversion |
-| **util** | Generic utility types: branding, boxing, casting, simplification |
+| **[assert](https://komed3.github.io/devtypes/modules/assert.html)** | Assertion utilities for compile-time checks |
+| **[class](https://komed3.github.io/devtypes/modules/class.html)** | Class-specific utilities: methods, properties, constructors |
+| **[condition](https://komed3.github.io/devtypes/modules/condition.html)** | Conditional type utilities (If and Equals) |
+| **[constraint](https://komed3.github.io/devtypes/modules/constraint.html)** | Property requirement constraints and validation |
+| **[function](https://komed3.github.io/devtypes/modules/function.html)** | Function type utilities: curry, compose, promisify |
+| **[guard](https://komed3.github.io/devtypes/modules/guard.html)** | Type guard utilities for runtime type checking |
+| **[list](https://komed3.github.io/devtypes/modules/list.html)** | List-like structures (arrays, sets, maps, records, iterables) |
+| **[merge](https://komed3.github.io/devtypes/modules/merge.html)** | (Deep) merging and intersection of types |
+| **[object](https://komed3.github.io/devtypes/modules/object.html)** | Object type manipulation and property utilities |
+| **[primitive](https://komed3.github.io/devtypes/modules/primitive.html)** | Primitive type utilities and literal handling |
+| **[transform](https://komed3.github.io/devtypes/modules/transform.html)** | (Deep) transformations for objects, arrays, and nested structures |
+| **[tuple](https://komed3.github.io/devtypes/modules/tuple.html)** | Tuple-specific utilities and manipulations |
+| **[union](https://komed3.github.io/devtypes/modules/union.html)** | Union type utilities: exclusion, extraction, conversion |
+| **[util](https://komed3.github.io/devtypes/modules/util.html)** | Generic utility types: branding, boxing, casting, simplification |
 
 ## Performance Tips
 
