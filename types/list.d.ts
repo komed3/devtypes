@@ -9,6 +9,8 @@
  * @license MIT
  */
 
+import { Equals, If } from "./condition";
+
 
 /**
  * Any list-like structure.
@@ -184,3 +186,28 @@ export type IsKeyedList< L > =
  * type C = IsIndexedList< Set< boolean > >;           // false
  */
 export type IsIndexedList< L > = L extends readonly any[] ? true : false;
+
+/**
+ * Test whether a type can be found within a list of types.
+ * 
+ * @remarks
+ * Returns `true` if `T` is in `L`.
+ * Returns `false` if `T` cannot be found in `L`.
+ * Returns `false` if L is empty.
+ * 
+ * @template T - A type.
+ * @template L - A list of types.
+ * 
+ * @example
+ * type TrueIsFound = IsTypeInList<true, [1, 'no', true]>; // true
+ * type TrueIsNotFound = IsTypeInList<true, [1, 'no', false]>; // false
+ * type ListIsEmptySoFalse = IsTypeInList<true, []>; // false
+ */
+export type IsTypeInList<T, L extends any[]> = 
+    L extends [infer F, ...infer R]
+        ? If<Equals<T, F>, true, false> extends true
+            ? true
+            : IsTypeInList<T, R>
+        : L extends [infer F]
+            ? If<Equals<T, F>, true, T>
+            : false
