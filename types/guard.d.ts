@@ -251,7 +251,7 @@ export type IsJSONSerializable< T > =
 export type IsJSONSerializableStrict< T > =
     T extends ( ...args: any[] ) => any ? false
         : T extends bigint | symbol | undefined ? false
-        : T extends JSONPrimitive ? true
+        : T extends string | number | boolean | null ? true
         : T extends readonly ( infer U )[] ? IsJSONSerializableStrict< U >
         : T extends object ? false extends {
             [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
