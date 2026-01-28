@@ -239,6 +239,24 @@ export type IsNonEmptyObject< T > =
             : true
         : false;
 
+/**
+ * Type guard: detect whether a type is JSON serializable.
+ * 
+ * @remarks
+ * Recursively inspects the structure of `T` to ensure all components
+ * are compatible with JSON serialization rules.
+ * 
+ * Loose check: functions are considered non-serializable, but 
+ * JSON.stringify will allow them (they get stripped).
+ * 
+ * Will not detect cyclic references in objects.
+ * 
+ * @template T - Type to test
+ * 
+ * @example
+ * type A = IsJSONSerializable< { a: string; b: number[] } >;  // true
+ * type B = IsJSONSerializable< symbol >;                      // false
+ */
 export type IsJSONSerializable< T > =
     T extends JSONPrimitive ? true
         : T extends bigint | symbol ? false
@@ -248,6 +266,26 @@ export type IsJSONSerializable< T > =
         }[ keyof T ] ? false : true
         : true;
 
+/**
+ * Type guard: strictly detect whether a type is JSON serializable.
+ * 
+ * @remarks
+ * Recursively inspects the structure of `T` to ensure all components
+ * are fully compatible with JSON serialization rules.
+ * 
+ * Strict check: functions and undefined are considered non-serializable.
+ * 
+ * Will not detect cyclic references in objects.
+ * 
+ * @template T - Type to test
+ * 
+ * @example
+ * type A = IsJSONSerializableStrict< { a: string; b: number[] } >;   // true
+ * type B = IsJSONSerializableStrict< { a: string; b: undefined } >;  // false
+ * type C = IsJSONSerializableStrict< ()=>void >;                     // false
+ * type D = IsJSONSerializableStrict< ( string | undefined )[] >;     // false
+ * 
+ */
 export type IsJSONSerializableStrict< T > =
     T extends ( ...args: any[] ) => any ? false
         : T extends bigint | symbol | undefined ? false
@@ -257,58 +295,3 @@ export type IsJSONSerializableStrict< T > =
             [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
         }[ keyof T ] ? false : true
         : false;
-
-
-
-
-
-
-
-
-
-/**
- * Ensure safe JSON serialization for any type
- * 
- * @returns `T` if safe, `never` if something is not JSON compliant
- * 
- * @param T - any type 
- * 
- * @remarks
- * There is no debug, if it encounters a bad value, it will simply return `never`
- * 
- * Consider this type as potentially unrelieable.
- * This type util requires more testing.
- * 
- * This type util doesn't provide any safety on how JSON stringification handles
- * values that are undefined.
- * 
- * @example
- * 
- * type NoYouCannot1 = JSONSerializable< {simple_value: string,a_function: ()=>void}> // never
- * type NoYoucannot2 = JSONSerializable<()=>void> // never
- * type YesYouCan1 = JSONSerializable<{simple_value: string, nested: { simple: string }}> // {simple_value: string, nested: { simple: string }}
- * type NoYoucannot3 = JSONSerializable<{simple_value: string, nested: { simple: string, a_function: ()=>void }}> //never
- * type YesYouCan2 = JSONSerializable<[]> // []
- * type YesYouCan3 = JSONSerializable<true> // true
- * type BewareOfThat = JSONSerializable<{stripped_at_stringify: undefined}> // returns the value, but JSON.stringify that and you will receive "{}"
- */
-type JSONSerializable<T> = 
-    T extends JSONPrimitive
-        ? T
-        : T extends JSONPrimitiveNotAssigneable
-            ? never
-            : T extends JSONPrimitive[]
-                ? T
-                : T extends JSONPrimitiveNotAssigneable[]
-                    ? never
-                    : T extends  {[key: string]: any}
-                        ? {
-                            [K in keyof T]:
-                                JSONSerializable<T[K]> extends never
-                                ? 1
-                                : 0
-                        }[keyof T] extends 0
-                            ? T
-                            : never
-                        : never & 'JSONSerializable<T> have no clue what this type can be please report that exception'
-;
