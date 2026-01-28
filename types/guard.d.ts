@@ -9,7 +9,7 @@
  */
 
 import type { ListLike } from './list';
-import { JSONPrimitive } from './primitive';
+import type { JSONPrimitive } from './primitive';
 
 
 /**
