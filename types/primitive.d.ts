@@ -22,6 +22,20 @@
 export type Primitive = string | number | boolean | symbol | null | undefined;
 
 /**
+ * All JSON primitive types.
+ * 
+ * @remarks
+ * Includes the primitive types that can be represented in JSON format.
+ * JSON may allow `undefined` in some contexts, but it is not a valid JSON value
+ * when serializing data.
+ * 
+ * @example
+ * type JP = JSONPrimitive;
+ * // string | number | boolean | null
+ */
+export type JSONPrimitive = string | number | boolean | null;
+
+/**
  * All non-primitive JavaScript types.
  * 
  * @remarks
@@ -31,6 +45,17 @@ export type Primitive = string | number | boolean | symbol | null | undefined;
  * type NP = NonPrimitive;  // object | Function
  */
 export type NonPrimitive = object | Function;
+
+/**
+ * All non-primitive JSON types.
+ * 
+ * @remarks
+ * Represents JSON values that are not primitives, such as arrays and objects.
+ * 
+ * @example
+ * type JNP = JSONNonPrimitive;  // bigint | symbol | Function
+ */
+export type JSONNonPrimitive = bigint | symbol | Function;
 
 /**
  * Literal union with IntelliSense autocomplete support.
