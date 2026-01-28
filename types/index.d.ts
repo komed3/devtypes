@@ -29,17 +29,17 @@
  * @license MIT
  */
 
-export type * from './assert';
-export type * from './class';
-export type * from './condition';
-export type * from './constraint';
-export type * from './function';
-export type * from './guard';
-export type * from './list';
-export type * from './merge';
-export type * from './object';
-export type * from './primitive';
-export type * from './transform';
-export type * from './tuple';
-export type * from './union';
-export type * from './util';
+export type * as 'assert' from './assert';
+export type * as 'class' from './class';
+export type * as 'condition' from './condition';
+export type * as 'constraint' from './constraint';
+export type * as 'function' from './function';
+export type * as 'guard' from './guard';
+export type * as 'list' from './list';
+export type * as 'merge' from './merge';
+export type * as 'object' from './object';
+export type * as 'primitive' from './primitive';
+export type * as 'transform' from './transform';
+export type * as 'tuple' from './tuple';
+export type * as 'union' from './union';
+export type * as 'util' from './util';

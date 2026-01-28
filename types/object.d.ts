@@ -249,31 +249,30 @@ export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer 
     : P extends keyof T ? T[ P ] : never;
 
 /**
- * Nest an object with set strings recursively
+ * Nest an object with set strings recursively.
  * 
- * @remarks 
+ * @remarks
+ * This is useful to reduce boilerplate while having a strong type safety.
  * 
- * This is useful to reduce boilerplate while having a strong
- * type safety.
+ * Note that if no keys are provided, this turns into `< K, T > => T`
  * 
- * Note that if no keys are provided, this turns into <K,T> => T
  * @param K - A list of string template
  * @param T - The type associated with the deepest object's keys
  * 
  * @example
- * type RestaurantMenu = ChainMapped<['night' | 'day', 'entry' | 'main' | 'dessert' ], ()=>void> 
- * type RestaurantMenu = {
- *  night: {
- *    entry: () => void;
- *    main: () => void;
- *    dessert: () => void;
- *  };
- *  day: {
- *      entry: () => void;
- *      main: () => void;
- *      dessert: () => void;
- *  };
- * }
+ * type RestaurantMenu = ChainMapped< [ 'night' | 'day', 'entry' | 'main' | 'dessert' ], () => void > 
+ * // type RestaurantMenu = {
+ * //   night: {
+ * //     entry: () => void;
+ * //     main: () => void;
+ * //     dessert: () => void;
+ * //   };
+ * //   day: {
+ * //     entry: () => void;
+ * //     main: () => void;
+ * //     dessert: () => void;
+ * //   };
+ * // }
  */
 
 export type ChainMapped<K extends string[], T> = 
