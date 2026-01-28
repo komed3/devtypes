@@ -286,5 +286,3 @@ type JSONSerializable<T> =
                             : never
                         : never & 'JSONSerializable<T> have no clue what this type can be please report that exception'
 ;
-
-type NoYouCannot1 = JSONSerializable< {simple_value: string,a_function: ()=>void}> // never
