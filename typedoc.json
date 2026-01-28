@@ -11,7 +11,12 @@
   "excludePrivate": true,
   "excludeProtected": true,
   "excludeInternal": true,
-  "customFooterHtml": "Copyright 2025–2026 Paul Köhler (komed3) — Distributed under the MIT license.",
-  "favicon": "favicon.ico",
-  "plugin": [ "typedoc-github-theme" ]
+  "customFooterHtml": "<b>devtypes v2.0</b> — Copyright 2025–2026 Paul Köhler (komed3) <br /> Distributed under the MIT license.",
+  "hideGenerator": true,
+  "headings": {
+    "readme": false,
+    "document": false
+  },
+  "plugin": [ "typedoc-github-theme" ],
+  "theme": "typedoc-github-theme"
 }
