@@ -247,3 +247,36 @@ type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
 export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer Rest }`
     ? K extends keyof T ? PathValue< T[ K ], Rest > : never
     : P extends keyof T ? T[ P ] : never;
+
+/**
+ * Nest an object with set strings recursively
+ * 
+ * @remarks 
+ * 
+ * This is useful to reduce boilerplate while having a strong
+ * type safety.
+ * 
+ * Note that if no keys are provided, this turns into <K,T> => T
+ * @param K - A list of string template
+ * @param T - The type associated with the deepest object's keys
+ * 
+ * @example
+ * type RestaurantMenu = ChainMapped<['night' | 'day', 'entry' | 'main' | 'dessert' ], ()=>void> 
+ * type RestaurantMenu = {
+ *  night: {
+ *    entry: () => void;
+ *    main: () => void;
+ *    dessert: () => void;
+ *  };
+ *  day: {
+ *      entry: () => void;
+ *      main: () => void;
+ *      dessert: () => void;
+ *  };
+ * }
+ */
+
+export type ChainMapped<K extends string[], T> = 
+    K extends [infer F extends string, ...infer R extends string[]]
+        ? { [key in F]: ChainMapped<R, T> }
+        : T
