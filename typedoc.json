@@ -1,12 +1,15 @@
 {
+  "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [ "./types/*" ],
-  "exclude" : [ "./types/index.ts" ],
+  "exclude" : [ "./types/index.d.ts" ],
   "entryPointStrategy": "resolve",
   "out": "docs",
   "githubPages": true,
   "searchInComments": true,
   "searchInDocuments": true,
   "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
   "excludeInternal": true,
   "customFooterHtml": "Copyright 2025–2026 Paul Köhler (komed3) — Distributed under the MIT license.",
   "favicon": "favicon.ico"
