@@ -9,6 +9,8 @@
  * @license MIT
  */
 
+import type { IsJSONSerializable, IsJSONSerializableStrict } from './guard';
+
 
 /**
  * Generic plain object type.
@@ -307,7 +309,7 @@ export type Mapped< Keys extends string, T > = { [ K in Keys ]: T };
  * Constructs an object whose properties are optional and which keys are `Keys`
  * and property values are `T`.
  * 
- * @remarks 
+ * @remarks
  * Complementary to {@link Mapped}.
  * 
  * @param Keys - A string type, likely `string` template
@@ -319,3 +321,33 @@ export type Mapped< Keys extends string, T > = { [ K in Keys ]: T };
  * };
  */
 export type PartiallyMapped< Keys extends string, T > = { [ K in Keys ]?: T };
+
+/**
+ * Loosely checks whether the type is serializable and returns `T`, otherwise `never`.
+ * 
+ * @remarks
+ * Type guard logic is based on {@link IsJSONSerializable}.
+ * 
+ * @template T - Type to test
+ * 
+ * @example
+ * type A = JSONSerializable< { a: string; b: number[] } >;  // { a: string; b: number[] }
+ * type B = JSONSerializable< symbol >;                      // never
+ */
+export type JSONSerializable< T > = IsJSONSerializable< T > extends true ? T : never;
+
+/**
+ * Checks whether the type is serializable and returns `T`, otherwise `never`.
+ * 
+ * @remarks
+ * Type guard logic is based on {@link IsJSONSerializableStrict}.
+ * 
+ * @template T - Type to test
+ * 
+ * @example
+ * type A = JSONSerializableStrict< { a: string; b: number[] } >;   // { a: string; b: number[] }
+ * type B = JSONSerializableStrict< { a: string; b: undefined } >;  // never
+ * type C = JSONSerializableStrict< ()=>void >;                     // never
+ * type D = JSONSerializableStrict< ( string | undefined )[] >;     // never
+ */
+export type JSONSerializableStrict< T > = IsJSONSerializableStrict< T > extends true ? T : never;

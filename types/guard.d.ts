@@ -284,7 +284,6 @@ export type IsJSONSerializable< T > =
  * type B = IsJSONSerializableStrict< { a: string; b: undefined } >;  // false
  * type C = IsJSONSerializableStrict< ()=>void >;                     // false
  * type D = IsJSONSerializableStrict< ( string | undefined )[] >;     // false
- * 
  */
 export type IsJSONSerializableStrict< T > =
     T extends ( ...args: any[] ) => any ? false
