@@ -16,6 +16,7 @@
   "name": "devtypes",
   "customFooterHtml": "<b>devtypes v2.0</b> — Copyright 2025–2026 Paul Köhler (komed3) <br /> Distributed under the MIT license.",
   "hideGenerator": true,
+  "favicon": "favicon.ico",
   "headings": {
     "readme": false,
     "document": false
