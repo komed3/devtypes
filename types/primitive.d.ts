@@ -26,14 +26,12 @@ export type Primitive = string | number | boolean | symbol | null | undefined;
  * 
  * @remarks
  * Includes the primitive types that can be represented in JSON format.
- * JSON may allow `undefined` in some contexts, but it is not a valid JSON value
- * when serializing data.
  * 
  * @example
  * type JP = JSONPrimitive;
- * // string | number | boolean | null
+ * // string | number | boolean | null | undefined
  */
-export type JSONPrimitive = string | number | boolean | null;
+export type JSONPrimitive = string | number | boolean | null | undefined;
 
 /**
  * All non-primitive JavaScript types.
