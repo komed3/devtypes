@@ -237,3 +237,52 @@ export type IsNonEmptyObject< T > =
             ? false
             : true
         : false;
+
+type JSONPrimitive = string | number | boolean | null | undefined;
+type JSONPrimitiveNotAssigneable = bigint | symbol | Function;
+/**
+ * Ensure safe JSON serialization for any type
+ * 
+ * @returns `T` if safe, `never` if something is not JSON compliant
+ * 
+ * @param T - any type 
+ * 
+ * @remarks
+ * There is no debug, if it encounters a bad value, it will simply return `never`
+ * 
+ * Consider this type as potentially unrelieable.
+ * This type util requires more testing.
+ * 
+ * This type util doesn't provide any safety on how JSON stringification handles
+ * values that are undefined.
+ * 
+ * @example
+ * 
+ * type NoYouCannot1 = JSONSerializable< {simple_value: string,a_function: ()=>void}> // never
+ * type NoYoucannot2 = JSONSerializable<()=>void> // never
+ * type YesYouCan1 = JSONSerializable<{simple_value: string, nested: { simple: string }}> // {simple_value: string, nested: { simple: string }}
+ * type NoYoucannot3 = JSONSerializable<{simple_value: string, nested: { simple: string, a_function: ()=>void }}> //never
+ * type YesYouCan2 = JSONSerializable<[]> // []
+ * type YesYouCan3 = JSONSerializable<true> // true
+ * type BewareOfThat = JSONSerializable<{stripped_at_stringify: undefined}> // returns the value, but JSON.stringify that and you will receive "{}"
+ */
+type JSONSerializable<T> = 
+    T extends JSONPrimitive
+        ? T
+        : T extends JSONPrimitiveNotAssigneable
+            ? never
+            : T extends JSONPrimitive[]
+                ? T
+                : T extends JSONPrimitiveNotAssigneable[]
+                    ? never
+                    : T extends  {[key: string]: any}
+                        ? {
+                            [K in keyof T]:
+                                JSONSerializable<T[K]> extends never
+                                ? 1
+                                : 0
+                        }[keyof T] extends 0
+                            ? T
+                            : never
+                        : never & 'JSONSerializable<T> have no clue what this type can be please report that exception'
+;
