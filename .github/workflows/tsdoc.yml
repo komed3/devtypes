@@ -33,7 +33,7 @@ jobs:
         with:
           source_dir: ./types/*
           output_dir: ./docs
-          tsconfig_file: tsconfig.json
+          options: tsconfig.json
           front_page: README.md
 
       - name: Setup Pages
