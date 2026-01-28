@@ -30,13 +30,6 @@ jobs:
 
       - name: TSDoc Action
         uses: erikyo/tsdoc-action@v1
-        with:
-          entryPointStrategy: resolve
-          source_dir: ./types/*
-          output_dir: ./docs
-          front_page: README.md
-          searchInComments: true
-          includeVersion: true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
