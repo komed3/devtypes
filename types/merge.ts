@@ -24,7 +24,8 @@ import { Simplify } from './util';
  * @example
  * type A = { a: number; b: string };
  * type B = { b: number; c: boolean };
- * type Merged = Merge< A, B >; // { a: number; b: number; c: boolean }
+ * type Merged = Merge< A, B >;
+ * // { a: number; b: number; c: boolean }
  */
 export type Merge< Left, Right > = Simplify<
     Pick< Left, Exclude< keyof Left, keyof Right > > & Right
@@ -113,6 +114,27 @@ export type DeepMergeStrict< Left, Right > = Simplify<
 export type MergeMany< T extends unknown[] > = Simplify<
     T extends [ infer H, ...infer R ]
         ? Merge< H, MergeMany< R > >
+        : {}
+>;
+
+/**
+ * Deeply merge multiple object types sequentially.
+ * 
+ * @remarks
+ * Applies deep merges from left to right over a tuple of object types.
+ * 
+ * @template T - Tuple of object types
+ * 
+ * @example
+ * type A = { a: { x: number } };
+ * type B = { a: { y: string } };
+ * type C = { a: { x: string } };
+ * type Merged = DeepMergeMany< [ A, B, C ] >;
+ * // { a: { x: string; y: string } }
+ */
+export type DeepMergeMany< T extends unknown[] > = Simplify<
+    T extends [ infer H, ...infer R ]
+        ? DeepMerge< H, DeepMergeMany< R > >
         : {}
 >;
 
