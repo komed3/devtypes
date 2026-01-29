@@ -41,7 +41,7 @@ export type Brand<
     >;
 
 /**
- * Cast a type while preserving assignability.
+ * Coerce a type while preserving assignability.
  * 
  * @remarks
  * Keeps the source type if it is assignable to the target type; otherwise,
@@ -51,11 +51,11 @@ export type Brand<
  * @template U - Target type
  * 
  * @example
- * type A = Cast< string, string | number >;   // string
- * type B = Cast< number, string | number >;   // number
- * type C = Cast< boolean, string | number >;  // string | number
+ * type A = Coerce< string, string | number >;   // string
+ * type B = Coerce< number, string | number >;   // number
+ * type C = Coerce< boolean, string | number >;  // string | number
  */
-export type Cast< T, U > = T extends U ? T : U;
+export type Coerce< T, U > = T extends U ? T : U;
 
 /**
  * Optional value type.
@@ -139,11 +139,11 @@ export type Narrow< T > =
             : T;
 
 /**
- * Compute chained intersections across multiple types.
+ * Compute intersections across multiple types and unions.
  * 
  * @remarks
- * Produces all pairwise and transitive intersections across a tuple
- * of types. Useful for detecting overlapping keys or values.
+ * Finds common members among a tuple of types or unions. Useful for
+ * detecting overlapping keys or values.
  * 
  * Will return never if only one type is given.
  * 
@@ -153,16 +153,16 @@ export type Narrow< T > =
  * 
  * @example
  * type KeysA = 'a' | 'aa'
- * type KeysB = 'b' | 'bb'
+ * type KeysB = 'a' | 'bb'
  * type KeysX = 'x' | 'bb'
- * type Intersection1 = ChainedIntersection< [ KeysA, KeysB, KeysX ] >  // "bb"
- * type Intersection2 = ChainedIntersection< [ true, false, 1, true ] > // true
+ * type Int1 = Intersect< [ KeysA, KeysB, KeysX ] >   // 'a' | 'bb'
+ * type Int2 = Intersect< [ true, false, 1, true ] >  // true
  */
-export type ChainedIntersection< T extends unknown[] > =
+export type Intersect< T extends unknown[] > =
     T extends [ infer F, infer S, ...infer R ]
         ? ( F & S )
-            | ChainedIntersection< [ S, ...R ] >
-            | ChainedIntersection< [ F, ...R ] >
+            | Intersect< [ S, ...R ] >
+            | Intersect< [ F, ...R ] >
         : T extends [ infer F, infer S ]
             ? F & S
             : never;
