@@ -8,6 +8,8 @@
  * @license MIT
  */
 
+import { Simplify } from './util';
+
 
 /** @internal */
 export type UnionLast< U > =
@@ -77,9 +79,10 @@ export type UnionToTuple< U, T extends any[] = [] > =
  * type Animal = DiscriminatedUnion< 'type', AnimalMap >;
  * // { type: 'cat'; meows: boolean } | { type: 'dog'; barks: boolean }
  */
-export type DiscriminatedUnion< Tag extends string, Map extends Record< string, any > > = {
-    [ K in keyof Map & string ]: { [ P in Tag ]: K } & Map[ K ];
-}[ keyof Map & string ];
+export type DiscriminatedUnion< Tag extends string, Map extends Record< string, any > > =
+    Simplify< {
+        [ K in keyof Map & string ]: { [ P in Tag ]: K } & Map[ K ];
+    }[ keyof Map & string ] >;
 
 /**
  * Pick specific members from a union by type.
