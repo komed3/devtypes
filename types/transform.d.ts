@@ -25,9 +25,10 @@ import type { PlainObject } from './object';
  * type Nested = ( number[] | string[] )[];
  * type Flat = Flat< Nested >;  // ( number | string )[]
  */
-export type Flat< T extends readonly any[] > = T extends readonly ( infer E )[]
-    ? ( E extends readonly any[] ? E[ number ] : E )[]
-    : never;
+export type Flat< T extends readonly any[] > =
+    T extends readonly ( infer E )[]
+        ? ( E extends readonly any[] ? E[ number ] : E )[]
+        : never;
 
 /**
  * Recursively make all properties optional.
@@ -43,7 +44,7 @@ export type Flat< T extends readonly any[] > = T extends readonly ( infer E )[]
  * type PartialUser = DeepPartial< User >;
  * // { id?: number; profile?: { name?: string; address?: { city?: string } } }
  */
-export type DeepPartial< T extends PlainObject > = {
+export type DeepPartial< T > = {
     [ P in keyof T ]?: T[ P ] extends Array< infer U >
         ? DeepPartial< U >[]
         : T[ P ] extends ReadonlyArray< infer U >
@@ -67,7 +68,7 @@ export type DeepPartial< T extends PlainObject > = {
  * type Required = DeepRequired< User >;
  * // { id: number; profile: { name: string; address: { city: string } } }
  */
-export type DeepRequired< T extends PlainObject > = {
+export type DeepRequired< T > = {
     [ P in keyof T ]-?: T[ P ] extends Array< infer U >
         ? DeepRequired< U >[]
         : T[ P ] extends ReadonlyArray< infer U >
@@ -91,7 +92,7 @@ export type DeepRequired< T extends PlainObject > = {
  * type Readonly = DeepReadonly< User >;
  * // { readonly id: number; readonly profile: { readonly name: string; readonly address: { readonly city: string } } }
  */
-export type DeepReadonly< T extends PlainObject > = T extends Function
+export type DeepReadonly< T > = T extends Function
     ? T
     : T extends Array< infer U >
         ? ReadonlyArray< DeepReadonly< U > >
@@ -112,7 +113,7 @@ export type DeepReadonly< T extends PlainObject > = T extends Function
  * type Mutable = DeepMutable< User >;
  * // { id: number; profile: { name: string; address: { city: string } } }
  */
-export type DeepMutable< T extends PlainObject > = T extends Function
+export type DeepMutable< T > = T extends Function
     ? T
     : T extends Array< infer U >
         ? Array< DeepMutable< U > >
