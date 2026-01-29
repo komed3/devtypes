@@ -104,10 +104,10 @@ export type MethodNames< T > = {
  * 
  * @example
  * class API { fetch( url: string ) {} post( url: string, data: any ) {} }
- * type Methods = MethodsObject< API >;
+ * type Methods = ClassMethods< API >;
  * // { fetch: ( url: string ) => ...; post: ( url: string, data: any ) => ...; }
  */
-export type MethodsObject< T > = Pick< T, MethodNames< T > >;
+export type ClassMethods< T > = Pick< T, MethodNames< T > >;
 
 /**
  * Extract public readonly property names from a class.
