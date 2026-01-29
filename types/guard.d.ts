@@ -301,29 +301,24 @@ export type IsJSONSerializableStrict< T > =
  * Type Guard: detect if a type is recursive.
  * 
  * @remarks
- * Recursively inspects the structure of `T` to detect if a type is **very likely** to be recursive.
- * 
- * `L` has been set arbitrarily to 32, it is probably dependant of your developpement environment.
- * In case you want to modify it, to reduce it for instance, do that
- * @example
- * IsTypeRecursive<YourType, [], 9>;
+ * Recursively inspects the structure of `T` to detect if a type is recursive
  * 
  * @template T - A type to be inspected.
  * @template P - (Optional) The list of parents types.
- * @template L - The limit before considering the object is recursive.
  * 
  * @example
  * type RecursiveType = {T: RecursiveType};
  * type IsRecursive = IsTypeRecursive<RecursiveType>; // true
  * type IsNotRecursive = IsTypeRecursive<{a:{a:{a:{a:{a:{a:{a:'a'}}}}}}}>; // false
  */
-export type IsTypeRecursive<T, P extends any[] = [], L extends number = 32> = 
-    P['length'] extends L
-        ? true
-        : T extends {[key: string]: any}
-            ? {
-                [K in keyof T]: IsTypeRecursive<T[K], [...P, T], L>
-            }[keyof T] extends false
-                ? false
-                : true
-            : IsTypeInList<T, [...P]>
+export type IsTypeRecursive<T, P extends any[] = []> = 
+    T extends [] ? false :
+    T extends {[key: string]: any}
+        ? {
+            [K in keyof T]: IsTypeInList<T[K], P> extends true
+                ? 'true'
+                : IsTypeRecursive<T[K], [...P, T]>
+        }[keyof T] extends false
+            ? false
+            : true
+        : IsTypeInList<T, [...P]> 
