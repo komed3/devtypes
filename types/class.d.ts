@@ -110,7 +110,7 @@ export type MethodNames< T > = {
 export type MethodsObject< T > = Pick< T, MethodNames< T > >;
 
 /**
- * Extract readonly property names from a class.
+ * Extract public readonly property names from a class.
  * 
  * @remarks
  * Returns a union of all readonly properties, excluding methods.
@@ -122,15 +122,13 @@ export type MethodsObject< T > = Pick< T, MethodNames< T > >;
  * class Config { readonly version = "1.0"; readonly name = "app"; }
  * type ReadonlyProps = ReadonlyPropertyNames< Config >; // "version" | "name"
  */
-export type ReadonlyPropertyNames< T > =
-    { [ K in keyof T ]-?:
-        T[ K ] extends ( ...args: any[] ) => any
-            ? never
-            : IfEquals< { [ P in K ]: T[ K ] }, { -readonly [ P in K ]: T[ K ] }, never, K >
-    }[ keyof T ];
+export type ReadonlyPropertyNames< T > = {
+    [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? never
+        : IfEquals< { [ P in K ]: T[ K ] }, { -readonly [ P in K ]: T[ K ] }, never, K >
+}[ keyof T ];
 
 /**
- * Extract readonly properties from a class as an object.
+ * Extract public readonly properties from a class as an object.
  * 
  * @remarks
  * Produces an object type containing all readonly properties.
@@ -140,7 +138,7 @@ export type ReadonlyPropertyNames< T > =
  * 
  * @example
  * class Settings { readonly theme = "dark"; readonly language = "en"; }
- * type ReadonlyPropsObj = ReadonlyPropertiesObject< Settings >;
+ * type ReadonlyPropsObj = ReadonlyProperties< Settings >;
  * // { theme: string; language: string; }
  */
 export type ReadonlyProperties< T > = Pick< T, ReadonlyPropertyNames< T > >;
