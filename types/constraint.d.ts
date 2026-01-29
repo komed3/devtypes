@@ -24,7 +24,9 @@
  * type OptKeys = OptionalKeys< Obj >;  // "b" | "c"
  */
 export type OptionalKeys< T > = {
-    [ K in keyof T ]-?: {} extends Pick< T, K > ? K : never
+    [ K in keyof T ]-?: {} extends Pick< T, K >
+        ? K : undefined extends T[ K ]
+            ? K : never
 }[ keyof T ];
 
 /**
