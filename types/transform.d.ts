@@ -12,30 +12,6 @@
 import type { PlainObject } from './object';
 
 
-/** @internal Extract value type from containers */
-type ContainerValue< T > =
-    T extends Array< infer U > ? U
-        : T extends ReadonlyArray< infer U > ? U
-        : T extends Map< infer _, infer V > ? V
-        : T extends ReadonlyMap< infer _, infer V > ? V
-        : T extends Set< infer U > ? U
-        : T extends ReadonlySet< infer U > ? U
-        : never;
-
-/** @internal Reconstruct container with transformed value */
-type MapContainer< T, U > =
-    T extends Array< any > ? U[]
-        : T extends ReadonlyArray< any > ? ReadonlyArray< U >
-        : T extends Map< infer K, any > ? Map< K, U >
-        : T extends ReadonlyMap< infer K, any > ? ReadonlyMap< K, U >
-        : T extends Set< any > ? Set< U >
-        : T extends ReadonlySet< any > ? ReadonlySet< U >
-        : never;
-
-/** @internal Check if should recurse (not a leaf type) */
-type ShouldRecurse< T > = T extends Function | Date | PlainObject ? true : false;
-
-
 /**
  * Flatten an array by one level.
  * 
@@ -68,15 +44,16 @@ export type Flat< T extends readonly any[] > =
  * type PartialUser = DeepPartial< User >;
  * // { id?: number; profile?: { name?: string; address?: { city?: string } } }
  */
-export type DeepPartial< T > = {
-    [ P in keyof T ]?: T[ P ] extends Array< infer U >
-        ? DeepPartial< U >[]
-        : T[ P ] extends ReadonlyArray< infer U >
-            ? ReadonlyArray< DeepPartial< U > >
-            : T[ P ] extends object
-                ? DeepPartial< T[ P ] >
-                : T[ P ];
-};
+export type DeepPartial< T > =
+    T extends Function | Date ? T
+        : T extends Array< infer U > ? DeepPartial< U >[]
+        : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepPartial< U > >
+        : T extends Map< infer K, infer V > ? Map< K, DeepPartial< V > >
+        : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepPartial< V > >
+        : T extends Set< infer U > ? Set< DeepPartial< U > >
+        : T extends ReadonlySet< infer U > ? ReadonlySet< DeepPartial< U > >
+        : T extends PlainObject ? { [ K in keyof T ]?: DeepPartial< T[ K ] > }
+        : T;
 
 /**
  * Recursively make all properties required.
