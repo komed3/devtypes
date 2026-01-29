@@ -86,8 +86,7 @@ export type IfAny< T extends readonly boolean[], Then, Else = never > =
  * type A = IfNon< [ false, false ], 'ok', 'fail' >;  // 'ok'
  * type B = IfNon< [ false, true ], 'ok', 'fail' >;   // 'fail'
  */
-export type IfNon< T extends readonly boolean[], Then, Else = never > =
-    If< IfAny< T, false, true >, Then, Else >;
+export type IfNon< T extends readonly boolean[], Then, Else = never > = IfAny< T, Else, Then >;
 
 /**
  * Count the number of `true` values in a boolean tuple.
@@ -126,7 +125,7 @@ export type CountTrue< T extends readonly boolean[], Acc extends any[] = [] > =
  * type B = IfExactly< [ true, true ], 1, 'yes', 'no' >;         // 'no'
  */
 export type IfExactly< T extends readonly boolean[], N extends number, Then, Else = never > =
-    If< IfEquals< CountTrue< T >, N, true, false >, Then, Else >;
+    IfEquals< CountTrue< T >, N, Then, Else >;
 
 /**
  * Conditional helper: only one `true` value.
