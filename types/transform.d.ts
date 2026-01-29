@@ -118,17 +118,24 @@ export type DeepReadonly< T > =
  * @remarks
  * Produces a fully mutable and required version of a deeply readonly type.
  * 
+ * Will keep functions and special types like Date unchanged.
+ * 
  * @template T - Readonly object type to transform
  * 
  * @example
- * type User = { readonly id?: number; profile?: { readonly name?: string; address?: { readonly city?: string } } };
+ * type User = { readonly id?: number; profile?: {
+ *   readonly name?: string; address?: { readonly city?: string }
+ * } };
  * type Mutable = DeepMutable< User >;
  * // { id: number; profile: { name: string; address: { city: string } } }
  */
-export type DeepMutable< T > = T extends Function
-    ? T
-    : T extends Array< infer U >
-        ? Array< DeepMutable< U > >
-        : T extends object
-            ? { -readonly [ K in keyof T ]-?: DeepMutable< T[ K ] > }
-            : T;
+export type DeepMutable< T > =
+    T extends Function | Date ? T
+        : T extends Array< infer U > ? Array< DeepMutable< U > >
+        : T extends ReadonlyArray< infer U > ? Array< DeepMutable< U > >
+        : T extends Map< infer K, infer V > ? Map< K, DeepMutable< V > >
+        : T extends ReadonlyMap< infer K, infer V > ? Map< K, DeepMutable< V > >
+        : T extends Set< infer U > ? Set< DeepMutable< U > >
+        : T extends ReadonlySet< infer U > ? Set< DeepMutable< U > >
+        : T extends PlainObject ? { -readonly [ K in keyof T ]-?: DeepMutable< T[ K ] > }
+        : T;
