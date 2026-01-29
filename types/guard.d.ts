@@ -303,16 +303,16 @@ export type IsJSONSerializable< T > =
  * type D = IsJSONSerializableStrict< ( string | undefined )[] >;     // false
  */
 export type IsJSONSerializableStrict< T > =
-    T extends ( ...args: any[] ) => any ? false
-        : T extends bigint | symbol | undefined ? false
-        : T extends string | number | boolean | null ? true
-        : T extends readonly ( infer U )[] ? IsJSONSerializableStrict< U >
-        : T extends object ? false extends {
-            [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
-        }[ keyof T ] ? false : true
-        : false;
-
-
+    [ T ] extends [ ( ...args: any[] ) => any ] ? false
+        : [ T ] extends [ bigint | symbol | undefined ] ? false
+        : [ T ] extends [ string | number | boolean | null ] ? true
+        : [ T ] extends [ readonly ( infer U )[] ]
+            ? IsJSONSerializableStrict< U > extends true ? true : false
+            : [ T ] extends [ object ]
+                ? false extends {
+                    [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
+                }[ keyof T ] ? false : true
+                : false;
 
 /**
  * Type Guard: detect if a type is recursive.
