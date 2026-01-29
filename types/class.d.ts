@@ -193,7 +193,7 @@ export type WritableProperties< T > = Pick< T, WritablePropertyNames< T > >;
 export type ClassProperties< T > = Omit< T, MethodNames< T > >;
 
 /**
- * Extract static properties from a constructor.
+ * Extract public static properties from a constructor.
  * 
  * @remarks
  * Produces a union of static property names of the constructor.
@@ -211,7 +211,7 @@ export type StaticPropertyNames< T extends Function > = Exclude< {
 }[ keyof T ], 'prototype' >;
 
 /**
- * Extract static properties from a constructor as an object.
+ * Extract public static properties from a constructor as an object.
  * 
  * @remarks
  * Produces an object type containing all static properties of the class.
@@ -221,13 +221,13 @@ export type StaticPropertyNames< T extends Function > = Exclude< {
  * 
  * @example
  * class Settings { static appName = "MyApp"; static maxUsers = 100; }
- * type StaticPropsObj = StaticPropertiesObject< typeof Settings >;
+ * type StaticPropsObj = StaticProperties< typeof Settings >;
  * // { appName: string; maxUsers: number; }
  */
 export type StaticProperties< T extends Function > = Pick< T, StaticPropertyNames< T > >;
 
 /**
- * Extract static methods from a constructor.
+ * Extract public static methods from a constructor.
  * 
  * @remarks
  * Returns a union of all static method names of the class.
@@ -244,7 +244,7 @@ export type StaticMethodNames< T extends Function > = {
 }[ keyof T ];
 
 /**
- * Extract static methods from a constructor as an object.
+ * Extract public static methods from a constructor as an object.
  * 
  * @remarks
  * Produces an object type containing all static methods.
@@ -254,7 +254,7 @@ export type StaticMethodNames< T extends Function > = {
  * 
  * @example
  * class Helpers { static parse() {} static stringify() {} }
- * type StaticMethodsObj = StaticMethodsObject< typeof Helpers >;
+ * type StaticMethodsObj = StaticMethods< typeof Helpers >;
  * // { parse: () => ...; stringify: () => ...; }
  */
 export type StaticMethods< T extends Function > = Pick< T, StaticMethodNames< T > >;
