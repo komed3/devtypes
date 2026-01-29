@@ -88,15 +88,13 @@ export type IsNever< T > = [ T ] extends [ never ] ? true : false;
  * @template T - Type to test
  * 
  * @example
- * type A = IsUnknown< unknown >; // true
- * type B = IsUnknown< any >;     // false
- * type C = IsUnknown< string >;  // false
+ * type A = IsUnknown< unknown >;  // true
+ * type B = IsUnknown< any >;      // false
+ * type C = IsUnknown< string >;   // false
  */
 export type IsUnknown< T > =
-    IsAny< T > extends true
-        ? false
-        : unknown extends T
-            ? ( T extends {} ? false : true )
+    IsAny< T > extends true ? false
+        : unknown extends T ? ( T extends {} ? false : true )
             : false;
 
 /**
