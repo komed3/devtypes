@@ -99,7 +99,8 @@ export type Simplify< T > = T extends Function ? T : { [ K in keyof T ]: T[ K ] 
  * 
  * @example
  * type Nested = { a: { b: { c: number } } };
- * type Expanded = Expand< Nested >; // { a: { b: { c: number } } }
+ * type Expanded = Expand< Nested >;
+ * // { a: { b: { c: number } } }
  */
 export type Expand< T > = T extends object ? { [ K in keyof T ]: T[ K ] } & {} : T;
 
@@ -119,24 +120,26 @@ export type Expand< T > = T extends object ? { [ K in keyof T ]: T[ K ] } & {} :
 export type Flatten< T > = T extends any[] ? { [ K in keyof T ]: T[ K ] } : T;
 
 /**
- * Narrow a type without widening literals.
+ * Widen a literal type to its broader primitive type.
  * 
  * @remarks
- * Preserves literal types while leaving their corresponding base types
- * unchanged. Primarily useful as a semantic marker in public APIs.
+ * Converts string literals to `string`, numeric literals to `number`,
+ * boolean literals to `boolean`, bigint literals to `bigint`, and symbol
+ * literals to `symbol`. Other types remain unchanged.
  * 
- * @template T - Type to narrow
+ * @template T - Type to widen
  * 
  * @example
- * type A = Narrow< 'hello' >;  // 'hello'
- * type B = Narrow< string >;   // string
+ * type A = Narrow< 'hello' >;  // string
+ * type B = Narrow< true >;     // boolean
  */
-export type Narrow< T > =
-    T extends string
-        ? ( string extends T ? T : T )
-        : T extends number
-            ? ( number extends T ? T : T )
-            : T;
+export type Widen< T > =
+    T extends string ? string
+        : T extends number ? number
+        : T extends boolean ? boolean
+        : T extends bigint ? bigint
+        : T extends symbol ? symbol
+        : T;
 
 /**
  * Compute intersections across multiple types and unions.
