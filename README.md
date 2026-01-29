@@ -1,6 +1,6 @@
 # TypeScript Advanced Type Utilities
 
-A comprehensive collection of **more than 140 high-performance TypeScript type utilities** focused on type safety and developer experience.
+A comprehensive collection of **more than 150 high-performance TypeScript type utilities** focused on type safety and developer experience.
 
 ## Features
 
