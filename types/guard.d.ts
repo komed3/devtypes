@@ -9,7 +9,7 @@
  */
 
 import type { IsTypeInList, ListLike } from './list';
-import type { JSONPrimitive } from './primitive';
+import type { JSONPrimitive, Primitive } from './primitive';
 
 
 /**
@@ -95,7 +95,7 @@ export type IsNever< T > = [ T ] extends [ never ] ? true : false;
 export type IsUnknown< T > =
     IsAny< T > extends true ? false
         : unknown extends T ? ( T extends {} ? false : true )
-            : false;
+        : false;
 
 /**
  * Type guard: detect whether a type is a literal type.
@@ -134,11 +134,9 @@ export type IsLiteral< T > =
  * type B = IsNonLiteral< 'a' >;     // false
  */
 export type IsNonLiteral< T > =
-    IsAny< T > extends true
-        ? false
-        : IsLiteral< T > extends true
-            ? false
-            : true;
+    IsAny< T > extends true ? false
+        : IsLiteral< T > extends true ? false
+        : true;
 
 /**
  * Type guard: detect whether a type is a list-like.
@@ -153,7 +151,7 @@ export type IsNonLiteral< T > =
  * type B = IsListLike< Record< string, number > >;  // true
  * type C = IsListLike< string >;                    // false
  */
-export type IsListLike< T > = T extends ListLike< any, any > ? true : false;
+export type IsListLike< T > = T extends Primitive ? false : T extends ListLike ? true : false;
 
 /**
  * Type guard: detect whether a type is a union.
