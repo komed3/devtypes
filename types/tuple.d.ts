@@ -238,12 +238,12 @@ export type TupleDrop< T extends readonly any[], N extends number, C extends rea
  * @template V - Type to check for
  * 
  * @example
- * type HasString = TupleIncludes< [ number, string, boolean ], string >;  // true
- * type HasDate = TupleIncludes< [ number, string, boolean ], Date >;      // false
+ * type HasString = TupleHas< [ number, string, boolean ], string >;  // true
+ * type HasDate = TupleHas< [ number, string, boolean ], Date >;      // false
  */
-export type TupleIncludes< T extends readonly any[], V > =
+export type TupleHas< T extends readonly any[], V > =
     T extends readonly [ infer H, ...infer R ]
         ? [ H ] extends [ V ]
             ? true
-            : TupleIncludes< R, V >
+            : TupleHas< R, V >
         : false;
