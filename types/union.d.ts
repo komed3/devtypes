@@ -12,7 +12,7 @@ import { Simplify } from './util';
 
 
 /** @internal */
-export type UnionLast< U > =
+type UnionLast< U > =
     UnionToIntersection< U extends any ? ( x: U ) => 0 : never > extends
         ( x: infer L ) => 0 ? L : never;
 
@@ -185,3 +185,35 @@ export type UnionMerge< U > = {
  * type HasDate = UnionHas< U, Date >;      // false
  */
 export type UnionHas< U, T > = [ T ] extends [ U ] ? true : false;
+
+/**
+ * Get the intersection of two union types.
+ * 
+ * @remarks
+ * Produces a union of types that are present in both `A` and `B`.
+ * 
+ * @template A - First union type
+ * @template B - Second union type
+ * 
+ * @example
+ * type A = 'a' | 'b' | 'c';
+ * type B = 'a' | 'x';
+ * type C = UnionDifference< A, B >;  // 'a'
+ */
+export type UnionIntersect< A, B > = A extends B ? A : never;
+
+/**
+ * Get the difference of two union types.
+ * 
+ * @remarks
+ * Produces a union of types that are in `A` but not in `B`.
+ * 
+ * @template A - First union type
+ * @template B - Second union type
+ * 
+ * @example
+ * type A = 'a' | 'b' | 'c';
+ * type B = 'a' | 'x';
+ * type C = UnionDifference< A, B >;  // 'b' | 'c'
+ */
+export type UnionDifference< A, B > = A extends B ? never : A;
