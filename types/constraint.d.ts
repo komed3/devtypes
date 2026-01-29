@@ -41,9 +41,7 @@ export type OptionalKeys< T > = {
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
  * type ReqKeys = RequiredKeys< Obj >;  // "a" | "d"
  */
-export type RequiredKeys< T > = {
-    [ K in keyof T ]-?: {} extends Pick< T, K > ? never : K
-}[ keyof T ];
+export type RequiredKeys< T > = keyof Omit< T, OptionalKeys< T > >;
 
 /**
  * Extract specific properties as optional.
