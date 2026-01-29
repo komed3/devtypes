@@ -13,6 +13,27 @@ import type { JSONPrimitive } from './primitive';
 
 
 /**
+ * Exact type matching: ensure no extra properties.
+ * 
+ * @remarks
+ * Validates that `T` matches exactly the shape of `Shape`.
+ * Useful for type-level validation or enforcing strict interfaces.
+ * 
+ * @template T - The type to validate
+ * @template Shape - The exact shape to match
+ * 
+ * @example
+ * type A = Exact< { a: number }, { a: number } >;             // { a: number }
+ * type B = Exact< { a: number; b: number }, { a: number } >;  // never
+ */
+export type Exact< T, Shape > =
+    T extends Shape
+        ? Exclude< keyof T, keyof Shape > extends never
+            ? T
+            : never
+        : never;
+
+/**
  * Type guard: detect whether a type `T` extends type `U`.
  * 
  * @remarks
