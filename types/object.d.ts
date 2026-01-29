@@ -48,7 +48,7 @@ export type PlainObject = Record< string | number | symbol, any >;
  * 
  * @example
  * type Obj = { a: number; b: string; c: number; d: boolean };
- * type NumKeys = KeysByValue< Obj, number >;  // "a" | "c"
+ * type NumKeys = KeysByValue< Obj, number >;  // 'a' | 'c'
  */
 export type KeysByValue< T, V > = {
     [ K in keyof T ]-?: T[ K ] extends V ? K : never
@@ -224,7 +224,7 @@ export type MutableProperty< T, K extends keyof T > =
  * @example
  * type User = { id: number; profile: { name: string; address: { city: string } } };
  * type PathList = Paths< User >;
- * // "id" | "profile" | "profile.name" | "profile.address" | "profile.address.city"
+ * // 'id' | 'profile' | 'profile.name' | 'profile.address' | 'profile.address.city'
  */
 export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
     ? never : T extends object
@@ -247,7 +247,7 @@ export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
  * 
  * @example
  * type User = { id: number; profile: { name: string; address: { city: string } } };
- * type City = PathValue< User, "profile.address.city" >;  // string
+ * type City = PathValue< User, 'profile.address.city' >;  // string
  */
 export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer Rest }`
     ? K extends keyof T ? PathValue< T[ K ], Rest > : never

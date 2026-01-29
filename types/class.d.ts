@@ -87,7 +87,7 @@ export type InstanceType< C extends Constructor< any > > =
  * 
  * @example
  * class Service { getData() {} setData() {} value = 123; }
- * type Methods = MethodNames< Service >; // "getData" | "setData"
+ * type Methods = MethodNames< Service >; // 'getData' | 'setData'
  */
 export type MethodNames< T > = {
     [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? K : never
@@ -119,8 +119,8 @@ export type ClassMethods< T > = Pick< T, MethodNames< T > >;
  * @template T - A class or object type
  * 
  * @example
- * class Config { readonly version = "1.0"; readonly name = "app"; }
- * type ReadonlyProps = ReadonlyPropertyNames< Config >; // "version" | "name"
+ * class Config { readonly version = '1.0'; readonly name = 'app'; }
+ * type ReadonlyProps = ReadonlyPropertyNames< Config >; // 'version' | 'name'
  */
 export type ReadonlyPropertyNames< T > = {
     [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? never
@@ -137,7 +137,7 @@ export type ReadonlyPropertyNames< T > = {
  * @template T - A class or object type
  * 
  * @example
- * class Settings { readonly theme = "dark"; readonly language = "en"; }
+ * class Settings { readonly theme = 'dark'; readonly language = 'en'; }
  * type ReadonlyPropsObj = ReadonlyProperties< Settings >;
  * // { theme: string; language: string; }
  */
@@ -155,7 +155,7 @@ export type ReadonlyProperties< T > = Pick< T, ReadonlyPropertyNames< T > >;
  * 
  * @example
  * class User { readonly id: number; name: string; }
- * type WritableProps = WritablePropertyNames< User >; // "name"
+ * type WritableProps = WritablePropertyNames< User >; // 'name'
  */
 export type WritablePropertyNames< T > =
     Exclude< keyof T, MethodNames< T > | ReadonlyPropertyNames< T > >;
@@ -202,9 +202,9 @@ export type ClassProperties< T > = Omit< T, MethodNames< T > >;
  * @template T - A constructor function
  * 
  * @example
- * class Config { static readonly version = "1.0"; static readonly debug = false; }
+ * class Config { static readonly version = '1.0'; static readonly debug = false; }
  * type StaticProps = StaticPropertyNames< typeof Config >;
- * // "version" | "debug"
+ * // 'version' | 'debug'
  */
 export type StaticPropertyNames< T extends Function > = Exclude< {
     [ K in keyof T ]-?: T[ K ] extends Function ? never : K
@@ -220,7 +220,7 @@ export type StaticPropertyNames< T extends Function > = Exclude< {
  * @template T - A constructor function
  * 
  * @example
- * class Settings { static appName = "MyApp"; static maxUsers = 100; }
+ * class Settings { static appName = 'MyApp'; static maxUsers = 100; }
  * type StaticPropsObj = StaticProperties< typeof Settings >;
  * // { appName: string; maxUsers: number; }
  */
@@ -237,7 +237,7 @@ export type StaticProperties< T extends Function > = Pick< T, StaticPropertyName
  * 
  * @example
  * class Utils { static create() {} static format() {} }
- * type StaticMethods = StaticMethodNames< typeof Utils >; // "create" | "format"
+ * type StaticMethods = StaticMethodNames< typeof Utils >; // 'create' | 'format'
  */
 export type StaticMethodNames< T extends Function > = {
     [ K in keyof T ]-?: T[ K ] extends Function ? K : never

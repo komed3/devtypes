@@ -21,7 +21,7 @@
  * 
  * @example
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
- * type OptKeys = OptionalKeys< Obj >;  // "b" | "c"
+ * type OptKeys = OptionalKeys< Obj >;  // 'b' | 'c'
  */
 export type OptionalKeys< T > = {
     [ K in keyof T ]-?: {} extends Pick< T, K >
@@ -39,7 +39,7 @@ export type OptionalKeys< T > = {
  * 
  * @example
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
- * type ReqKeys = RequiredKeys< Obj >;  // "a" | "d"
+ * type ReqKeys = RequiredKeys< Obj >;  // 'a' | 'd'
  */
 export type RequiredKeys< T > = keyof Omit< T, OptionalKeys< T > >;
 
