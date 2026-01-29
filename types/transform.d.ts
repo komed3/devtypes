@@ -37,6 +37,8 @@ export type Flat< T extends readonly any[] > =
  * Traverses objects and arrays and applies optional modifiers at every
  * nesting level without altering value types.
  * 
+ * Will keep functions and special types like Date unchanged.
+ * 
  * @template T - Object type to transform
  * 
  * @example
@@ -59,8 +61,10 @@ export type DeepPartial< T > =
  * Recursively make all properties required.
  * 
  * @remarks
- * Removes optional property modifiers but does not remove `undefined`
- * from union types.
+ * Removes optional property modifiers at all nesting levels. Will also remove
+ * `undefined` from union types within the object structure.
+ * 
+ * Function types and special types like Date are preserved unchanged.
  * 
  * @template T - Object type to transform
  * 
@@ -69,15 +73,16 @@ export type DeepPartial< T > =
  * type Required = DeepRequired< User >;
  * // { id: number; profile: { name: string; address: { city: string } } }
  */
-export type DeepRequired< T > = {
-    [ P in keyof T ]-?: T[ P ] extends Array< infer U >
-        ? DeepRequired< U >[]
-        : T[ P ] extends ReadonlyArray< infer U >
-            ? ReadonlyArray< DeepRequired< U > >
-            : T[ P ] extends object
-                ? DeepRequired< T[ P ] >
-                : T[ P ];
-};
+export type DeepRequired< T > =
+    T extends Function | Date ? T
+        : T extends Array< infer U > ? DeepRequired< U >[]
+        : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepRequired< U > >
+        : T extends Map< infer K, infer V > ? Map< K, DeepRequired< V > >
+        : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepRequired< V > >
+        : T extends Set< infer U > ? Set< DeepRequired< U > >
+        : T extends ReadonlySet< infer U > ? ReadonlySet< DeepRequired< U > >
+        : T extends PlainObject ? { [ K in keyof T ]-?: DeepRequired< T[ K ] > }
+        : T;
 
 /**
  * Recursively make all properties readonly.
