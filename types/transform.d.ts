@@ -88,23 +88,29 @@ export type DeepRequired< T > =
  * Recursively make all properties readonly.
  * 
  * @remarks
- * Applies `readonly` modifiers deeply to all properties.
- * Function types are preserved unchanged.
+ * Applies `readonly` modifiers deeply at all nesting levels.
+ * 
+ * Function types and special types like Date are preserved unchanged.
  * 
  * @template T - Object type to transform
  * 
  * @example
  * type User = { id: number; profile: { name: string; address: { city: string } } };
  * type Readonly = DeepReadonly< User >;
- * // { readonly id: number; readonly profile: { readonly name: string; readonly address: { readonly city: string } } }
+ * // { readonly id: number; readonly profile: {
+ * //    readonly name: string; readonly address: { readonly city: string }
+ * // } }
  */
-export type DeepReadonly< T > = T extends Function
-    ? T
-    : T extends Array< infer U >
-        ? ReadonlyArray< DeepReadonly< U > >
-        : T extends object
-            ? { readonly [ K in keyof T ]: DeepReadonly< T[ K ] > }
-            : T;
+export type DeepReadonly< T > =
+    T extends Function | Date ? T
+        : T extends Array< infer U > ? ReadonlyArray< DeepReadonly< U > >
+        : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepReadonly< U > >
+        : T extends Map< infer K, infer V > ? ReadonlyMap< K, DeepReadonly< V > >
+        : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepReadonly< V > >
+        : T extends Set< infer U > ? ReadonlySet< DeepReadonly< U > >
+        : T extends ReadonlySet< infer U > ? ReadonlySet< DeepReadonly< U > >
+        : T extends PlainObject ? { readonly [ K in keyof T ]: DeepReadonly< T[ K ] > }
+        : T;
 
 /**
  * Recursively remove readonly and optional modifiers.
