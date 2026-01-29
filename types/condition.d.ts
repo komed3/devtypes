@@ -70,6 +70,26 @@ export type IfAny< T extends readonly boolean[], Then, Else = never > =
         : Else;
 
 /**
+ * Conditional type that succeeds if all conditions are false.
+ * 
+ * @remarks
+ * Evaluates to `Then` if all conditions in the tuple are `false`.
+ * Otherwise resolves to `Else`.
+ * 
+ * Empty tuples evaluate to `Then`.
+ * 
+ * @template T - Tuple of boolean conditions
+ * @template Then - Result if all conditions are false
+ * @template Else - Result if any condition is true
+ * 
+ * @example
+ * type A = IfNon< [ false, false ], 'ok', 'fail' >;  // 'ok'
+ * type B = IfNon< [ false, true ], 'ok', 'fail' >;   // 'fail'
+ */
+export type IfNon< T extends readonly boolean[], Then, Else = never > =
+    If< IfAny< T, false, true >, Then, Else >;
+
+/**
  * Conditional type based on type equality.
  * 
  * @remarks
