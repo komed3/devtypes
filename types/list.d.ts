@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-import { Equals, If } from "./condition";
+import { Equals, If } from './condition';
 
 
 /**
