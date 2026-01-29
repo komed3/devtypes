@@ -144,7 +144,7 @@ export type ReadonlyPropertyNames< T > = {
 export type ReadonlyProperties< T > = Pick< T, ReadonlyPropertyNames< T > >;
 
 /**
- * Extract writable (mutable) property names from a class.
+ * Extract public writable (mutable) property names from a class.
  * 
  * @remarks
  * Returns a union of all properties that can be modified.
@@ -161,7 +161,7 @@ export type WritablePropertyNames< T > =
     Exclude< keyof T, MethodNames< T > | ReadonlyPropertyNames< T > >;
 
 /**
- * Extract writable (mutable) properties from a class as an object.
+ * Extract public writable (mutable) properties from a class as an object.
  * 
  * @remarks
  * Returns an object type containing all writable properties.
@@ -171,13 +171,13 @@ export type WritablePropertyNames< T > =
  * 
  * @example
  * class Profile { readonly id: number; bio: string; avatarUrl: string; }
- * type WritablePropsObj = WritablePropertiesObject< Profile >;
+ * type WritablePropsObj = WritableProperties< Profile >;
  * // { bio: string; avatarUrl: string; }
  */
 export type WritableProperties< T > = Pick< T, WritablePropertyNames< T > >;
 
 /**
- * Create an object with property types extracted from a class.
+ * Create an object with public property types extracted from a class.
  * 
  * @remarks
  * Removes all method properties, leaving only fields.
@@ -187,10 +187,10 @@ export type WritableProperties< T > = Pick< T, WritablePropertyNames< T > >;
  * 
  * @example
  * class User { id: number; name: string; email: string; }
- * type UserProperties = PropertyTypes< User >;
+ * type UserProperties = ClassProperties< User >;
  * // { id: number; name: string; email: string; }
  */
-export type PropertyTypes< T > = Omit< T, MethodNames< T > >;
+export type ClassProperties< T > = Omit< T, MethodNames< T > >;
 
 /**
  * Extract static properties from a constructor.
