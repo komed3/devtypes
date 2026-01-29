@@ -32,6 +32,26 @@ export type Merge< Left, Right > = Simplify<
 >;
 
 /**
+ * Strict merge of two object types.
+ * 
+ * @remarks
+ * Similar to {@link Merge} but preserves properties from the left-hand type
+ * by only adding non-conflicting properties from the right-hand type.
+ * 
+ * @template Left - Base object type
+ * @template Right - Non-Overriding object type
+ * 
+ * @example
+ * type A = { a: number; b: string };
+ * type B = { b: number; c: boolean };
+ * type Merged = MergeStrict< A, B >;
+ * // { a: number; b: string; c: boolean }
+ */
+export type MergeStrict< Left, Right > = Simplify<
+    Left & Pick< Right, Exclude< keyof Right, keyof Left > >
+>;
+
+/**
  * Deeply merge two object types.
  * 
  * @remarks
