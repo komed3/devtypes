@@ -12,6 +12,30 @@
 import type { PlainObject } from './object';
 
 
+/** @internal Extract value type from containers */
+type ContainerValue< T > =
+    T extends Array< infer U > ? U
+        : T extends ReadonlyArray< infer U > ? U
+        : T extends Map< infer _, infer V > ? V
+        : T extends ReadonlyMap< infer _, infer V > ? V
+        : T extends Set< infer U > ? U
+        : T extends ReadonlySet< infer U > ? U
+        : never;
+
+/** @internal Reconstruct container with transformed value */
+type MapContainer< T, U > =
+    T extends Array< any > ? U[]
+        : T extends ReadonlyArray< any > ? ReadonlyArray< U >
+        : T extends Map< infer K, any > ? Map< K, U >
+        : T extends ReadonlyMap< infer K, any > ? ReadonlyMap< K, U >
+        : T extends Set< any > ? Set< U >
+        : T extends ReadonlySet< any > ? ReadonlySet< U >
+        : never;
+
+/** @internal Check if should recurse (not a leaf type) */
+type ShouldRecurse< T > = T extends Function | Date | PlainObject ? true : false;
+
+
 /**
  * Flatten an array by one level.
  * 
