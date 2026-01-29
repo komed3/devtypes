@@ -90,6 +90,26 @@ export type IfNon< T extends readonly boolean[], Then, Else = never > =
     If< IfAny< T, false, true >, Then, Else >;
 
 /**
+ * Count the number of `true` values in a boolean tuple.
+ * 
+ * @remarks
+ * Evaluates the tuple at the type level and returns a numeric literal.
+ * Useful as a building block for higher-order conditional helpers.
+ * 
+ * @template T - Tuple of boolean values
+ * 
+ * @example
+ * type A = CountTrue< [ true, false, true ] >;  // 2
+ * type B = CountTrue< [ false, false ] >;       // 0
+ */
+export type CountTrue< T extends readonly boolean[], Acc extends any[] = [] > =
+    T extends readonly [ infer H extends boolean, ...infer R extends boolean[] ]
+        ? H extends true
+            ? CountTrue< R, [ 0, ...Acc ] >
+            : CountTrue< R, Acc >
+        : Acc[ 'length' ];
+
+/**
  * Conditional type based on type equality.
  * 
  * @remarks
