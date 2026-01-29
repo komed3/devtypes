@@ -33,7 +33,7 @@ export type * as 'assert' from './assert';
 export type * as 'class' from './class';
 export type * as 'condition' from './condition';
 export type * as 'constraint' from './constraint';
-export type * as 'function' from './function';
+export type * as 'functional' from './functional';
 export type * as 'guard' from './guard';
 export type * as 'list' from './list';
 export type * as 'merge' from './merge';

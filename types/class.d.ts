@@ -77,7 +77,7 @@ export type InstanceType< C extends Constructor< any > > =
     C extends { new ( ...args: any[] ): infer I } ? I : never;
 
 /**
- * Extract method names from a class.
+ * Extract public method names from a class.
  * 
  * @remarks
  * Returns a union of all callable method names of the class.
@@ -87,14 +87,14 @@ export type InstanceType< C extends Constructor< any > > =
  * 
  * @example
  * class Service { getData() {} setData() {} value = 123; }
- * type Methods = MethodNames< Service >; // "getData" | "setData"
+ * type Methods = MethodNames< Service >; // 'getData' | 'setData'
  */
 export type MethodNames< T > = {
     [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? K : never
 }[ keyof T ];
 
 /**
- * Extract method types from a class as an object.
+ * Extract public method types from a class as an object.
  * 
  * @remarks
  * Produces an object mapping method names to their signatures.
@@ -104,13 +104,13 @@ export type MethodNames< T > = {
  * 
  * @example
  * class API { fetch( url: string ) {} post( url: string, data: any ) {} }
- * type Methods = MethodsObject< API >;
+ * type Methods = ClassMethods< API >;
  * // { fetch: ( url: string ) => ...; post: ( url: string, data: any ) => ...; }
  */
-export type MethodsObject< T > = Pick< T, MethodNames< T > >;
+export type ClassMethods< T > = Pick< T, MethodNames< T > >;
 
 /**
- * Extract readonly property names from a class.
+ * Extract public readonly property names from a class.
  * 
  * @remarks
  * Returns a union of all readonly properties, excluding methods.
@@ -119,18 +119,16 @@ export type MethodsObject< T > = Pick< T, MethodNames< T > >;
  * @template T - A class or object type
  * 
  * @example
- * class Config { readonly version = "1.0"; readonly name = "app"; }
- * type ReadonlyProps = ReadonlyPropertyNames< Config >; // "version" | "name"
+ * class Config { readonly version = '1.0'; readonly name = 'app'; }
+ * type ReadonlyProps = ReadonlyPropertyNames< Config >; // 'version' | 'name'
  */
-export type ReadonlyPropertyNames< T > =
-    { [ K in keyof T ]-?:
-        T[ K ] extends ( ...args: any[] ) => any
-            ? never
-            : IfEquals< { [ P in K ]: T[ K ] }, { -readonly [ P in K ]: T[ K ] }, never, K >
-    }[ keyof T ];
+export type ReadonlyPropertyNames< T > = {
+    [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? never
+        : IfEquals< { [ P in K ]: T[ K ] }, { -readonly [ P in K ]: T[ K ] }, never, K >
+}[ keyof T ];
 
 /**
- * Extract readonly properties from a class as an object.
+ * Extract public readonly properties from a class as an object.
  * 
  * @remarks
  * Produces an object type containing all readonly properties.
@@ -139,14 +137,14 @@ export type ReadonlyPropertyNames< T > =
  * @template T - A class or object type
  * 
  * @example
- * class Settings { readonly theme = "dark"; readonly language = "en"; }
- * type ReadonlyPropsObj = ReadonlyPropertiesObject< Settings >;
+ * class Settings { readonly theme = 'dark'; readonly language = 'en'; }
+ * type ReadonlyPropsObj = ReadonlyProperties< Settings >;
  * // { theme: string; language: string; }
  */
 export type ReadonlyProperties< T > = Pick< T, ReadonlyPropertyNames< T > >;
 
 /**
- * Extract writable (mutable) property names from a class.
+ * Extract public writable (mutable) property names from a class.
  * 
  * @remarks
  * Returns a union of all properties that can be modified.
@@ -157,13 +155,13 @@ export type ReadonlyProperties< T > = Pick< T, ReadonlyPropertyNames< T > >;
  * 
  * @example
  * class User { readonly id: number; name: string; }
- * type WritableProps = WritablePropertyNames< User >; // "name"
+ * type WritableProps = WritablePropertyNames< User >; // 'name'
  */
 export type WritablePropertyNames< T > =
     Exclude< keyof T, MethodNames< T > | ReadonlyPropertyNames< T > >;
 
 /**
- * Extract writable (mutable) properties from a class as an object.
+ * Extract public writable (mutable) properties from a class as an object.
  * 
  * @remarks
  * Returns an object type containing all writable properties.
@@ -173,13 +171,13 @@ export type WritablePropertyNames< T > =
  * 
  * @example
  * class Profile { readonly id: number; bio: string; avatarUrl: string; }
- * type WritablePropsObj = WritablePropertiesObject< Profile >;
+ * type WritablePropsObj = WritableProperties< Profile >;
  * // { bio: string; avatarUrl: string; }
  */
 export type WritableProperties< T > = Pick< T, WritablePropertyNames< T > >;
 
 /**
- * Create an object with property types extracted from a class.
+ * Create an object with public property types extracted from a class.
  * 
  * @remarks
  * Removes all method properties, leaving only fields.
@@ -189,13 +187,13 @@ export type WritableProperties< T > = Pick< T, WritablePropertyNames< T > >;
  * 
  * @example
  * class User { id: number; name: string; email: string; }
- * type UserProperties = PropertyTypes< User >;
+ * type UserProperties = ClassProperties< User >;
  * // { id: number; name: string; email: string; }
  */
-export type PropertyTypes< T > = Omit< T, MethodNames< T > >;
+export type ClassProperties< T > = Omit< T, MethodNames< T > >;
 
 /**
- * Extract static properties from a constructor.
+ * Extract public static properties from a constructor.
  * 
  * @remarks
  * Produces a union of static property names of the constructor.
@@ -204,16 +202,16 @@ export type PropertyTypes< T > = Omit< T, MethodNames< T > >;
  * @template T - A constructor function
  * 
  * @example
- * class Config { static readonly version = "1.0"; static readonly debug = false; }
+ * class Config { static readonly version = '1.0'; static readonly debug = false; }
  * type StaticProps = StaticPropertyNames< typeof Config >;
- * // "version" | "debug"
+ * // 'version' | 'debug'
  */
 export type StaticPropertyNames< T extends Function > = Exclude< {
     [ K in keyof T ]-?: T[ K ] extends Function ? never : K
 }[ keyof T ], 'prototype' >;
 
 /**
- * Extract static properties from a constructor as an object.
+ * Extract public static properties from a constructor as an object.
  * 
  * @remarks
  * Produces an object type containing all static properties of the class.
@@ -222,14 +220,14 @@ export type StaticPropertyNames< T extends Function > = Exclude< {
  * @template T - A constructor function
  * 
  * @example
- * class Settings { static appName = "MyApp"; static maxUsers = 100; }
- * type StaticPropsObj = StaticPropertiesObject< typeof Settings >;
+ * class Settings { static appName = 'MyApp'; static maxUsers = 100; }
+ * type StaticPropsObj = StaticProperties< typeof Settings >;
  * // { appName: string; maxUsers: number; }
  */
 export type StaticProperties< T extends Function > = Pick< T, StaticPropertyNames< T > >;
 
 /**
- * Extract static methods from a constructor.
+ * Extract public static methods from a constructor.
  * 
  * @remarks
  * Returns a union of all static method names of the class.
@@ -239,14 +237,14 @@ export type StaticProperties< T extends Function > = Pick< T, StaticPropertyName
  * 
  * @example
  * class Utils { static create() {} static format() {} }
- * type StaticMethods = StaticMethodNames< typeof Utils >; // "create" | "format"
+ * type StaticMethods = StaticMethodNames< typeof Utils >; // 'create' | 'format'
  */
 export type StaticMethodNames< T extends Function > = {
     [ K in keyof T ]-?: T[ K ] extends Function ? K : never
 }[ keyof T ];
 
 /**
- * Extract static methods from a constructor as an object.
+ * Extract public static methods from a constructor as an object.
  * 
  * @remarks
  * Produces an object type containing all static methods.
@@ -256,7 +254,7 @@ export type StaticMethodNames< T extends Function > = {
  * 
  * @example
  * class Helpers { static parse() {} static stringify() {} }
- * type StaticMethodsObj = StaticMethodsObject< typeof Helpers >;
+ * type StaticMethodsObj = StaticMethods< typeof Helpers >;
  * // { parse: () => ...; stringify: () => ...; }
  */
 export type StaticMethods< T extends Function > = Pick< T, StaticMethodNames< T > >;

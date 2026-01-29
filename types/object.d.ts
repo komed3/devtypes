@@ -12,6 +12,17 @@
 import type { IsJSONSerializable, IsJSONSerializableStrict } from './guard';
 
 
+/** @internal */
+type Join< K, P > = K extends string | number
+    ? P extends string | number
+        ? `${ K & ( string | number ) }.${ P & ( string | number ) }`
+        : never
+    : never;
+
+/** @internal */
+type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+
+
 /**
  * Generic plain object type.
  * 
@@ -37,7 +48,7 @@ export type PlainObject = Record< string | number | symbol, any >;
  * 
  * @example
  * type Obj = { a: number; b: string; c: number; d: boolean };
- * type NumKeys = KeysByValue< Obj, number >;  // "a" | "c"
+ * type NumKeys = KeysByValue< Obj, number >;  // 'a' | 'c'
  */
 export type KeysByValue< T, V > = {
     [ K in keyof T ]-?: T[ K ] extends V ? K : never
@@ -205,13 +216,15 @@ export type MutableProperty< T, K extends keyof T > =
  * Generates a union of valid access paths up to a configurable recursion
  * depth. Path order is not guaranteed.
  * 
+ * Arrays are treated as terminal values and do not have indexed paths.
+ * 
  * @template T - Object type to analyze
  * @template D - Maximum recursion depth (defaults to 5)
  * 
  * @example
  * type User = { id: number; profile: { name: string; address: { city: string } } };
- * type Paths = Paths< User >;
- * // "id" | "profile" | "profile.name" | "profile.address" | "profile.address.city"
+ * type PathList = Paths< User >;
+ * // 'id' | 'profile' | 'profile.name' | 'profile.address' | 'profile.address.city'
  */
 export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
     ? never : T extends object
@@ -221,16 +234,6 @@ export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
                     ? K | Join< K, Paths< T[ K ], Prev[ D ] > > : K
             : never }[ keyof T ]
         : '';
-
-/** @internal */
-type Join< K, P > = K extends string | number
-    ? P extends string | number
-        ? `${ K & ( string | number ) }.${ P & ( string | number ) }`
-        : never
-    : never;
-
-/** @internal */
-type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
 
 /**
  * Resolve the value type at a given property path.
@@ -244,36 +247,29 @@ type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
  * 
  * @example
  * type User = { id: number; profile: { name: string; address: { city: string } } };
- * type City = PathValue< User, "profile.address.city" >;  // string
+ * type City = PathValue< User, 'profile.address.city' >;  // string
  */
 export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer Rest }`
     ? K extends keyof T ? PathValue< T[ K ], Rest > : never
     : P extends keyof T ? T[ P ] : never;
 
 /**
- * Nest an object with set strings recursively.
+ * Nest an object structure based on a list of keys.
  * 
  * @remarks
- * This is useful to reduce boilerplate while having a strong type safety.
+ * Will recursively create nested objects for each key in the list,
+ * assigning the final type `T` at the deepest level.
  * 
  * Note that if no keys are provided, this turns into `< K, T > => T`
  * 
- * @param K - A list of string template
- * @param T - The type associated with the deepest object's keys
+ * @param K - A tuple of string keys representing the nesting levels
+ * @param T - The type to assign at the deepest level
  * 
  * @example
- * type RestaurantMenu = ChainMapped< [ 'night' | 'day', 'entry' | 'main' | 'dessert' ], () => void > 
- * // type RestaurantMenu = {
- * //   night: {
- * //     entry: () => void;
- * //     main: () => void;
- * //     dessert: () => void;
- * //   };
- * //   day: {
- * //     entry: () => void;
- * //     main: () => void;
- * //     dessert: () => void;
- * //   };
+ * type RestaurantMenu = ChainMapped< [ 'night' | 'day', 'entry' | 'main' | 'dessert' ], () => void >
+ * // {
+ * //   night: { entry: () => void; main: () => void; dessert: () => void };
+ * //   day: { entry: () => void; main: () => void; dessert: () => void };
  * // }
  */
 export type ChainMapped< K extends string[], T > =

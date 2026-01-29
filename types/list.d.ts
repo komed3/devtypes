@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-import { Equals, If } from "./condition";
+import { Equals, If } from './condition';
 
 
 /**
@@ -191,23 +191,23 @@ export type IsIndexedList< L > = L extends readonly any[] ? true : false;
  * Test whether a type can be found within a list of types.
  * 
  * @remarks
- * Returns `true` if `T` is in `L`.
- * Returns `false` if `T` cannot be found in `L`.
- * Returns `false` if L is empty.
+ * This will recursively check each type in the list `L` to see if it matches type `T`.
+ * If returns `true` as soon as a match is found and `false` if no matches are found or
+ * if the list is empty.
  * 
- * @template T - A type.
- * @template L - A list of types.
+ * @template T - A type to search for
+ * @template L - A list of types
  * 
  * @example
- * type TrueIsFound = IsTypeInList<true, [1, 'no', true]>; // true
- * type TrueIsNotFound = IsTypeInList<true, [1, 'no', false]>; // false
- * type ListIsEmptySoFalse = IsTypeInList<true, []>; // false
+ * type TrueIsFound = IsTypeInList< true, [ 1, 'no', true ] >;      // true
+ * type TrueIsNotFound = IsTypeInList< true, [ 1, 'no', false ] >;  // false
+ * type ListIsEmptySoFalse = IsTypeInList< true, [] >;              // false
  */
-export type IsTypeInList<T, L extends any[]> = 
-    L extends [infer F, ...infer R]
-        ? If<Equals<T, F>, true, false> extends true
+export type IsTypeInList< T, L extends any[] > =
+    L extends [ infer F, ...infer R ]
+        ? If< Equals< T, F >, true, false > extends true
             ? true
-            : IsTypeInList<T, R>
-        : L extends [infer F]
-            ? If<Equals<T, F>, true, T>
+            : IsTypeInList< T, R >
+        : L extends [ infer F ]
+            ? If< Equals< T, F >, true, T >
             : false

@@ -70,6 +70,82 @@ export type IfAny< T extends readonly boolean[], Then, Else = never > =
         : Else;
 
 /**
+ * Conditional type that succeeds if all conditions are false.
+ * 
+ * @remarks
+ * Evaluates to `Then` if all conditions in the tuple are `false`.
+ * Otherwise resolves to `Else`.
+ * 
+ * Empty tuples evaluate to `Then`.
+ * 
+ * @template T - Tuple of boolean conditions
+ * @template Then - Result if all conditions are false
+ * @template Else - Result if any condition is true
+ * 
+ * @example
+ * type A = IfNon< [ false, false ], 'ok', 'fail' >;  // 'ok'
+ * type B = IfNon< [ false, true ], 'ok', 'fail' >;   // 'fail'
+ */
+export type IfNon< T extends readonly boolean[], Then, Else = never > = IfAny< T, Else, Then >;
+
+/**
+ * Count the number of `true` values in a boolean tuple.
+ * 
+ * @remarks
+ * Evaluates the tuple at the type level and returns a numeric literal.
+ * Useful as a building block for higher-order conditional helpers.
+ * 
+ * @template T - Tuple of boolean values
+ * 
+ * @example
+ * type A = CountTrue< [ true, false, true ] >;  // 2
+ * type B = CountTrue< [ false, false ] >;       // 0
+ */
+export type CountTrue< T extends readonly boolean[], Acc extends any[] = [] > =
+    T extends readonly [ infer H extends boolean, ...infer R extends boolean[] ]
+        ? H extends true
+            ? CountTrue< R, [ 0, ...Acc ] >
+            : CountTrue< R, Acc >
+        : Acc[ 'length' ];
+
+/**
+ * Conditional helper: exactly N `true` values.
+ * 
+ * @remarks
+ * Resolves to `Then` if the tuple contains exactly `N` occurrences
+ * of `true`, otherwise `Else`.
+ * 
+ * @template T - Tuple of boolean conditions
+ * @template N - Exact number of `true` values required
+ * @template Then - Result if the condition matches
+ * @template Else - Result otherwise
+ * 
+ * @example
+ * type A = IfExactly< [ true, false, true ], 2, 'yes', 'no' >;  // 'yes'
+ * type B = IfExactly< [ true, true ], 1, 'yes', 'no' >;         // 'no'
+ */
+export type IfExactly< T extends readonly boolean[], N extends number, Then, Else = never > =
+    IfEquals< CountTrue< T >, N, Then, Else >;
+
+/**
+ * Conditional helper: only one `true` value.
+ * 
+ * @remarks
+ * Resolves to `Then` if the tuple contains exactly one `true` value,
+ * otherwise `Else`.
+ * 
+ * @template T - Tuple of boolean conditions
+ * @template Then - Result if exactly one condition is true
+ * @template Else - Result otherwise
+ * 
+ * @example
+ * type A = IfOnlyOne< [ false, true, false ], 'yes', 'no' >;  // 'yes'
+ * type B = IfOnlyOne< [ true, true, false ], 'yes', 'no' >;   // 'no'
+ */
+export type IfOnlyOne< T extends readonly boolean[], Then, Else = never > =
+    IfExactly< T, 1, Then, Else >;
+
+/**
  * Conditional type based on type equality.
  * 
  * @remarks
@@ -144,24 +220,3 @@ export type EqualsAny< T extends readonly any[] > =
     T extends readonly [ infer A, infer B, ...infer Rest ]
         ? If< Equals< A, B >, true, EqualsAny< [ B, ...Rest ] > >
         : false;
-
-/**
- * Exact type matching: ensure no extra properties.
- * 
- * @remarks
- * Validates that `T` matches exactly the shape of `Shape`.
- * Useful for type-level validation or enforcing strict interfaces.
- * 
- * @template T - The type to validate
- * @template Shape - The exact shape to match
- * 
- * @example
- * type A = Exact< { a: number }, { a: number } >;            // { a: number }
- * type B = Exact< { a: number; b: number }, { a: number } >; // never
- */
-export type Exact< T, Shape > =
-    T extends Shape
-        ? Exclude< keyof T, keyof Shape > extends never
-            ? T
-            : never
-        : never;

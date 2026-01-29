@@ -9,8 +9,29 @@
  */
 
 import type { IsTypeInList, ListLike } from './list';
-import type { JSONPrimitive } from './primitive';
+import type { JSONPrimitive, Primitive } from './primitive';
 
+
+/**
+ * Exact type matching: ensure no extra properties.
+ * 
+ * @remarks
+ * Validates that `T` matches exactly the shape of `Shape`.
+ * Useful for type-level validation or enforcing strict interfaces.
+ * 
+ * @template T - The type to validate
+ * @template Shape - The exact shape to match
+ * 
+ * @example
+ * type A = Exact< { a: number }, { a: number } >;             // { a: number }
+ * type B = Exact< { a: number; b: number }, { a: number } >;  // never
+ */
+export type Exact< T, Shape > =
+    T extends Shape
+        ? Exclude< keyof T, keyof Shape > extends never
+            ? T
+            : never
+        : never;
 
 /**
  * Type guard: detect whether a type `T` extends type `U`.
@@ -67,16 +88,14 @@ export type IsNever< T > = [ T ] extends [ never ] ? true : false;
  * @template T - Type to test
  * 
  * @example
- * type A = IsUnknown< unknown >; // true
- * type B = IsUnknown< any >;     // false
- * type C = IsUnknown< string >;  // false
+ * type A = IsUnknown< unknown >;  // true
+ * type B = IsUnknown< any >;      // false
+ * type C = IsUnknown< string >;   // false
  */
 export type IsUnknown< T > =
-    IsAny< T > extends true
-        ? false
-        : unknown extends T
-            ? ( T extends {} ? false : true )
-            : false;
+    IsAny< T > extends true ? false
+        : unknown extends T ? ( T extends {} ? false : true )
+        : false;
 
 /**
  * Type guard: detect whether a type is a literal type.
@@ -115,11 +134,9 @@ export type IsLiteral< T > =
  * type B = IsNonLiteral< 'a' >;     // false
  */
 export type IsNonLiteral< T > =
-    IsAny< T > extends true
-        ? false
-        : IsLiteral< T > extends true
-            ? false
-            : true;
+    IsAny< T > extends true ? false
+        : IsLiteral< T > extends true ? false
+        : true;
 
 /**
  * Type guard: detect whether a type is a list-like.
@@ -134,7 +151,7 @@ export type IsNonLiteral< T > =
  * type B = IsListLike< Record< string, number > >;  // true
  * type C = IsListLike< string >;                    // false
  */
-export type IsListLike< T > = T extends ListLike< any, any > ? true : false;
+export type IsListLike< T > = T extends Primitive ? false : T extends ListLike ? true : false;
 
 /**
  * Type guard: detect whether a type is a union.
@@ -246,7 +263,7 @@ export type IsNonEmptyObject< T > =
  * Recursively inspects the structure of `T` to ensure all components
  * are compatible with JSON serialization rules.
  * 
- * Loose check: functions are considered non-serializable, but 
+ * Loose check: functions are considered non-serializable, but
  * JSON.stringify will allow them (they get stripped).
  * 
  * Will not detect cyclic references in objects.
@@ -286,16 +303,16 @@ export type IsJSONSerializable< T > =
  * type D = IsJSONSerializableStrict< ( string | undefined )[] >;     // false
  */
 export type IsJSONSerializableStrict< T > =
-    T extends ( ...args: any[] ) => any ? false
-        : T extends bigint | symbol | undefined ? false
-        : T extends string | number | boolean | null ? true
-        : T extends readonly ( infer U )[] ? IsJSONSerializableStrict< U >
-        : T extends object ? false extends {
-            [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
-        }[ keyof T ] ? false : true
-        : false;
-
-
+    [ T ] extends [ ( ...args: any[] ) => any ] ? false
+        : [ T ] extends [ bigint | symbol | undefined ] ? false
+        : [ T ] extends [ string | number | boolean | null ] ? true
+        : [ T ] extends [ readonly ( infer U )[] ]
+            ? IsJSONSerializableStrict< U > extends true ? true : false
+            : [ T ] extends [ object ]
+                ? false extends {
+                    [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
+                }[ keyof T ] ? false : true
+                : false;
 
 /**
  * Type Guard: detect if a type is recursive.
@@ -316,9 +333,9 @@ export type IsTypeRecursive<T, P extends any[] = []> =
     T extends {[key: string]: any}
         ? {
             [K in keyof T]: IsTypeInList<T[K], P> extends true
-                ? 'true'
+                ? true
                 : IsTypeRecursive<T[K], [...P, T]>
         }[keyof T] extends false
             ? false
             : true
-        : IsTypeInList<T, [...P]> 
+        : IsTypeInList<T, P>

@@ -21,10 +21,12 @@
  * 
  * @example
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
- * type OptKeys = OptionalKeys< Obj >;  // "b" | "c"
+ * type OptKeys = OptionalKeys< Obj >;  // 'b' | 'c'
  */
 export type OptionalKeys< T > = {
-    [ K in keyof T ]-?: {} extends Pick< T, K > ? K : never
+    [ K in keyof T ]-?: {} extends Pick< T, K >
+        ? K : undefined extends T[ K ]
+            ? K : never
 }[ keyof T ];
 
 /**
@@ -37,11 +39,9 @@ export type OptionalKeys< T > = {
  * 
  * @example
  * type Obj = { a: number; b?: string; c: number | undefined; d: boolean };
- * type ReqKeys = RequiredKeys< Obj >;  // "a" | "d"
+ * type ReqKeys = RequiredKeys< Obj >;  // 'a' | 'd'
  */
-export type RequiredKeys< T > = {
-    [ K in keyof T ]-?: {} extends Pick< T, K > ? never : K
-}[ keyof T ];
+export type RequiredKeys< T > = keyof Omit< T, OptionalKeys< T > >;
 
 /**
  * Extract specific properties as optional.
@@ -91,12 +91,11 @@ export type RequireFrom< T, K extends keyof T > = Required< Pick< T, K > >;
  * type Result = RequireExactlyOne< Test, 'a' | 'b' >;
  * // { a: string; b?: never; c: boolean } | { a?: never; b: number; c: boolean }
  */
-export type RequireExactlyOne< T, K extends keyof T = keyof T > =
-    { [ P in K ]:
-        Required< Pick< T, P > > &
-        Partial< Record< Exclude< K, P >, never > > &
-        Omit< T, K >;
-    }[ K ];
+export type RequireExactlyOne< T, K extends keyof T = keyof T > = { [ P in K ]:
+    Required< Pick< T, P > > &
+    Partial< Record< Exclude< K, P >, never > > &
+    Omit< T, K >;
+}[ K ];
 
 /**
  * Require at least one property from a set.
@@ -109,9 +108,9 @@ export type RequireExactlyOne< T, K extends keyof T = keyof T > =
  * @template K - Keys where at least one must be present (defaults to all keys)
  * 
  * @example
- * type Test = { a?: string; b?: number; };
+ * type Test = { a?: string; b?: number };
  * type Result = RequireAtLeastOne< Test, 'a' | 'b' >;
- * // { a: string; b?: number; } | { a?: string; b: number; } | { a: string; b: number; }
+ * // { a: string; b?: number } | { a?: string; b: number } | { a: string; b: number }
  */
 export type RequireAtLeastOne< T, K extends keyof T = keyof T > =
     Pick< T, Exclude< keyof T, K > > &
@@ -133,7 +132,7 @@ export type RequireAtLeastOne< T, K extends keyof T = keyof T > =
  * @example
  * type Test = { a?: string; b?: number; c: boolean };
  * type Result = RequireNone< Test, 'a' | 'b' >;
- * // { c: boolean; a?: never; b?: never; }
+ * // { c: boolean; a?: never; b?: never }
  */
 export type RequireNone< T, K extends keyof T > = Omit< T, K > & Partial< Record< K, never > >;
 
@@ -149,7 +148,7 @@ export type RequireNone< T, K extends keyof T > = Omit< T, K > & Partial< Record
  * @example
  * type Test = { a?: string; b?: number; c: boolean };
  * type Result = RequireAllOrNone< Test, 'a' | 'b' >;
- * // { a: string; b: number; c: boolean } | { c: boolean; a?: never; b?: never; }
+ * // { a: string; b: number; c: boolean } | { c: boolean; a?: never; b?: never }
  */
 export type RequireAllOrNone< T, K extends keyof T > =
     | ( T & Required< Pick< T, K > > )
@@ -167,7 +166,7 @@ export type RequireAllOrNone< T, K extends keyof T > =
  * @example
  * type User = { id: number | null; name?: string | undefined; email: string | null };
  * type NonNullableUser = NonNullableProps< User, 'id' | 'name' >;
- * // { id: number; name?: string; email: string | null; }
+ * // { id: number; name?: string | undefined }
  */
 export type NonNullableProps< T, K extends keyof T > =
     Omit< T, K > & { [ P in K ]: NonNullable< T[ P ] > };
