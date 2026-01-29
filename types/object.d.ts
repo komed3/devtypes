@@ -12,6 +12,17 @@
 import type { IsJSONSerializable, IsJSONSerializableStrict } from './guard';
 
 
+/** @internal */
+type Join< K, P > = K extends string | number
+    ? P extends string | number
+        ? `${ K & ( string | number ) }.${ P & ( string | number ) }`
+        : never
+    : never;
+
+/** @internal */
+type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+
+
 /**
  * Generic plain object type.
  * 
@@ -223,16 +234,6 @@ export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
                     ? K | Join< K, Paths< T[ K ], Prev[ D ] > > : K
             : never }[ keyof T ]
         : '';
-
-/** @internal */
-type Join< K, P > = K extends string | number
-    ? P extends string | number
-        ? `${ K & ( string | number ) }.${ P & ( string | number ) }`
-        : never
-    : never;
-
-/** @internal */
-type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
 
 /**
  * Resolve the value type at a given property path.

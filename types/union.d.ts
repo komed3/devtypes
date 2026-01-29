@@ -9,6 +9,12 @@
  */
 
 
+/** @internal */
+export type UnionLast< U > =
+    UnionToIntersection< U extends any ? ( x: U ) => 0 : never > extends
+        ( x: infer L ) => 0 ? L : never;
+
+
 /**
  * Convert a union type to an intersection.
  * 
@@ -51,11 +57,6 @@ export type UnionToTuple< U, T extends any[] = [] > =
             Exclude< U, UnionLast< U > >,
             [ UnionLast< U >, ...T ]
         >;
-
-/** @internal */
-export type UnionLast< U > =
-    UnionToIntersection< U extends any ? ( x: U ) => 0 : never > extends
-        ( x: infer L ) => 0 ? L : never;
 
 /**
  * Build a discriminated union from a tag key and a mapping object.
