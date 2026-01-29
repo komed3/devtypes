@@ -77,7 +77,7 @@ export type InstanceType< C extends Constructor< any > > =
     C extends { new ( ...args: any[] ): infer I } ? I : never;
 
 /**
- * Extract method names from a class.
+ * Extract public method names from a class.
  * 
  * @remarks
  * Returns a union of all callable method names of the class.
@@ -94,7 +94,7 @@ export type MethodNames< T > = {
 }[ keyof T ];
 
 /**
- * Extract method types from a class as an object.
+ * Extract public method types from a class as an object.
  * 
  * @remarks
  * Produces an object mapping method names to their signatures.
