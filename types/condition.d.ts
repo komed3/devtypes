@@ -110,6 +110,43 @@ export type CountTrue< T extends readonly boolean[], Acc extends any[] = [] > =
         : Acc[ 'length' ];
 
 /**
+ * Conditional helper: exactly N `true` values.
+ * 
+ * @remarks
+ * Resolves to `Then` if the tuple contains exactly `N` occurrences
+ * of `true`, otherwise `Else`.
+ * 
+ * @template T - Tuple of boolean conditions
+ * @template N - Exact number of `true` values required
+ * @template Then - Result if the condition matches
+ * @template Else - Result otherwise
+ * 
+ * @example
+ * type A = IfExactly< [ true, false, true ], 2, 'yes', 'no' >;  // 'yes'
+ * type B = IfExactly< [ true, true ], 1, 'yes', 'no' >;         // 'no'
+ */
+export type IfExactly< T extends readonly boolean[], N extends number, Then, Else = never > =
+    If< IfEquals< CountTrue< T >, N, true, false >, Then, Else >;
+
+/**
+ * Conditional helper: only one `true` value.
+ * 
+ * @remarks
+ * Resolves to `Then` if the tuple contains exactly one `true` value,
+ * otherwise `Else`.
+ * 
+ * @template T - Tuple of boolean conditions
+ * @template Then - Result if exactly one condition is true
+ * @template Else - Result otherwise
+ * 
+ * @example
+ * type A = IfOnlyOne< [ false, true, false ], 'yes', 'no' >;  // 'yes'
+ * type B = IfOnlyOne< [ true, true, false ], 'yes', 'no' >;   // 'no'
+ */
+export type IfOnlyOne< T extends readonly boolean[], Then, Else = never > =
+    IfExactly< T, 1, Then, Else >;
+
+/**
  * Conditional type based on type equality.
  * 
  * @remarks
