@@ -186,3 +186,64 @@ export type TupleFlatten< T extends readonly any[] > =
             ? readonly [ ...TupleFlatten< H >, ...TupleFlatten< R > ]
             : readonly [ H, ...TupleFlatten< R > ]
         : readonly [];
+
+/**
+ * Take the first N elements of a tuple.
+ * 
+ * @remarks
+ * Produces a new tuple containing the first N elements from the input tuple.
+ * If N exceeds the tuple length, returns the entire tuple.
+ * 
+ * @template T - Tuple type
+ * @template N - Number of elements to take
+ * 
+ * @example
+ * type T = TupleTake< [ 1, 2, 3, 4 ], 2 >;  // [ 1, 2 ]
+ */
+export type TupleTake< T extends readonly any[], N extends number, R extends readonly any[] = [] > =
+    R[ 'length' ] extends N
+        ? R
+        : T extends readonly [ infer H, ...infer Rest ]
+            ? TupleTake< Rest, N, readonly [ ...R, H ] >
+            : R;
+
+/**
+ * Drop the first N elements of a tuple.
+ * 
+ * @remarks
+ * Produces a new tuple with the first N elements removed.
+ * If N exceeds the tuple length, returns an empty tuple.
+ * 
+ * @template T - Tuple type
+ * @template N - Number of elements to drop
+ * 
+ * @example
+ * type T = TupleDrop< [ 1, 2, 3, 4 ], 2 >;  // [ 3, 4 ]
+ */
+export type TupleDrop< T extends readonly any[], N extends number, C extends readonly any[] = [] > =
+    C[ 'length' ] extends N
+        ? T
+        : T extends readonly [ any, ...infer R ]
+            ? TupleDrop< R, N, readonly [ ...C, any ] >
+            : readonly [];
+
+/**
+ * Check if a tuple includes a specific type.
+ * 
+ * @remarks
+ * Recursively checks each element of the tuple to see if it matches
+ * the specified type.
+ * 
+ * @template T - Tuple type
+ * @template V - Type to check for
+ * 
+ * @example
+ * type HasString = TupleIncludes< [ number, string, boolean ], string >;  // true
+ * type HasDate = TupleIncludes< [ number, string, boolean ], Date >;      // false
+ */
+export type TupleIncludes< T extends readonly any[], V > =
+    T extends readonly [ infer H, ...infer R ]
+        ? [ H ] extends [ V ]
+            ? true
+            : TupleIncludes< R, V >
+        : false;
