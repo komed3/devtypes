@@ -77,7 +77,7 @@ type FullConfig = DeepRequired< Config >;
 | **[class](https://komed3.github.io/devtypes/modules/class.html)** | Class-specific utilities: methods, properties, constructors |
 | **[condition](https://komed3.github.io/devtypes/modules/condition.html)** | Conditional type utilities (If and Equals) |
 | **[constraint](https://komed3.github.io/devtypes/modules/constraint.html)** | Property requirement constraints and validation |
-| **[function](https://komed3.github.io/devtypes/modules/function.html)** | Function type utilities: curry, compose, promisify |
+| **[functional](https://komed3.github.io/devtypes/modules/functional.html)** | Functional type utilities: curry, compose, promisify |
 | **[guard](https://komed3.github.io/devtypes/modules/guard.html)** | Type guard utilities for runtime type checking |
 | **[list](https://komed3.github.io/devtypes/modules/list.html)** | List-like structures (arrays, sets, maps, records, iterables) |
 | **[merge](https://komed3.github.io/devtypes/modules/merge.html)** | (Deep) merging and intersection of types |

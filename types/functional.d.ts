@@ -6,7 +6,7 @@
  * 
  * Includes additional utilities for parameter and this-type extraction.
  * 
- * @module devtypes/function
+ * @module devtypes/functional
  * @author komed3
  * @license MIT
  */
