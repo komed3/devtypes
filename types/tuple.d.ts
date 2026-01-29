@@ -88,6 +88,20 @@ export type TupleHead< T extends readonly any[] > =
     T extends readonly [ infer H, ...any[] ] ? H : never;
 
 /**
+ * Get the last element of a tuple.
+ * 
+ * @remarks
+ * Extracts the type of the last element from a tuple type.
+ * 
+ * @template T - Tuple type
+ * 
+ * @example
+ * type L =TupleLast< [ number, string, boolean ] >;  // boolean
+ */
+export type TupleLast< T extends readonly any[] > =
+    T extends readonly [ infer H, ...any[] ] ? H : never;
+
+/**
  * Get all but the first element of a tuple.
  * 
  * @remarks
