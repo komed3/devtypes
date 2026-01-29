@@ -23,12 +23,12 @@
  * @example
  * type Fn = ( a: string, b: number, c: boolean ) => void;
  * type CurriedFn = Curry< Fn >;
- * // ( a: string ) => ( b: number ) => ( c: boolean ) => void
+ * // ( arg: string ) => ( arg: number ) => ( arg: boolean ) => void
  */
 export type Curry< F > =
     F extends ( ...args: infer Args ) => infer R
         ? Args extends [ infer A, ...infer Rest ]
-            ? ( a: A ) => Curry< ( ...args: Rest ) => R >
+            ? ( ( arg: A ) => Curry< ( ...args: Rest ) => R > )
             : R
         : never;
 
@@ -67,7 +67,8 @@ export type Compose< F extends ( arg: any ) => any, G extends ( arg: any ) => an
  * type F1 = ( x: number ) => string;
  * type F2 = ( y: string ) => boolean;
  * type F3 = ( z: boolean ) => Date;
- * type ComposedMany = ComposeMany< [ F1, F2, F3 ] >; // ( arg: number ) => Date
+ * type ComposedMany = ComposeMany< [ F1, F2, F3 ] >;
+ * // ( arg: number ) => Date
  */
 export type ComposeMany< Fns extends Array< ( ...args: any[] ) => any > > =
     Fns extends [ infer F, infer G, ...infer Rest ]
@@ -125,9 +126,9 @@ export type UnwrapPromise< T > = T extends Promise< infer U > ? U : T;
  * 
  * @example
  * type F1 = () => string;
- * type R1 = AwaitedReturnType< F1 >; // string
+ * type R1 = AwaitedReturnType< F1 >;  // string
  * type F2 = () => Promise< number >;
- * type R2 = AwaitedReturnType< F2 >; // number
+ * type R2 = AwaitedReturnType< F2 >;  // number
  */
 export type AwaitedReturnType< F > =
     F extends ( ...args: any[] ) => infer R
@@ -146,7 +147,8 @@ export type AwaitedReturnType< F > =
  * 
  * @example
  * type Fn = ( a: string, b: number, c: boolean ) => void;
- * type Params = Parameters< Fn >; // [ string, number, boolean ]
+ * type Params = Parameters< Fn >;
+ * // [ a: string, b: number, c: boolean ]
  */
 export type Parameters< F extends Function > = F extends ( ...args: infer P ) => any ? P : never;
 
@@ -161,8 +163,7 @@ export type Parameters< F extends Function > = F extends ( ...args: infer P ) =>
  * 
  * @example
  * type CurriedFn = ( a: string ) => ( b: number ) => ( c: boolean ) => void;
- * type Params = CurriedParameters< CurriedFn >;
- * // [ string, number, boolean ]
+ * type Params = CurriedParameters< CurriedFn >;  // [ string, number, boolean ]
  */
 export type CurriedParameters< F > =
     F extends ( a: infer A ) => infer R ? [ A, ...CurriedParameters< R > ] : [];
@@ -177,7 +178,7 @@ export type CurriedParameters< F > =
  * 
  * @example
  * type Fn = ( this: { x: number }, y: string ) => void;
- * type ThisType = ThisParameterType< Fn >; // { x: number }
+ * type ThisType = ThisParameterType< Fn >;  // { x: number }
  */
 export type ThisParameterType< F extends Function > =
     F extends ( this: infer T, ...args: any[] ) => any ? T : unknown;
@@ -192,7 +193,8 @@ export type ThisParameterType< F extends Function > =
  * 
  * @example
  * type Fn = ( this: { x: number }, y: string ) => void;
- * type WithoutThis = OmitThisParameter< Fn >; // ( y: string ) => void
+ * type WithoutThis = OmitThisParameter< Fn >;
+ * // ( y: string ) => void
  */
 export type OmitThisParameter< F extends Function > =
     F extends ( this: any, ...args: infer A ) => infer R ? ( ...args: A ) => R : F;
