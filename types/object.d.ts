@@ -205,12 +205,14 @@ export type MutableProperty< T, K extends keyof T > =
  * Generates a union of valid access paths up to a configurable recursion
  * depth. Path order is not guaranteed.
  * 
+ * Arrays are treated as terminal values and do not have indexed paths.
+ * 
  * @template T - Object type to analyze
  * @template D - Maximum recursion depth (defaults to 5)
  * 
  * @example
  * type User = { id: number; profile: { name: string; address: { city: string } } };
- * type Paths = Paths< User >;
+ * type PathList = Paths< User >;
  * // "id" | "profile" | "profile.name" | "profile.address" | "profile.address.city"
  */
 export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
@@ -251,29 +253,22 @@ export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer 
     : P extends keyof T ? T[ P ] : never;
 
 /**
- * Nest an object with set strings recursively.
+ * Nest an object structure based on a list of keys.
  * 
  * @remarks
- * This is useful to reduce boilerplate while having a strong type safety.
+ * Will recursively create nested objects for each key in the list,
+ * assigning the final type `T` at the deepest level.
  * 
  * Note that if no keys are provided, this turns into `< K, T > => T`
  * 
- * @param K - A list of string template
- * @param T - The type associated with the deepest object's keys
+ * @param K - A tuple of string keys representing the nesting levels
+ * @param T - The type to assign at the deepest level
  * 
  * @example
- * type RestaurantMenu = ChainMapped< [ 'night' | 'day', 'entry' | 'main' | 'dessert' ], () => void > 
- * // type RestaurantMenu = {
- * //   night: {
- * //     entry: () => void;
- * //     main: () => void;
- * //     dessert: () => void;
- * //   };
- * //   day: {
- * //     entry: () => void;
- * //     main: () => void;
- * //     dessert: () => void;
- * //   };
+ * type RestaurantMenu = ChainMapped< [ 'night' | 'day', 'entry' | 'main' | 'dessert' ], () => void >
+ * // {
+ * //   night: { entry: () => void; main: () => void; dessert: () => void };
+ * //   day: { entry: () => void; main: () => void; dessert: () => void };
  * // }
  */
 export type ChainMapped< K extends string[], T > =

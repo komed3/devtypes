@@ -203,7 +203,7 @@ export type IsIndexedList< L > = L extends readonly any[] ? true : false;
  * type TrueIsNotFound = IsTypeInList< true, [ 1, 'no', false ] >;  // false
  * type ListIsEmptySoFalse = IsTypeInList< true, [] >;              // false
  */
-export type IsTypeInList< T, L extends any[] > = 
+export type IsTypeInList< T, L extends any[] > =
     L extends [ infer F, ...infer R ]
         ? If< Equals< T, F >, true, false > extends true
             ? true

@@ -263,7 +263,7 @@ export type IsNonEmptyObject< T > =
  * Recursively inspects the structure of `T` to ensure all components
  * are compatible with JSON serialization rules.
  * 
- * Loose check: functions are considered non-serializable, but 
+ * Loose check: functions are considered non-serializable, but
  * JSON.stringify will allow them (they get stripped).
  * 
  * Will not detect cyclic references in objects.
