@@ -138,6 +138,28 @@ export type MergeMany< T extends unknown[] > = Simplify<
 >;
 
 /**
+ * Strictly merge multiple object types sequentially.
+ * 
+ * @remarks
+ * Applies strict merges from left to right over a tuple of object types.
+ * 
+ * @template T - Tuple of object types
+ * 
+ * @example
+ * type A = { a: number };
+ * type B = { b: string };
+ * type C = { b: number };
+ * type D = { c: boolean };
+ * type Merged = MergeManyStrict< [ A, B, C, D ] >;
+ * // { a: number, b: string, c: boolean }
+ */
+export type MergeManyStrict< T extends unknown[] > = Simplify<
+    T extends [ infer H, ...infer R ]
+        ? MergeStrict< H, MergeManyStrict< R > >
+        : {}
+>;
+
+/**
  * Deeply merge multiple object types sequentially.
  * 
  * @remarks
@@ -155,6 +177,27 @@ export type MergeMany< T extends unknown[] > = Simplify<
 export type DeepMergeMany< T extends unknown[] > = Simplify<
     T extends [ infer H, ...infer R ]
         ? DeepMerge< H, DeepMergeMany< R > >
+        : {}
+>;
+
+/**
+ * Strictly deep merge multiple object types sequentially.
+ * 
+ * @remarks
+ * Applies strict deep merges from left to right over a tuple of object types.
+ * 
+ * @template T - Tuple of object types
+ * 
+ * @example
+ * type A = { a: { x: { foo: true } } };
+ * type B = { a: { x: { bar: string } } };
+ * type C = { a: { x: { foo: number } } };
+ * type Merged = DeepMergeManyStrict< [ A, B, C ] >;
+ * // { a: { x: { foo: true; bar: string } } }
+ */
+export type DeepMergeManyStrict< T extends unknown[] > = Simplify<
+    T extends [ infer H, ...infer R ]
+        ? DeepMergeStrict< H, DeepMergeManyStrict< R > >
         : {}
 >;
 
