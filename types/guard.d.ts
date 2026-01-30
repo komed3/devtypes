@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import type { IsTypeInList, ListLike } from './list';
+import type { IsTypeExtendedInList, IsTypeInList, ListLike } from './list';
 import type { JSONPrimitive, Primitive } from './primitive';
 
 
@@ -292,7 +292,7 @@ export type IsJSONSerializable< T > =
  * 
  * Strict check: functions and undefined are considered non-serializable.
  * 
- * Will not detect cyclic references in objects.
+ * Will refuse any recursive type to ensure no cyclic references in objects.
  * 
  * @template T - Type to test
  * 
@@ -301,6 +301,8 @@ export type IsJSONSerializable< T > =
  * type B = IsJSONSerializableStrict< { a: string; b: undefined } >;  // false
  * type C = IsJSONSerializableStrict< ()=>void >;                     // false
  * type D = IsJSONSerializableStrict< ( string | undefined )[] >;     // false
+ * type Recurse = { direct: Recurse, union: number | Recurse }
+ * type E = IsJSONSerializableStrict<Recurse>;                        // false
  */
 export type IsJSONSerializableStrict< T > =
     [ T ] extends [ ( ...args: any[] ) => any ] ? false
@@ -309,30 +311,46 @@ export type IsJSONSerializableStrict< T > =
         : [ T ] extends [ readonly ( infer U )[] ]
             ? IsJSONSerializableStrict< U > extends true ? true : false
             : [ T ] extends [ object ]
-                ? false extends {
-                    [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
-                }[ keyof T ] ? false : true
-                : false;
-
+                ? IsTypeRecursive<T> extends true
+                    ? false
+                    : false extends {
+                        [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
+                    }[ keyof T ] ? false : true
+                : false
+type Recurse = { direct: Recurse, union: number | Recurse }
+type E = IsJSONSerializableStrict<Recurse>;                        // false
 /**
  * Type Guard: detect if a type is recursive.
  * 
  * @remarks
  * Recursively inspects the structure of `T` to detect if a type is recursive.
  * 
+ * Potentially recursive types, such as union types with a parent type,
+ * are considered recursion.
+ * 
+ * @returns 
+ * `true` if `T` is recursive.
+ * `false` if `T` is not recursive.
+ * `boolean` if `T` is a union type with a recursive type.
+ * 
  * @template T - A type to be inspected
  * @template P - (Optional) The list of parents types
  * 
  * @example
- * type RecursiveType = { T: RecursiveType };
- * type IsRecursive = IsTypeRecursive< RecursiveType >;                              // true
+ * type RecursiveType = { r: RecursiveType };
+ * type Recursive = IsTypeRecursive< RecursiveType >;                                // true
+ * type PotentialRecursiveType = { r: PotentialRecursiveType | null };
+ * type PotentialRecursive = IsTypeRecursive< PotentialRecursiveType >;              // true             
  * type IsNotRecursive = IsTypeRecursive< { a: { a: { a: { a: { a: 'a' } } } } } >;  // false
  */
 export type IsTypeRecursive< T, P extends any[] = [] > =
-    T extends [] ? false
-        : T extends { [ key: string ]: any } ? {
-            [ K in keyof T ]: IsTypeInList< T[ K ], P > extends true ? true
-                : IsTypeRecursive< T[ K ], [ ...P, T ] >
-        }[ keyof T ] extends false ? false
-            : true
-        : IsTypeInList< T, P >;
+    T extends any[] 
+        ? false
+        : T extends { [ key: string ]: any } 
+            ? {
+                [ K in keyof T ]: IsTypeExtendedInList< T[ K ], P > extends true ? true
+                    : IsTypeRecursive< T[ K ], [ ...P, T ] >
+            }[ keyof T ] extends false 
+                ? false
+                : true
+            : IsTypeExtendedInList< T, P >;
