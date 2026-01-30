@@ -346,11 +346,11 @@ export type IsJSONSerializableStrict< T > =
         : [ T ] extends [ bigint | symbol | undefined ] ? false
         : [ T ] extends [ string | number | boolean | null ] ? true
         : [ T ] extends [ readonly ( infer U )[] ]
-            ? IsJSONSerializableStrict< U > extends true ? true : false
+            ? [ IsJSONSerializableStrict< U > ] extends [ true ] ? true : false
             : [ T ] extends [ object ]
                 ? IsTypeRecursive< T > extends true
                     ? false
                     : false extends {
                         [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
                     }[ keyof T ] ? false : true
-                : false
+                : false;
