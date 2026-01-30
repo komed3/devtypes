@@ -20,6 +20,10 @@
 import type { Primitive } from './primitive';
 
 
+/** @internal */
+type ThrowErrorOnInstantiation< T > = T extends never ? never : ThrowErrorOnInstantiation< T >
+
+
 /**
  * Assert that a boolean type resolves to `true`.
  * 
@@ -329,30 +333,25 @@ export type AssertPromiseLike< T extends PromiseLike< any > > = T;
  */
 export type AssertTypeWeak< T extends D, D > = T;
 
-
-type TypeThatWillThrowARecursiveErrorOnInstantiation<T>=
-    T extends never
-        ? never
-        : TypeThatWillThrowARecursiveErrorOnInstantiation<T>
 /**
- * Assert that a type is assigneable to another
+ * Assert that a type is strongly assignable to another type.
  * 
  * @remarks
- * If it's not assigneable, it will throw a 
- * Type instantiation is excessively deep and possibly infinite.ts(2589)
+ * This is a strict compile-time check that `T` is exactly assignable to `D`.
+ * If `T` is not assignable to `D`, or if `D` is not assignable to `T`, this
+ * will produce a compiler error.
+ * 
+ * **Hack:** This type uses recursive conditional types to force TypeScript
+ * to evaluate the types fully, causing an error to be thrown if the assertion
+ * fails.
  * 
  * @template T - The inferred or concrete type to validate
  * @template D - The expected destination type
  * 
  * @example
  * 
- * type _1 = AssertTypeOrCauseARecursiveErrorOnInstantiation<true, true>
- * // AssertTypeWeak would accept but not this one and it will throw an error
- * type _ = AssertTypeOrCauseARecursiveErrorOnInstantiation<true, boolean>
+ * type A = AssertTypeStrong< true, true >;               // ✓
+ * type B = AssertTypeStrong< true, boolean >;            // ✗ TS error
+ * type C = AssertTypeStrong< string, string | number >;  // ✗ TS error
  */
-export type AssertTypeOrCauseARecursiveErrorOnInstantiation<T extends D, D> = 
-    D extends T
-        ? T
-        : TypeThatWillThrowARecursiveErrorOnInstantiation<T>
-
-
+export type AssertTypeStrong< T extends D, D > = D extends T ? T : ThrowErrorOnInstantiation< T >;
