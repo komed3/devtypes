@@ -328,3 +328,31 @@ export type AssertPromiseLike< T extends PromiseLike< any > > = T;
  * type D = AssertTypeWeak< string, unknown >;          // ✓
  */
 export type AssertTypeWeak< T extends D, D > = T;
+
+
+type TypeThatWillThrowARecursiveErrorOnInstantiation<T>=
+    T extends never
+        ? never
+        : TypeThatWillThrowARecursiveErrorOnInstantiation<T>
+/**
+ * Assert that a type is assigneable to another
+ * 
+ * @remarks
+ * If it's not assigneable, it will throw a 
+ * Type instantiation is excessively deep and possibly infinite.ts(2589)
+ * 
+ * @template T - The inferred or concrete type to validate
+ * @template D - The expected destination type
+ * 
+ * @example
+ * 
+ * type _1 = AssertTypeOrCauseARecursiveErrorOnInstantiation<true, true>
+ * // AssertTypeWeak would accept but not this one and it will throw an error
+ * type _ = AssertTypeOrCauseARecursiveErrorOnInstantiation<true, boolean>
+ */
+export type AssertTypeOrCauseARecursiveErrorOnInstantiation<T extends D, D> = 
+    D extends T
+        ? T
+        : TypeThatWillThrowARecursiveErrorOnInstantiation<T>
+
+
