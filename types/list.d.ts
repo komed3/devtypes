@@ -216,18 +216,17 @@ export type IsTypeInList< T, L extends any[] > =
  * 
  * @remarks
  * Iterate over the list `L` and tries each elements against `T`.
- * @returns
- * `true` is one type from `L` extends `T`.
- * `false` if nothing from `L` extended `T`
+ * This will return `true` if one type from `L` extends `T`.
+ * This will return `false` if nothing from `L` extended `T`.
  * 
  * @template T - A type to match against `L`
  * @template L - A list of types
  * 
  * @examples
- * type A = IsTypeExtendedInList< 1 | true, [ false ] >;      // false
- * type B = IsTypeExtendedInList< 1 | boolean, [ false ] >;   // true
- * type C = IsTypeExtendedInList< 1 | false, [ false ] >;     // true
- * type D = IsTypeExtendedInList< 1 | false, [ boolean ] >;   // false
+ * type A = IsTypeExtendedInList< 1 | true, [ false ] >;     // false
+ * type B = IsTypeExtendedInList< 1 | boolean, [ false ] >;  // true
+ * type C = IsTypeExtendedInList< 1 | false, [ false ] >;    // true
+ * type D = IsTypeExtendedInList< 1 | false, [ boolean ] >;  // false
  */
 export type IsTypeExtendedInList< T, L extends any[] > =
     L extends [ infer F, ...infer R ]
