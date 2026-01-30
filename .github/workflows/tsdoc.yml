@@ -1,7 +1,6 @@
 name: Typedoc Deployment
 
 on:
-  workflow_dispatch:
   release:
     types: [ published ]
 
