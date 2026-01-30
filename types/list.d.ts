@@ -11,7 +11,6 @@
 
 import { Equals, If } from './condition';
 
-
 /**
  * Any list-like structure.
  * 
@@ -209,5 +208,30 @@ export type IsTypeInList< T, L extends any[] > =
             ? true
             : IsTypeInList< T, R >
         : L extends [ infer F ]
-            ? If< Equals< T, F >, true, T >
-            : false
+            ? If< Equals< T, F >, true, false >
+            : false;
+
+/**
+ * Test whether a type is being extended by a member of a list of types.
+ * 
+ * @remarks
+ * Iterate over the list `L` and tries each elements against `T`.
+ * @returns
+ * `true` is one type from `L` extends `T`.
+ * `false` if nothing from `L` extended `T`
+ * 
+ * @template T - A type to match against `L`
+ * @template L - A list of types
+ * 
+ * @examples
+ * type A = IsTypeExtendedInList< 1 | true, [ false ] >;      // false
+ * type B = IsTypeExtendedInList< 1 | boolean, [ false ] >;   // true
+ * type C = IsTypeExtendedInList< 1 | false, [ false ] >;     // true
+ * type D = IsTypeExtendedInList< 1 | false, [ boolean ] >;   // false
+ */
+export type IsTypeExtendedInList< T, L extends any[] > =
+    L extends [ infer F, ...infer R ]
+        ? [ F ] extends [ T ] 
+            ? true 
+            : IsTypeExtendedInList< T, R >
+        : false;
