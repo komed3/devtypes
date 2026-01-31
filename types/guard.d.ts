@@ -9,7 +9,7 @@
  */
 
 import type { IsTypeExtendedInList, ListLike } from './list';
-import type { JSONPrimitive, Primitive } from './primitive';
+import type { JSONBadValueTypes, JSONPrimitive, Primitive } from './primitive';
 
 
 /**
@@ -343,8 +343,8 @@ export type IsJSONSerializable< T > =
  */
 export type IsJSONSerializableStrict< T > =
     [ T ] extends [ ( ...args: any[] ) => any ] ? false
-        : [ T ] extends [ bigint | symbol | undefined ] ? false
-        : [ T ] extends [ string | number | boolean | null ] ? true
+        : [ T ] extends [ JSONBadValueTypes ] ? false
+        : [ T ] extends [ JSONPrimitive ] ? true
         : [ T ] extends [ readonly ( infer U )[] ]
             ? [ IsJSONSerializableStrict< U > ] extends [ true ] ? true : false
             : [ T ] extends [ object ]

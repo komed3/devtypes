@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
-    "lib": [ "ES2015" ]
+    "lib": [ "ES2015" ],
+    // without strict enabled it is not possible to detect union types with undefined
+    "strict": true
   }
 }
