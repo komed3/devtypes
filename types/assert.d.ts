@@ -17,6 +17,7 @@
  * @license MIT
  */
 
+import { PlainObject } from './object';
 import type { Primitive } from './primitive';
 
 
@@ -169,7 +170,7 @@ export type AssertObject< T extends {} > = T;
  * type B = AssertRecord< { a: number } >;             // ✓
  * type C = AssertRecord< string >;                    // ✗ TS error
  */
-export type AssertRecord< T extends Record< string | number | symbol, any > > = T;
+export type AssertRecord< T extends PlainObject > = T;
 
 /**
  * Assert that a type is a `Map`.
