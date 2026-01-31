@@ -19,7 +19,7 @@
  * type P = Primitive;
  * // string | number | boolean | symbol | null | undefined
  */
-export type Primitive = string | number | boolean | symbol | null | undefined;
+export type Primitive = string | number | boolean | symbol | null | undefined | bigint;
 
 /**
  * All JSON primitive types.
