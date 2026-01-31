@@ -25,8 +25,8 @@ Read the full **[devtypes Documentation](https://komed3.github.io/devtypes)** fo
 ### Object Type Manipulation
 
 ```ts
-import type { Merge } from 'devtypes/merge';
-import type { RequireExactlyOne } from 'devtypes/constraint';
+import type { Merge } from 'devtypes/types/merge';
+import type { RequireExactlyOne } from 'devtypes/types/constraint';
 
 type UserBase = { id: number; name: string; email?: string };
 type UserAuth = { email: string; password: string };
@@ -45,7 +45,7 @@ type LoginCredentials = RequireExactlyOne<
 ### Deep Utilities
 
 ```ts
-import type { DeepPartial, DeepRequired } from 'devtypes/transform';
+import type { DeepPartial, DeepRequired } from 'devtypes/types/transform';
 
 interface Config {
     server: {
@@ -94,11 +94,11 @@ Import from specific modules for best IDE performance:
 
 ```ts
 // Good - direct import
-import type { Brand } from 'devtypes/util';
-import type { MethodNames } from 'devtypes/class';
+import type { Brand } from 'devtypes/types/util';
+import type { MethodNames } from 'devtypes/types/class';
 
 // Avoid - star imports slow down IntelliSense
-import * as Types from 'devtypes';
+import type * as Types from 'devtypes';
 ```
 
 ## Contributing
