@@ -19,19 +19,7 @@
  * type P = Primitive;
  * // string | number | boolean | symbol | null | undefined
  */
-export type Primitive = string | number | boolean | symbol | null | undefined;
-
-/**
- * All JSON primitive types.
- * 
- * @remarks
- * Includes the primitive types that can be represented in JSON format.
- * 
- * @example
- * type JP = JSONPrimitive;
- * // string | number | boolean | null | undefined
- */
-export type JSONPrimitive = string | number | boolean | null | undefined;
+export type Primitive = string | number | boolean | symbol | null | undefined | bigint;
 
 /**
  * All non-primitive JavaScript types.
@@ -45,15 +33,46 @@ export type JSONPrimitive = string | number | boolean | null | undefined;
 export type NonPrimitive = object | Function;
 
 /**
- * All non-primitive JSON types.
+ * All JSON primitive types.
  * 
  * @remarks
- * Represents JSON values that are not primitives, such as arrays and objects.
+ * Includes the primitive types that can be represented in JSON format.
  * 
  * @example
- * type JNP = JSONNonPrimitive;  // bigint | symbol | Function
+ * type JP = JSONPrimitive;
+ * // string | number | boolean | null
  */
-export type JSONNonPrimitive = bigint | symbol | Function;
+export type JSONPrimitive = string | number | boolean | null;
+
+/**
+ * All JSON bad values types.
+ * 
+ * @remarks
+ * Includes the types that are not valid JSON values and will be:
+ * - Omitted when found in an `object`.
+ * - Changed to `[null]` if found in an `array`.
+ * - Will cause the stringification process to return undefined.
+ * 
+ * `bigint` will throw an error.
+ * In theory `bigint` can be handled by monkey patching `BigInt.prototype.toJSON = ...`.
+ * And then converted to an object, and be parsed with a custom JSON parser.
+ * Which is out of scope in this context.
+ * 
+ * Warnings, things TS cannot protect you against:
+ * - `Infinity` and `NaN` will be converted to null.
+ * - Any Object which has toJSON() method will behave in accordance to said method.
+ * - Uncommon things not mentionned here https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description
+ * 
+ * @example
+ * JSON.stringify({a: undefined, b: ()=>{}, c: Symbol('')}) // "{}"
+ * JSON.stringify(undefined)                                // undefined
+ * JSON.stringify(()=>{})                                   // undefined
+ * JSON.stringify(Symbol("s"))                              // undefined
+ * JSON.stringify([undefined, ()=>{}, Symbol('s')])         // "[null, null, null]"
+ * JSON.stringify(BigInt(1))                                // Type Error               
+ * 
+ */
+export type JSONBadValueTypes = bigint | undefined | Function | Symbol
 
 /**
  * Literal union with IntelliSense autocomplete support.

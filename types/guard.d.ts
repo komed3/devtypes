@@ -9,7 +9,7 @@
  */
 
 import type { IsTypeExtendedInList, ListLike } from './list';
-import type { JSONPrimitive, Primitive } from './primitive';
+import type { JSONBadValueTypes, JSONPrimitive, Primitive } from './primitive';
 
 
 /**
@@ -292,34 +292,6 @@ export type IsTypeRecursive< T, P extends any[] = [] > =
                 ? false
                 : true
             : IsTypeExtendedInList< T, P >;
-
-/**
- * Type guard: detect whether a type is JSON serializable.
- * 
- * @remarks
- * Recursively inspects the structure of `T` to ensure all components
- * are compatible with JSON serialization rules.
- * 
- * Loose check: functions are considered non-serializable, but
- * JSON.stringify will allow them (they get stripped).
- * 
- * Will not detect cyclic references in objects.
- * 
- * @template T - Type to test
- * 
- * @example
- * type A = IsJSONSerializable< { a: string; b: number[] } >;  // true
- * type B = IsJSONSerializable< symbol >;                      // false
- */
-export type IsJSONSerializable< T > =
-    T extends JSONPrimitive ? true
-        : T extends bigint | symbol ? false
-        : T extends readonly ( infer U )[] ? IsJSONSerializable< U >
-        : T extends object ? false extends {
-            [ K in keyof T ]: IsJSONSerializable< T[ K ] >
-        }[ keyof T ] ? false : true
-        : true;
-
 /**
  * Type guard: strictly detect whether a type is JSON serializable.
  * 
@@ -343,8 +315,8 @@ export type IsJSONSerializable< T > =
  */
 export type IsJSONSerializableStrict< T > =
     [ T ] extends [ ( ...args: any[] ) => any ] ? false
-        : [ T ] extends [ bigint | symbol | undefined ] ? false
-        : [ T ] extends [ string | number | boolean | null ] ? true
+        : [ T ] extends [ JSONBadValueTypes ] ? false
+        : [ T ] extends [ JSONPrimitive ] ? true
         : [ T ] extends [ readonly ( infer U )[] ]
             ? [ IsJSONSerializableStrict< U > ] extends [ true ] ? true : false
             : [ T ] extends [ object ]
