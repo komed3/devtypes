@@ -17,7 +17,7 @@
  * 
  * @example
  * type P = Primitive;
- * // string | number | boolean | symbol | null | undefined
+ * // string | number | boolean | symbol | null | undefined | bigint
  */
 export type Primitive = string | number | boolean | symbol | null | undefined | bigint;
 
@@ -54,8 +54,8 @@ export type JSONPrimitive = string | number | boolean | null;
  * - Will cause the stringification process to return undefined.
  * 
  * `bigint` will throw an error.
- * In theory `bigint` can be handled by monkey patching `BigInt.prototype.toJSON = ...`.
- * And then converted to an object, and be parsed with a custom JSON parser.
+ * In theory `bigint` can be handled by monkey patching `BigInt.prototype.toJSON = ...`,
+ * then converted to an object and parsed with a custom JSON parser.
  * Which is out of scope in this context.
  * 
  * Warnings, things TS cannot protect you against:
@@ -64,15 +64,15 @@ export type JSONPrimitive = string | number | boolean | null;
  * - Uncommon things not mentionned here https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description
  * 
  * @example
- * JSON.stringify({a: undefined, b: ()=>{}, c: Symbol('')}) // "{}"
- * JSON.stringify(undefined)                                // undefined
- * JSON.stringify(()=>{})                                   // undefined
- * JSON.stringify(Symbol("s"))                              // undefined
- * JSON.stringify([undefined, ()=>{}, Symbol('s')])         // "[null, null, null]"
- * JSON.stringify(BigInt(1))                                // Type Error               
+ * JSON.stringify( { a: undefined, b: () => {}, c: Symbol( '' ) } )  // '{}'
+ * JSON.stringify( undefined )                                       // undefined
+ * JSON.stringify( () => {} )                                        // undefined
+ * JSON.stringify( Symbol( 's' ) )                                   // undefined
+ * JSON.stringify( [ undefined, () => {}, Symbol( 's' ) ] )          // '[ null, null, null ]'
+ * JSON.stringify( BigInt( 1 ) )                                     // Type Error               
  * 
  */
-export type JSONBadValueTypes = bigint | undefined | Function | Symbol
+export type JSONBadValueTypes = bigint | undefined | Function | Symbol;
 
 /**
  * Literal union with IntelliSense autocomplete support.
