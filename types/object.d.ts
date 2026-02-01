@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-import type { IsJSONSerializableStrict } from './guard';
+import type { IsJSONSerializable } from './guard';
 
 
 /** @internal */
@@ -322,14 +322,14 @@ export type PartiallyMapped< Keys extends string, T > = { [ K in Keys ]?: T };
  * Checks whether the type is serializable and returns `T`, otherwise `never`.
  * 
  * @remarks
- * Type guard logic is based on {@link IsJSONSerializableStrict}.
+ * Type guard logic is based on {@link IsJSONSerializable}.
  * 
  * @template T - Type to test
  * 
  * @example
- * type A = JSONSerializableStrict< { a: string; b: number[] } >;   // { a: string; b: number[] }
- * type B = JSONSerializableStrict< { a: string; b: undefined } >;  // never
- * type C = JSONSerializableStrict< ()=>void >;                     // never
- * type D = JSONSerializableStrict< ( string | undefined )[] >;     // never
+ * type A = JSONSerializable< { a: string; b: number[] } >;   // { a: string; b: number[] }
+ * type B = JSONSerializable< { a: string; b: undefined } >;  // never
+ * type C = JSONSerializable< ()=>void >;                     // never
+ * type D = JSONSerializable< ( string | undefined )[] >;     // never
  */
-export type JSONSerializableStrict< T > = IsJSONSerializableStrict< T > extends true ? T : never;
+export type JSONSerializable< T > = IsJSONSerializable< T > extends true ? T : never;

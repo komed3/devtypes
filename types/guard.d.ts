@@ -292,6 +292,7 @@ export type IsTypeRecursive< T, P extends any[] = [] > =
                 ? false
                 : true
             : IsTypeExtendedInList< T, P >;
+
 /**
  * Type guard: strictly detect whether a type is JSON serializable.
  * 
@@ -306,23 +307,23 @@ export type IsTypeRecursive< T, P extends any[] = [] > =
  * @template T - Type to test
  * 
  * @example
- * type A = IsJSONSerializableStrict< { a: string; b: number[] } >;   // true
- * type B = IsJSONSerializableStrict< { a: string; b: undefined } >;  // false
- * type C = IsJSONSerializableStrict< ()=>void >;                     // false
- * type D = IsJSONSerializableStrict< ( string | undefined )[] >;     // false
+ * type A = IsJSONSerializable< { a: string; b: number[] } >;   // true
+ * type B = IsJSONSerializable< { a: string; b: undefined } >;  // false
+ * type C = IsJSONSerializable< ()=>void >;                     // false
+ * type D = IsJSONSerializable< ( string | undefined )[] >;     // false
  * type Recurse = { direct: Recurse, union: number | Recurse }
- * type E = IsJSONSerializableStrict< Recurse >;                      // false
+ * type E = IsJSONSerializable< Recurse >;                      // false
  */
-export type IsJSONSerializableStrict< T > =
+export type IsJSONSerializable< T > =
     [ T ] extends [ ( ...args: any[] ) => any ] ? false
         : [ T ] extends [ JSONBadValueTypes ] ? false
         : [ T ] extends [ JSONPrimitive ] ? true
         : [ T ] extends [ readonly ( infer U )[] ]
-            ? [ IsJSONSerializableStrict< U > ] extends [ true ] ? true : false
+            ? [ IsJSONSerializable< U > ] extends [ true ] ? true : false
             : [ T ] extends [ object ]
                 ? IsTypeRecursive< T > extends true
                     ? false
                     : false extends {
-                        [ K in keyof T ]: IsJSONSerializableStrict< T[ K ] >
+                        [ K in keyof T ]: IsJSONSerializable< T[ K ] >
                     }[ keyof T ] ? false : true
                 : false;
