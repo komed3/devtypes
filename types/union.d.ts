@@ -198,7 +198,7 @@ export type UnionHas< U, T > = [ T ] extends [ U ] ? true : false;
  * @example
  * type A = 'a' | 'b' | 'c';
  * type B = 'a' | 'x';
- * type C = UnionDifference< A, B >;  // 'a'
+ * type C = UnionIntersect< A, B >;  // 'a'
  */
 export type UnionIntersect< A, B > = A extends B ? A : never;
 
