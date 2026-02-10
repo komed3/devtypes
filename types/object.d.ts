@@ -313,7 +313,7 @@ export type Mapped< Keys extends string, T > = { [ K in Keys ]: T };
  * 
  * @example
  * const stringValidator: PartiallyMapped< 'username' | 'email', ( field: string ) => boolean > = {
- *   username: ( field: string ) => regex.validate( 'username', field )
+ *   username: ( field: string ) => /usernameregex/.test( field )
  * };
  */
 export type PartiallyMapped< Keys extends string, T > = { [ K in Keys ]?: T };
