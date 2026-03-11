@@ -130,8 +130,8 @@ export type Flatten< T > = T extends any[] ? { [ K in keyof T ]: T[ K ] } : T;
  * @template T - Type to widen
  * 
  * @example
- * type A = Narrow< 'hello' >;  // string
- * type B = Narrow< true >;     // boolean
+ * type A = Widen< 'hello' >;  // string
+ * type B = Widen< true >;     // boolean
  */
 export type Widen< T > =
     T extends string ? string
