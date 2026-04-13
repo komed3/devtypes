@@ -239,20 +239,19 @@ export type IsTypeExtendedInList< T, L extends readonly any[] > =
  * Validate a tuple or readonly tuple has an exact fixed length.
  * 
  * @remarks
- * This will check if the `length` property of the tuple type `T` is exactly equal
- * to the number `N` and return `true` if it is, or `false` if it is not.
- * 
- * If `T` is not a tuple type, this will resolve to `never`.
+ * This will check if the length of the tuple `T` is exactly `N`. If it is, this resolves to `T`.
+ * If it is not, this resolves to `never`, effectively enforcing a compile-time constraint
+ * on the tuple length.
  * 
  * @template T - Tuple type to validate
  * @template N - Required tuple length
  * 
  * @example
- * type ExactFive = StaticListLengthConstraint< [ 1, 2, 3, 4, 5 ], 5 >;  // true
- * type NotFive = StaticListLengthConstraint< [ 1, 2, 3 ], 5 >;          // false
+ * type ExactFive = StaticListLengthConstraint< [ 1, 2, 3, 4, 5 ], 5 >;  // [ 1, 2, 3, 4, 5 ]
+ * type NotFive = StaticListLengthConstraint< [ 1, 2, 3 ], 5 >;          // never
  */
 export type StaticListLengthConstraint< T extends readonly any[], N extends number > =
-    T extends readonly any[] ? If< Equals< T[ 'length' ], N >, true, false > : never;
+    T extends readonly any[] ? If< Equals< T[ 'length' ], N >, T, never > : never;
 
 /**
  * Enforces that a tuple contains no duplicate types.
@@ -273,3 +272,23 @@ export type ListNoDuplicate< L extends readonly any[] > =
             ? never
             : L
         : L;
+
+/**
+ * Validate that every type in `T` is present in tuple `L`.
+ * 
+ * @remarks
+ * This will check if each type in the union `T` can be found in the tuple `L` using
+ * `IsTypeInList`. If all types in `T` are found in `L`, this resolves to `L`. If any type
+ * in `T` is missing from `L`, this resolves to `never`.
+ *
+ * @template L - Tuple to validate
+ * @template T - Union of required element types
+ *
+ * @example
+ * type Full = ListNoMissingType< [ 'a', 'b', 'c' ], 'a' | 'b' | 'c' >;  // [ 'a', 'b', 'c' ]
+ * type Missing = ListNoMissingType< [ 'a', 'c' ], 'a' | 'b' | 'c' >;    // never
+ */
+export type ListNoMissingType< L extends readonly any[], T > =
+    ( T extends any ? If< IsTypeInList< T, L >, true, false > : never ) extends true
+        ? L
+        : never;
