@@ -243,13 +243,33 @@ export type IsTypeExtendedInList< T, L extends readonly any[] > =
  * to the number `N` and return `true` if it is, or `false` if it is not.
  * 
  * If `T` is not a tuple type, this will resolve to `never`.
- *
+ * 
  * @template T - Tuple type to validate
  * @template N - Required tuple length
- *
+ * 
  * @example
  * type ExactFive = StaticListLengthConstraint< [ 1, 2, 3, 4, 5 ], 5 >;  // true
  * type NotFive = StaticListLengthConstraint< [ 1, 2, 3 ], 5 >;          // false
  */
 export type StaticListLengthConstraint< T extends readonly any[], N extends number > =
     T extends readonly any[] ? If< Equals< T[ 'length' ], N >, true, false > : never;
+
+/**
+ * Enforces that a tuple contains no duplicate types.
+ * 
+ * @remarks
+ * This will recursively check each type in the tuple `L` against the rest of the tuple to ensure
+ * that no type appears more than once. If a duplicate is found, the type resolves to `never`.
+ * 
+ * @template L - Tuple type to validate
+ * 
+ * @example
+ * type Unique = ListNoDuplicate< [ 1, false, true ] >;        // [ 1, false, true ]
+ * type Duplicate = ListNoDuplicate< [ 1, false, true, 1 ] >;  // never
+ */
+export type ListNoDuplicate< L extends readonly any[] > =
+    L extends readonly [ infer F, ...infer R ]
+        ? IsTypeInList< F, R > extends true
+            ? never
+            : L
+        : L;
