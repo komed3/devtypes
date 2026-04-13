@@ -11,6 +11,7 @@
  * @license MIT
  */
 
+
 /**
  * Curry a function type.
  * 
