@@ -202,7 +202,7 @@ export type IsIndexedList< L > = L extends readonly any[] ? true : false;
  * type TrueIsNotFound = IsTypeInList< true, [ 1, 'no', false ] >;  // false
  * type ListIsEmptySoFalse = IsTypeInList< true, [] >;              // false
  */
-export type IsTypeInList< T, L extends any[] > =
+export type IsTypeInList< T, L extends readonly any[] > =
     L extends [ infer F, ...infer R ]
         ? If< Equals< T, F >, true, false > extends true
             ? true
@@ -213,24 +213,43 @@ export type IsTypeInList< T, L extends any[] > =
 
 /**
  * Test whether a type is being extended by a member of a list of types.
- * 
+ *
  * @remarks
  * Iterate over the list `L` and tries each elements against `T`.
  * This will return `true` if one type from `L` extends `T`.
  * This will return `false` if nothing from `L` extended `T`.
- * 
+ *
  * @template T - A type to match against `L`
  * @template L - A list of types
- * 
+ *
  * @examples
  * type A = IsTypeExtendedInList< 1 | true, [ false ] >;     // false
  * type B = IsTypeExtendedInList< 1 | boolean, [ false ] >;  // true
  * type C = IsTypeExtendedInList< 1 | false, [ false ] >;    // true
  * type D = IsTypeExtendedInList< 1 | false, [ boolean ] >;  // false
  */
-export type IsTypeExtendedInList< T, L extends any[] > =
+export type IsTypeExtendedInList< T, L extends readonly any[] > =
     L extends [ infer F, ...infer R ]
         ? [ F ] extends [ T ] 
             ? true 
             : IsTypeExtendedInList< T, R >
         : false;
+
+/**
+ * Validate a tuple or readonly tuple has an exact fixed length.
+ * 
+ * @remarks
+ * This will check if the `length` property of the tuple type `T` is exactly equal
+ * to the number `N` and return `true` if it is, or `false` if it is not.
+ * 
+ * If `T` is not a tuple type, this will resolve to `never`.
+ *
+ * @template T - Tuple type to validate
+ * @template N - Required tuple length
+ *
+ * @example
+ * type ExactFive = StaticListLengthConstaint< [ 1, 2, 3, 4, 5 ], 5 >;    // true
+ * type NotFive = StaticListLengthConstaint< [ 1, 2, 3 ], 5 >;            // false
+ */
+export type StaticListLengthConstaint< T extends readonly any[], N extends number > =
+    T extends readonly any[] ? If< Equals< T[ 'length' ], N >, true, false > : never;
