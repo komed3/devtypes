@@ -97,6 +97,28 @@ export type RequireExactlyOne< T, K extends keyof T = keyof T > = { [ P in K ]:
     Omit< T, K >;
 }[ K ];
 
+
+/**
+ * Require exactly one property from a chosen subset of keys.
+ * 
+ * @remarks
+ * Applies a mutually exclusive constraint to a selected subset of fields
+ * without carrying the remaining properties from the source type.
+ * This is useful when the source type includes additional fields that
+ * should not be part of the exact-one union.
+ * 
+ * @template T - Source object type
+ * @template K - Keys where exactly one must be present
+ * 
+ * @example
+ * type Result = RequireExactlyOneFrom<
+ *   { value?: string; values?: string[]; range?: number; },
+ *   'value' | 'values'
+ * >;
+ * // { value: string; values?: never } | { value?: never; values: string[] }
+ */
+export type RequireExactlyOneFrom< T, K extends keyof T > = RequireExactlyOne< Pick< T, K >, K >;
+
 /**
  * Require at least one property from a set.
  * 
