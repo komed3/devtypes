@@ -248,8 +248,8 @@ export type IsTypeExtendedInList< T, L extends readonly any[] > =
  * @template N - Required tuple length
  *
  * @example
- * type ExactFive = StaticListLengthConstaint< [ 1, 2, 3, 4, 5 ], 5 >;    // true
- * type NotFive = StaticListLengthConstaint< [ 1, 2, 3 ], 5 >;            // false
+ * type ExactFive = StaticListLengthConstraint< [ 1, 2, 3, 4, 5 ], 5 >;  // true
+ * type NotFive = StaticListLengthConstraint< [ 1, 2, 3 ], 5 >;          // false
  */
-export type StaticListLengthConstaint< T extends readonly any[], N extends number > =
+export type StaticListLengthConstraint< T extends readonly any[], N extends number > =
     T extends readonly any[] ? If< Equals< T[ 'length' ], N >, true, false > : never;
