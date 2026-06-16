@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-import { Equals, If } from './condition';
+import type { Equals, If } from './condition';
 
 
 /**
@@ -26,14 +26,14 @@ import { Equals, If } from './condition';
  * type NumList = ListLike< number >;
  */
 export type ListLike< T = any, I extends string | number = string | number > =
-    | T[]
-    | ReadonlyArray< T >
-    | Record< I, T >
-    | Set< T >
-    | ReadonlySet< T >
-    | Map< I, T >
-    | ReadonlyMap< I, T >
-    | Iterable< T >;
+  | T[]
+  | ReadonlyArray< T >
+  | Record< I, T >
+  | Set< T >
+  | ReadonlySet< T >
+  | Map< I, T >
+  | ReadonlyMap< I, T >
+  | Iterable< T >;
 
 /**
  * Extract the element or value type from a list-like structure.
@@ -49,15 +49,15 @@ export type ListLike< T = any, I extends string | number = string | number > =
  * type E3 = ListElement< Record< string, boolean > >;  // boolean
  */
 export type ListElement< L > =
-    L extends ( infer E )[] ? E
-        : L extends ReadonlyArray< infer RE > ? RE
-        : L extends Set< infer SE > ? SE
-        : L extends ReadonlySet< infer RSE > ? RSE
-        : L extends Map< any, infer MV > ? MV
-        : L extends ReadonlyMap< any, infer RMV > ? RMV
-        : L extends Record< any, infer RV > ? RV
-        : L extends Iterable< infer IT > ? IT
-        : never;
+  L extends ( infer E )[] ? E
+    : L extends ReadonlyArray< infer RE > ? RE
+    : L extends Set< infer SE > ? SE
+    : L extends ReadonlySet< infer RSE > ? RSE
+    : L extends Map< any, infer MV > ? MV
+    : L extends ReadonlyMap< any, infer RMV > ? RMV
+    : L extends Record< any, infer RV > ? RV
+    : L extends Iterable< infer IT > ? IT
+    : never;
 
 /**
  * Extract the element type from an array or tuple.
@@ -89,12 +89,12 @@ export type ElementOf< T > = T extends readonly ( infer E )[] ? E : never;
  * type I3 = ListLikeIndex< number[] >;                  // number
  */
 export type ListLikeIndex< L > =
-    L extends readonly any[] ? number
-        : L extends ReadonlyMap< infer K, any > ? K
-        : L extends Map< infer K, any > ? K
-        : L extends Record< infer K, any > ? K
-        : L extends Set< any > | ReadonlySet< any > | Iterable< any > ? never
-        : string | number;
+  L extends readonly any[] ? number
+    : L extends ReadonlyMap< infer K, any > ? K
+    : L extends Map< infer K, any > ? K
+    : L extends Record< infer K, any > ? K
+    : L extends Set< any > | ReadonlySet< any > | Iterable< any > ? never
+    : string | number;
 
 /**
  * Convert a list-like structure to an array type.
@@ -166,11 +166,11 @@ export type ToMap< L > = Map< ListLikeIndex< L >, ListElement< L > >;
  * type C = IsKeyedList< number[] >;                  // false
  */
 export type IsKeyedList< L > =
-    L extends readonly any[] ? false
-        : L extends ReadonlyMap< any, any > ? true
-        : L extends Map< any, any > ? true
-        : L extends Record< any, any > ? true
-        : false;
+  L extends readonly any[] ? false
+    : L extends ReadonlyMap< any, any > ? true
+    : L extends Map< any, any > ? true
+    : L extends Record< any, any > ? true
+    : false;
 
 /**
  * Test whether a list-like structure is index-based.
@@ -204,13 +204,13 @@ export type IsIndexedList< L > = L extends readonly any[] ? true : false;
  * type ListIsEmptySoFalse = IsTypeInList< true, [] >;              // false
  */
 export type IsTypeInList< T, L extends readonly any[] > =
-    L extends [ infer F, ...infer R ]
-        ? If< Equals< T, F >, true, false > extends true
-            ? true
-            : IsTypeInList< T, R >
-        : L extends [ infer F ]
-            ? If< Equals< T, F >, true, false >
-            : false;
+  L extends [ infer F, ...infer R ]
+    ? If< Equals< T, F >, true, false > extends true
+      ? true
+      : IsTypeInList< T, R >
+    : L extends [ infer F ]
+      ? If< Equals< T, F >, true, false >
+      : false;
 
 /**
  * Test whether a type is being extended by a member of a list of types.
@@ -230,11 +230,11 @@ export type IsTypeInList< T, L extends readonly any[] > =
  * type D = IsTypeExtendedInList< 1 | false, [ boolean ] >;  // false
  */
 export type IsTypeExtendedInList< T, L extends readonly any[] > =
-    L extends [ infer F, ...infer R ]
-        ? [ F ] extends [ T ] 
-            ? true 
-            : IsTypeExtendedInList< T, R >
-        : false;
+  L extends [ infer F, ...infer R ]
+    ? [ F ] extends [ T ] 
+      ? true 
+      : IsTypeExtendedInList< T, R >
+    : false;
 
 /**
  * Validate a tuple or readonly tuple has an exact fixed length.
@@ -252,7 +252,7 @@ export type IsTypeExtendedInList< T, L extends readonly any[] > =
  * type NotFive = StaticListLengthConstraint< [ 1, 2, 3 ], 5 >;          // never
  */
 export type StaticListLengthConstraint< T extends readonly any[], N extends number > =
-    T extends readonly any[] ? If< Equals< T[ 'length' ], N >, T, never > : never;
+  T extends readonly any[] ? If< Equals< T[ 'length' ], N >, T, never > : never;
 
 /**
  * Enforces that a tuple contains no duplicate types.
@@ -268,11 +268,11 @@ export type StaticListLengthConstraint< T extends readonly any[], N extends numb
  * type Duplicate = ListNoDuplicate< [ 1, false, true, 1 ] >;  // never
  */
 export type ListNoDuplicate< L extends readonly any[] > =
-    L extends readonly [ infer F, ...infer R ]
-        ? IsTypeInList< F, R > extends true
-            ? never
-            : L
-        : L;
+  L extends readonly [ infer F, ...infer R ]
+    ? IsTypeInList< F, R > extends true
+      ? never
+      : L
+    : L;
 
 /**
  * Validate that every type in `T` is present in tuple `L`.
@@ -290,6 +290,6 @@ export type ListNoDuplicate< L extends readonly any[] > =
  * type Missing = ListNoMissingType< [ 'a', 'c' ], 'a' | 'b' | 'c' >;    // never
  */
 export type ListNoMissingType< L extends readonly any[], T > =
-    ( T extends any ? If< IsTypeInList< T, L >, true, false > : never ) extends true
-        ? L
-        : never;
+  ( T extends any ? If< IsTypeInList< T, L >, true, false > : never ) extends true
+    ? L
+    : never;
