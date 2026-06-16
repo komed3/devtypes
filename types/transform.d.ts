@@ -26,9 +26,9 @@ import type { PlainObject } from './object';
  * type Flat = Flat< Nested >;  // ( number | string )[]
  */
 export type Flat< T extends readonly any[] > =
-    T extends readonly ( infer E )[]
-        ? ( E extends readonly any[] ? E[ number ] : E )[]
-        : never;
+  T extends readonly ( infer E )[]
+    ? ( E extends readonly any[] ? E[ number ] : E )[]
+    : never;
 
 /**
  * Recursively make all properties optional.
@@ -47,15 +47,15 @@ export type Flat< T extends readonly any[] > =
  * // { id?: number; profile?: { name?: string; address?: { city?: string } } }
  */
 export type DeepPartial< T > =
-    T extends Function | Date ? T
-        : T extends Array< infer U > ? DeepPartial< U >[]
-        : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepPartial< U > >
-        : T extends Map< infer K, infer V > ? Map< K, DeepPartial< V > >
-        : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepPartial< V > >
-        : T extends Set< infer U > ? Set< DeepPartial< U > >
-        : T extends ReadonlySet< infer U > ? ReadonlySet< DeepPartial< U > >
-        : T extends PlainObject ? { [ K in keyof T ]?: DeepPartial< T[ K ] > }
-        : T;
+  T extends Function | Date ? T
+    : T extends Array< infer U > ? DeepPartial< U >[]
+    : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepPartial< U > >
+    : T extends Map< infer K, infer V > ? Map< K, DeepPartial< V > >
+    : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepPartial< V > >
+    : T extends Set< infer U > ? Set< DeepPartial< U > >
+    : T extends ReadonlySet< infer U > ? ReadonlySet< DeepPartial< U > >
+    : T extends PlainObject ? { [ K in keyof T ]?: DeepPartial< T[ K ] > }
+    : T;
 
 /**
  * Recursively make all properties required.
@@ -74,15 +74,15 @@ export type DeepPartial< T > =
  * // { id: number; profile: { name: string; address: { city: string } } }
  */
 export type DeepRequired< T > =
-    T extends Function | Date ? T
-        : T extends Array< infer U > ? DeepRequired< U >[]
-        : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepRequired< U > >
-        : T extends Map< infer K, infer V > ? Map< K, DeepRequired< V > >
-        : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepRequired< V > >
-        : T extends Set< infer U > ? Set< DeepRequired< U > >
-        : T extends ReadonlySet< infer U > ? ReadonlySet< DeepRequired< U > >
-        : T extends PlainObject ? { [ K in keyof T ]-?: DeepRequired< T[ K ] > }
-        : T;
+  T extends Function | Date ? T
+    : T extends Array< infer U > ? DeepRequired< U >[]
+    : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepRequired< U > >
+    : T extends Map< infer K, infer V > ? Map< K, DeepRequired< V > >
+    : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepRequired< V > >
+    : T extends Set< infer U > ? Set< DeepRequired< U > >
+    : T extends ReadonlySet< infer U > ? ReadonlySet< DeepRequired< U > >
+    : T extends PlainObject ? { [ K in keyof T ]-?: DeepRequired< T[ K ] > }
+    : T;
 
 /**
  * Recursively make all properties readonly.
@@ -102,15 +102,15 @@ export type DeepRequired< T > =
  * // } }
  */
 export type DeepReadonly< T > =
-    T extends Function | Date ? T
-        : T extends Array< infer U > ? ReadonlyArray< DeepReadonly< U > >
-        : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepReadonly< U > >
-        : T extends Map< infer K, infer V > ? ReadonlyMap< K, DeepReadonly< V > >
-        : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepReadonly< V > >
-        : T extends Set< infer U > ? ReadonlySet< DeepReadonly< U > >
-        : T extends ReadonlySet< infer U > ? ReadonlySet< DeepReadonly< U > >
-        : T extends PlainObject ? { readonly [ K in keyof T ]: DeepReadonly< T[ K ] > }
-        : T;
+  T extends Function | Date ? T
+    : T extends Array< infer U > ? ReadonlyArray< DeepReadonly< U > >
+    : T extends ReadonlyArray< infer U > ? ReadonlyArray< DeepReadonly< U > >
+    : T extends Map< infer K, infer V > ? ReadonlyMap< K, DeepReadonly< V > >
+    : T extends ReadonlyMap< infer K, infer V > ? ReadonlyMap< K, DeepReadonly< V > >
+    : T extends Set< infer U > ? ReadonlySet< DeepReadonly< U > >
+    : T extends ReadonlySet< infer U > ? ReadonlySet< DeepReadonly< U > >
+    : T extends PlainObject ? { readonly [ K in keyof T ]: DeepReadonly< T[ K ] > }
+    : T;
 
 /**
  * Recursively remove readonly and optional modifiers.
@@ -130,12 +130,12 @@ export type DeepReadonly< T > =
  * // { id: number; profile: { name: string; address: { city: string } } }
  */
 export type DeepMutable< T > =
-    T extends Function | Date ? T
-        : T extends Array< infer U > ? Array< DeepMutable< U > >
-        : T extends ReadonlyArray< infer U > ? Array< DeepMutable< U > >
-        : T extends Map< infer K, infer V > ? Map< K, DeepMutable< V > >
-        : T extends ReadonlyMap< infer K, infer V > ? Map< K, DeepMutable< V > >
-        : T extends Set< infer U > ? Set< DeepMutable< U > >
-        : T extends ReadonlySet< infer U > ? Set< DeepMutable< U > >
-        : T extends PlainObject ? { -readonly [ K in keyof T ]-?: DeepMutable< T[ K ] > }
-        : T;
+  T extends Function | Date ? T
+    : T extends Array< infer U > ? Array< DeepMutable< U > >
+    : T extends ReadonlyArray< infer U > ? Array< DeepMutable< U > >
+    : T extends Map< infer K, infer V > ? Map< K, DeepMutable< V > >
+    : T extends ReadonlyMap< infer K, infer V > ? Map< K, DeepMutable< V > >
+    : T extends Set< infer U > ? Set< DeepMutable< U > >
+    : T extends ReadonlySet< infer U > ? Set< DeepMutable< U > >
+    : T extends PlainObject ? { -readonly [ K in keyof T ]-?: DeepMutable< T[ K ] > }
+    : T;

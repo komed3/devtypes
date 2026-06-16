@@ -105,8 +105,8 @@ export type LiteralUnion< T extends U, U = string > = T | ( U & Record< never, n
  * // String | Number | Boolean
  */
 export type Box< T > =
-    T extends string ? String
-        : T extends number ? Number
-        : T extends boolean ? Boolean
-        : T extends symbol ? Symbol
-        : T;
+  T extends string ? String
+    : T extends number ? Number
+    : T extends boolean ? Boolean
+    : T extends symbol ? Symbol
+    : T;
