@@ -27,11 +27,11 @@
  * // ( arg: string ) => ( arg: number ) => ( arg: boolean ) => void
  */
 export type Curry< F > =
-    F extends ( ...args: infer Args ) => infer R
-        ? Args extends [ infer A, ...infer Rest ]
-            ? ( ( arg: A ) => Curry< ( ...args: Rest ) => R > )
-            : R
-        : never;
+  F extends ( ...args: infer Args ) => infer R
+    ? Args extends [ infer A, ...infer Rest ]
+      ? ( ( arg: A ) => Curry< ( ...args: Rest ) => R > )
+      : R
+    : never;
 
 /**
  * Compose two functions.
@@ -50,9 +50,9 @@ export type Curry< F > =
  * // ( arg: number ) => boolean
  */
 export type Compose< F extends ( arg: any ) => any, G extends ( arg: any ) => any > =
-    Parameters< G >[ 0 ] extends ReturnType< F >
-        ? ( arg: Parameters< F >[ 0 ] ) => ReturnType< G >
-        : never;
+  Parameters< G >[ 0 ] extends ReturnType< F >
+    ? ( arg: Parameters< F >[ 0 ] ) => ReturnType< G >
+    : never;
 
 /**
  * Compose multiple functions in sequence.
@@ -72,16 +72,16 @@ export type Compose< F extends ( arg: any ) => any, G extends ( arg: any ) => an
  * // ( arg: number ) => Date
  */
 export type ComposeMany< Fns extends Array< ( ...args: any[] ) => any > > =
-    Fns extends [ infer F, infer G, ...infer Rest ]
-        ? F extends ( ...args: any[] ) => any
-            ? G extends ( ...args: any[] ) => any
-                ? ComposeMany< [
-                    Compose< F, G >,
-                    ...Extract< Rest, ( ( ...args: any[] ) => any )[] >
-                ] >
-                : never
-            : never
-        : Fns extends [ infer F ] ? F : never;
+  Fns extends [ infer F, infer G, ...infer Rest ]
+    ? F extends ( ...args: any[] ) => any
+      ? G extends ( ...args: any[] ) => any
+        ? ComposeMany< [
+          Compose< F, G >,
+          ...Extract< Rest, ( ( ...args: any[] ) => any )[] >
+        ] >
+        : never
+      : never
+    : Fns extends [ infer F ] ? F : never;
 
 /**
  * Promisify a function type.
@@ -98,9 +98,9 @@ export type ComposeMany< Fns extends Array< ( ...args: any[] ) => any > > =
  * // ( a: string, b: number ) => Promise< boolean >
  */
 export type Promisify< F > =
-    F extends ( ...args: infer A ) => infer R
-        ? ( ...args: A ) => Promise< R >
-        : never;
+  F extends ( ...args: infer A ) => infer R
+    ? ( ...args: A ) => Promise< R >
+    : never;
 
 /**
  * Unwrap a Promise type.
@@ -132,11 +132,11 @@ export type UnwrapPromise< T > = T extends Promise< infer U > ? U : T;
  * type R2 = AwaitedReturnType< F2 >;  // number
  */
 export type AwaitedReturnType< F > =
-    F extends ( ...args: any[] ) => infer R
-        ? R extends Promise< infer U >
-            ? U
-            : R
-        : never;
+  F extends ( ...args: any[] ) => infer R
+    ? R extends Promise< infer U >
+      ? U
+      : R
+    : never;
 
 /**
  * Extract parameter types from a function.
@@ -167,7 +167,7 @@ export type Parameters< F extends Function > = F extends ( ...args: infer P ) =>
  * type Params = CurriedParameters< CurriedFn >;  // [ string, number, boolean ]
  */
 export type CurriedParameters< F > =
-    F extends ( a: infer A ) => infer R ? [ A, ...CurriedParameters< R > ] : [];
+  F extends ( a: infer A ) => infer R ? [ A, ...CurriedParameters< R > ] : [];
 
 /**
  * Get the this binding type from a function.
@@ -182,7 +182,7 @@ export type CurriedParameters< F > =
  * type ThisType = ThisParameterType< Fn >;  // { x: number }
  */
 export type ThisParameterType< F extends Function > =
-    F extends ( this: infer T, ...args: any[] ) => any ? T : unknown;
+  F extends ( this: infer T, ...args: any[] ) => any ? T : unknown;
 
 /**
  * Remove the `this` parameter from a function.
@@ -198,4 +198,4 @@ export type ThisParameterType< F extends Function > =
  * // ( y: string ) => void
  */
 export type OmitThisParameter< F extends Function > =
-    F extends ( this: any, ...args: infer A ) => infer R ? ( ...args: A ) => R : F;
+  F extends ( this: any, ...args: infer A ) => infer R ? ( ...args: A ) => R : F;

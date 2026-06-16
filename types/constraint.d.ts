@@ -24,9 +24,9 @@
  * type OptKeys = OptionalKeys< Obj >;  // 'b' | 'c'
  */
 export type OptionalKeys< T > = {
-    [ K in keyof T ]-?: {} extends Pick< T, K >
-        ? K : undefined extends T[ K ]
-            ? K : never
+  [ K in keyof T ]-?: {} extends Pick< T, K >
+    ? K : undefined extends T[ K ]
+      ? K : never
 }[ keyof T ];
 
 /**
@@ -92,9 +92,9 @@ export type RequireFrom< T, K extends keyof T > = Required< Pick< T, K > >;
  * // { a: string; b?: never; c: boolean } | { a?: never; b: number; c: boolean }
  */
 export type RequireExactlyOne< T, K extends keyof T = keyof T > = { [ P in K ]:
-    Required< Pick< T, P > > &
-    Partial< Record< Exclude< K, P >, never > > &
-    Omit< T, K >;
+  Required< Pick< T, P > > &
+  Partial< Record< Exclude< K, P >, never > > &
+  Omit< T, K >;
 }[ K ];
 
 
@@ -135,11 +135,11 @@ export type RequireExactlyOneFrom< T, K extends keyof T > = RequireExactlyOne< P
  * // { a: string; b?: number } | { a?: string; b: number } | { a: string; b: number }
  */
 export type RequireAtLeastOne< T, K extends keyof T = keyof T > =
-    Pick< T, Exclude< keyof T, K > > &
-    { [ P in K ]:
-        Required< Pick< T, P > > &
-        Partial< Pick< T, Exclude< K, P > > >;
-    }[ K ];
+  Pick< T, Exclude< keyof T, K > > &
+  { [ P in K ]:
+    Required< Pick< T, P > > &
+    Partial< Pick< T, Exclude< K, P > > >;
+  }[ K ];
 
 /**
  * Require none of the specified properties.
@@ -173,8 +173,8 @@ export type RequireNone< T, K extends keyof T > = Omit< T, K > & Partial< Record
  * // { a: string; b: number; c: boolean } | { c: boolean; a?: never; b?: never }
  */
 export type RequireAllOrNone< T, K extends keyof T > =
-    | ( T & Required< Pick< T, K > > )
-    | RequireNone< T, K >;
+  | ( T & Required< Pick< T, K > > )
+  | RequireNone< T, K >;
 
 /**
  * Make specific properties non-nullable.
@@ -191,7 +191,7 @@ export type RequireAllOrNone< T, K extends keyof T > =
  * // { id: number; name?: string | undefined }
  */
 export type NonNullableProps< T, K extends keyof T > =
-    Omit< T, K > & { [ P in K ]: NonNullable< T[ P ] > };
+  Omit< T, K > & { [ P in K ]: NonNullable< T[ P ] > };
 
 /**
  * Create a strict object subset.
@@ -210,4 +210,4 @@ export type NonNullableProps< T, K extends keyof T > =
  * // { id: number; email?: string; phone?: string }
  */
 export type StrictSubset< T extends object, R extends keyof T, O extends keyof T > =
-    RequireFrom< T, R > & ExtractFrom< T, O >;
+  RequireFrom< T, R > & ExtractFrom< T, O >;
