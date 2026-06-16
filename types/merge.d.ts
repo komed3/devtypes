@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import { Simplify } from './util';
+import type { Simplify } from './util';
 
 
 /**
@@ -28,7 +28,8 @@ import { Simplify } from './util';
  * // { a: number; b: number; c: boolean }
  */
 export type Merge< Left, Right > = Simplify<
-    Pick< Left, Exclude< keyof Left, keyof Right > > & Right
+  Pick< Left, Exclude< keyof Left, keyof Right > > &
+  Right
 >;
 
 /**
@@ -48,7 +49,8 @@ export type Merge< Left, Right > = Simplify<
  * // { a: number; b: string; c: boolean }
  */
 export type MergeStrict< Left, Right > = Simplify<
-    Left & Pick< Right, Exclude< keyof Right, keyof Left > >
+  Left &
+  Pick< Right, Exclude< keyof Right, keyof Left > >
 >;
 
 /**
@@ -68,20 +70,20 @@ export type MergeStrict< Left, Right > = Simplify<
  * // { a: { x: number; y: number; z: boolean }; b: string; c: boolean }
  */
 export type DeepMerge< Left, Right > = Simplify< {
-    [ K in keyof Left | keyof Right ]:
-        K extends keyof Right
-            ? K extends keyof Left
-                ? Left[ K ] extends ReadonlyArray< any >
-                    ? Right[ K ]
-                    : Left[ K ] extends object
-                        ? Right[ K ] extends object
-                            ? DeepMerge< Left[ K ], Right[ K ] >
-                            : Right[ K ]
-                        : Right[ K ]
-                : Right[ K ]
-            : K extends keyof Left
-                ? Left[ K ]
-                : never;
+  [ K in keyof Left | keyof Right ]:
+    K extends keyof Right
+      ? K extends keyof Left
+        ? Left[ K ] extends ReadonlyArray< any >
+          ? Right[ K ]
+          : Left[ K ] extends object
+            ? Right[ K ] extends object
+              ? DeepMerge< Left[ K ], Right[ K ] >
+              : Right[ K ]
+            : Right[ K ]
+        : Right[ K ]
+      : K extends keyof Left
+        ? Left[ K ]
+        : never;
 } & {} >;
 
 /**
@@ -101,18 +103,18 @@ export type DeepMerge< Left, Right > = Simplify< {
  * // { a: { x: { foo: true, bar: string } } }
  */
 export type DeepMergeStrict< Left, Right > = Simplify<
-    Left extends Array< infer U >
-        ? DeepMergeStrict< U, Right >[]
-        : Left extends ReadonlyArray< infer U >
-            ? ReadonlyArray< DeepMergeStrict< U, Right > >
-            : Left extends object
-                ? Right extends object
-                    ? { [ K in keyof Left ]: K extends keyof Right
-                            ? DeepMergeStrict< Left[ K ], Right[ K ] >
-                            : DeepMergeStrict< Left[ K ], Right > } & {
-                        [ K in Exclude< keyof Right, keyof Left > ]: Right[ K ] }
-                    : Left
-                : Left
+  Left extends Array< infer U >
+    ? DeepMergeStrict< U, Right >[]
+    : Left extends ReadonlyArray< infer U >
+      ? ReadonlyArray< DeepMergeStrict< U, Right > >
+      : Left extends object
+        ? Right extends object
+          ? { [ K in keyof Left ]: K extends keyof Right
+            ? DeepMergeStrict< Left[ K ], Right[ K ] >
+            : DeepMergeStrict< Left[ K ], Right > } & {
+              [ K in Exclude< keyof Right, keyof Left > ]: Right[ K ] }
+          : Left
+        : Left
 >;
 
 /**
@@ -132,9 +134,9 @@ export type DeepMergeStrict< Left, Right > = Simplify<
  * // { a: number, b: number, c: boolean }
  */
 export type MergeMany< T extends unknown[] > = Simplify<
-    T extends [ infer H, ...infer R ]
-        ? Merge< H, MergeMany< R > >
-        : {}
+  T extends [ infer H, ...infer R ]
+    ? Merge< H, MergeMany< R > >
+    : {}
 >;
 
 /**
@@ -154,9 +156,9 @@ export type MergeMany< T extends unknown[] > = Simplify<
  * // { a: number, b: string, c: boolean }
  */
 export type MergeManyStrict< T extends unknown[] > = Simplify<
-    T extends [ infer H, ...infer R ]
-        ? MergeStrict< H, MergeManyStrict< R > >
-        : {}
+  T extends [ infer H, ...infer R ]
+    ? MergeStrict< H, MergeManyStrict< R > >
+    : {}
 >;
 
 /**
@@ -175,9 +177,9 @@ export type MergeManyStrict< T extends unknown[] > = Simplify<
  * // { a: { x: string; y: string } }
  */
 export type DeepMergeMany< T extends unknown[] > = Simplify<
-    T extends [ infer H, ...infer R ]
-        ? DeepMerge< H, DeepMergeMany< R > >
-        : {}
+  T extends [ infer H, ...infer R ]
+    ? DeepMerge< H, DeepMergeMany< R > >
+    : {}
 >;
 
 /**
@@ -196,9 +198,9 @@ export type DeepMergeMany< T extends unknown[] > = Simplify<
  * // { a: { x: { foo: true; bar: string } } }
  */
 export type DeepMergeManyStrict< T extends unknown[] > = Simplify<
-    T extends [ infer H, ...infer R ]
-        ? DeepMergeStrict< H, DeepMergeManyStrict< R > >
-        : {}
+  T extends [ infer H, ...infer R ]
+    ? DeepMergeStrict< H, DeepMergeManyStrict< R > >
+    : {}
 >;
 
 /**
@@ -220,19 +222,21 @@ export type DeepMergeManyStrict< T extends unknown[] > = Simplify<
  * // { level_1: { level_2: { metadata?: string }, metadata?: string }, metadata?: string }
  */
 export type DeepInject< T, D > = Simplify<
-    T extends Array< infer U >
-        ? DeepInject< U, D >[]
-        : T extends ReadonlyArray< infer U >
-            ? ReadonlyArray< DeepInject< U, D > >
-            : T extends object
-                ? { [ K in keyof T ]: T[ K ] extends object
-                        ? DeepInject< T[ K ], D >
-                        : T[ K ] } & {
-                    [ K in Exclude< {
-                        [ K in keyof D ]-?: {} extends Pick< D, K > ? K : never
-                    }[ keyof D ], keyof T > ]?: D[ K ] } & {
-                    [ K in Exclude< {
-                        [ K in keyof D ]-?: {} extends Pick< D, K > ? never : K
-                    }[ keyof D ], keyof T > ]-?: D[ K ] }
-                : T
+  T extends Array< infer U >
+    ? DeepInject< U, D >[]
+    : T extends ReadonlyArray< infer U >
+      ? ReadonlyArray< DeepInject< U, D > >
+      : T extends object
+        ? { [ K in keyof T ]: T[ K ] extends object
+          ? DeepInject< T[ K ], D >
+          : T[ K ] } & {
+              [ K in Exclude< {
+                [ K in keyof D ]-?: {} extends Pick< D, K > ? K : never
+              }[ keyof D ], keyof T > ]?: D[ K ]
+            } & {
+              [ K in Exclude< {
+                [ K in keyof D ]-?: {} extends Pick< D, K > ? never : K
+              }[ keyof D ], keyof T > ]-?: D[ K ]
+            }
+        : T
 >;
