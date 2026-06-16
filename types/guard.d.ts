@@ -265,7 +265,7 @@ export type IsNonEmptyObject< T > =
  * Potentially recursive types, such as union types with a parent type,
  * are considered recursion.
  * 
- * @returns 
+ * @returns
  * `true` if `T` is recursive.
  * `false` if `T` is not recursive.
  * `boolean` if `T` is a union type with a recursive type.
@@ -278,7 +278,7 @@ export type IsNonEmptyObject< T > =
  * type Recursive = IsTypeRecursive< RecursiveType >;                                // true
  * 
  * type PotentialRecursiveType = { r: PotentialRecursiveType | null };
- * type PotentialRecursive = IsTypeRecursive< PotentialRecursiveType >;              // true             
+ * type PotentialRecursive = IsTypeRecursive< PotentialRecursiveType >;              // true
  * type IsNotRecursive = IsTypeRecursive< { a: { a: { a: { a: { a: 'a' } } } } } >;  // false
  */
 export type IsTypeRecursive< T, P extends any[] = [] > =

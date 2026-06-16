@@ -231,8 +231,8 @@ export type IsTypeInList< T, L extends readonly any[] > =
  */
 export type IsTypeExtendedInList< T, L extends readonly any[] > =
   L extends [ infer F, ...infer R ]
-    ? [ F ] extends [ T ] 
-      ? true 
+    ? [ F ] extends [ T ]
+      ? true
       : IsTypeExtendedInList< T, R >
     : false;
 

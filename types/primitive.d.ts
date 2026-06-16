@@ -69,7 +69,7 @@ export type JSONPrimitive = string | number | boolean | null;
  * JSON.stringify( () => {} )                                        // undefined
  * JSON.stringify( Symbol( 's' ) )                                   // undefined
  * JSON.stringify( [ undefined, () => {}, Symbol( 's' ) ] )          // '[ null, null, null ]'
- * JSON.stringify( BigInt( 1 ) )                                     // Type Error               
+ * JSON.stringify( BigInt( 1 ) )                                     // Type Error
  * 
  */
 export type JSONBadValueTypes = bigint | undefined | Function | Symbol;
