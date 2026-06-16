@@ -210,6 +210,25 @@ export type MutableProperty< T, K extends keyof T > =
   Omit< T, K > & { -readonly [ P in K ]: T[ P ] };
 
 /**
+ * Replace the type of one or more keys in an existing type.
+ * 
+ * @remarks
+ * Creates a new type by substituting specified keys with new types.
+ * Useful for modifying specific properties without affecting the entire structure.
+ * 
+ * @template T - The original object type
+ * @template R - A mapping of keys to their new types
+ * 
+ * @example
+ * type User = { id: number; name: string; email: string };
+ * type UpdatedUser = ReplaceMany< User, { name: number; email: boolean } >;
+ * // { id: number; name: number; email: boolean }
+ */
+export type ReplaceMany< T, R extends Partial< Record< keyof T, any > > > = {
+  [ K in keyof T ]: K extends keyof R ? R[ K ] : T[ K ];
+};
+
+/**
  * Build all nested property paths using dot notation.
  * 
  * @remarks
