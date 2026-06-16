@@ -17,7 +17,7 @@
  * @license MIT
  */
 
-import { PlainObject } from './object';
+import type { PlainObject } from './object';
 import type { Primitive } from './primitive';
 
 
