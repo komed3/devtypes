@@ -37,8 +37,8 @@ type User = Merge< UserBase, UserAuth >;
 
 // Require exactly one field
 type LoginCredentials = RequireExactlyOne<
-    { email?: string; phone?: string; username?: string; },
-    'email' | 'phone' | 'username'
+  { email?: string; phone?: string; username?: string; },
+  'email' | 'phone' | 'username'
 >;
 ```
 
@@ -48,18 +48,18 @@ type LoginCredentials = RequireExactlyOne<
 import type { DeepPartial, DeepRequired } from 'devtypes/types/transform';
 
 interface Config {
-    server: {
-        port: number;
-        host: string;
-        ssl?: {
-            cert: string;
-            key: string;
-        };
+  server: {
+    port: number;
+    host: string;
+    ssl?: {
+      cert: string;
+      key: string;
     };
-    database: {
-        url: string;
-        timeout?: number;
-    };
+  };
+  database: {
+    url: string;
+    timeout?: number;
+  };
 }
 
 // Make everything optional
