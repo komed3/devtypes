@@ -39,7 +39,7 @@ export type TupleToUnion< T extends readonly any[] > = T[ number ];
  * type C = TupleConcat< [ 1, 2 ], [ 3, 4 ] >;  // [ 1, 2, 3, 4 ]
  */
 export type TupleConcat< A extends readonly any[], B extends readonly any[] > =
-    readonly [ ...A, ...B ];
+  readonly [ ...A, ...B ];
 
 /**
  * Append an element to the end of a tuple.
@@ -85,7 +85,7 @@ export type TuplePrepend< T extends readonly any[], V > = [ V, ...T ];
  * type H = TupleHead< [ number, string, boolean ] >;  // number
  */
 export type TupleHead< T extends readonly any[] > =
-    T extends readonly [ infer H, ...any[] ] ? H : never;
+  T extends readonly [ infer H, ...any[] ] ? H : never;
 
 /**
  * Get the last element of a tuple.
@@ -99,7 +99,7 @@ export type TupleHead< T extends readonly any[] > =
  * type L =TupleLast< [ number, string, boolean ] >;  // boolean
  */
 export type TupleLast< T extends readonly any[] > =
-    T extends readonly [ infer H, ...any[] ] ? H : never;
+  T extends readonly [ infer H, ...any[] ] ? H : never;
 
 /**
  * Get all but the first element of a tuple.
@@ -114,7 +114,7 @@ export type TupleLast< T extends readonly any[] > =
  * // [ string, boolean ]
  */
 export type TupleTail< T extends readonly any[] > =
-    T extends readonly [ any, ...infer R ] ? R : [];
+  T extends readonly [ any, ...infer R ] ? R : [];
 
 /**
  * Get the length of a tuple.
@@ -143,9 +143,9 @@ export type TupleLength< T extends readonly any[] > = T[ 'length' ];
  * // [ boolean, string, number ]
  */
 export type TupleReverse< T extends readonly any[], R extends readonly any[] = [] > =
-    T extends readonly [ infer H, ...infer Rest ]
-        ? TupleReverse< Rest, readonly [ H, ...R ] >
-        : R;
+  T extends readonly [ infer H, ...infer Rest ]
+    ? TupleReverse< Rest, readonly [ H, ...R ] >
+    : R;
 
 /**
  * Zip two tuples into a tuple of pairs.
@@ -162,11 +162,11 @@ export type TupleReverse< T extends readonly any[], R extends readonly any[] = [
  * // [ [ 1, 'a' ], [ 2, 'b' ] ]
  */
 export type TupleZip< A extends readonly any[], B extends readonly any[] > =
-    A extends readonly [ infer AH, ...infer AT ]
-        ? B extends readonly [ infer BH, ...infer BT ]
-            ? readonly [ readonly [ AH, BH ], ...TupleZip< AT, BT > ]
-            : readonly []
-        : readonly [];
+  A extends readonly [ infer AH, ...infer AT ]
+    ? B extends readonly [ infer BH, ...infer BT ]
+      ? readonly [ readonly [ AH, BH ], ...TupleZip< AT, BT > ]
+      : readonly []
+    : readonly [];
 
 /**
  * Flatten a tuple recursively.
@@ -181,11 +181,11 @@ export type TupleZip< A extends readonly any[], B extends readonly any[] > =
  * type F = TupleFlatten< [ 1, [ 2, [ 3 ] ], 4 ] >;  // [ 1, 2, 3, 4 ]
  */
 export type TupleFlatten< T extends readonly any[] > =
-    T extends readonly [ infer H, ...infer R ]
-        ? H extends readonly any[]
-            ? readonly [ ...TupleFlatten< H >, ...TupleFlatten< R > ]
-            : readonly [ H, ...TupleFlatten< R > ]
-        : readonly [];
+  T extends readonly [ infer H, ...infer R ]
+    ? H extends readonly any[]
+      ? readonly [ ...TupleFlatten< H >, ...TupleFlatten< R > ]
+      : readonly [ H, ...TupleFlatten< R > ]
+    : readonly [];
 
 /**
  * Take the first N elements of a tuple.
@@ -201,11 +201,11 @@ export type TupleFlatten< T extends readonly any[] > =
  * type T = TupleTake< [ 1, 2, 3, 4 ], 2 >;  // [ 1, 2 ]
  */
 export type TupleTake< T extends readonly any[], N extends number, R extends readonly any[] = [] > =
-    R[ 'length' ] extends N
-        ? R
-        : T extends readonly [ infer H, ...infer Rest ]
-            ? TupleTake< Rest, N, readonly [ ...R, H ] >
-            : R;
+  R[ 'length' ] extends N
+    ? R
+    : T extends readonly [ infer H, ...infer Rest ]
+      ? TupleTake< Rest, N, readonly [ ...R, H ] >
+      : R;
 
 /**
  * Drop the first N elements of a tuple.
@@ -221,11 +221,11 @@ export type TupleTake< T extends readonly any[], N extends number, R extends rea
  * type T = TupleDrop< [ 1, 2, 3, 4 ], 2 >;  // [ 3, 4 ]
  */
 export type TupleDrop< T extends readonly any[], N extends number, C extends readonly any[] = [] > =
-    C[ 'length' ] extends N
-        ? T
-        : T extends readonly [ any, ...infer R ]
-            ? TupleDrop< R, N, readonly [ ...C, any ] >
-            : readonly [];
+  C[ 'length' ] extends N
+    ? T
+    : T extends readonly [ any, ...infer R ]
+      ? TupleDrop< R, N, readonly [ ...C, any ] >
+      : readonly [];
 
 /**
  * Check if a tuple includes a specific type.
@@ -242,8 +242,8 @@ export type TupleDrop< T extends readonly any[], N extends number, C extends rea
  * type HasDate = TupleHas< [ number, string, boolean ], Date >;      // false
  */
 export type TupleHas< T extends readonly any[], V > =
-    T extends readonly [ infer H, ...infer R ]
-        ? [ H ] extends [ V ]
-            ? true
-            : TupleHas< R, V >
-        : false;
+  T extends readonly [ infer H, ...infer R ]
+    ? [ H ] extends [ V ]
+      ? true
+      : TupleHas< R, V >
+    : false;
