@@ -23,7 +23,7 @@
  * type Result = If< true, string, number >;  // string
  */
 export type If< Cond extends boolean, Then, Else = never > =
-    Cond extends true ? Then : Else;
+  Cond extends true ? Then : Else;
 
 /**
  * Conditional type over multiple boolean conditions.
@@ -43,9 +43,9 @@ export type If< Cond extends boolean, Then, Else = never > =
  * type B = IfAll< [ true, false ], 'ok', 'fail' >;  // 'fail'
  */
 export type IfAll< T extends readonly boolean[], Then, Else = never > =
-    T extends readonly [ infer H extends boolean, ...infer R extends boolean[] ]
-        ? If< H, IfAll< R, Then, Else >, Else >
-        : Then;
+  T extends readonly [ infer H extends boolean, ...infer R extends boolean[] ]
+    ? If< H, IfAll< R, Then, Else >, Else >
+    : Then;
 
 /**
  * Conditional type that succeeds if any condition is true.
@@ -65,9 +65,9 @@ export type IfAll< T extends readonly boolean[], Then, Else = never > =
  * type B = IfAny< [ false, false ], 'ok', 'fail' >;  // 'fail'
  */
 export type IfAny< T extends readonly boolean[], Then, Else = never > =
-    T extends readonly [ infer H extends boolean, ...infer R extends boolean[] ]
-        ? If< H, Then, IfAny< R, Then, Else > >
-        : Else;
+  T extends readonly [ infer H extends boolean, ...infer R extends boolean[] ]
+    ? If< H, Then, IfAny< R, Then, Else > >
+    : Else;
 
 /**
  * Conditional type that succeeds if all conditions are false.
@@ -102,11 +102,11 @@ export type IfNon< T extends readonly boolean[], Then, Else = never > = IfAny< T
  * type B = CountTrue< [ false, false ] >;       // 0
  */
 export type CountTrue< T extends readonly boolean[], Acc extends any[] = [] > =
-    T extends readonly [ infer H extends boolean, ...infer R extends boolean[] ]
-        ? H extends true
-            ? CountTrue< R, [ 0, ...Acc ] >
-            : CountTrue< R, Acc >
-        : Acc[ 'length' ];
+  T extends readonly [ infer H extends boolean, ...infer R extends boolean[] ]
+    ? H extends true
+      ? CountTrue< R, [ 0, ...Acc ] >
+      : CountTrue< R, Acc >
+    : Acc[ 'length' ];
 
 /**
  * Conditional helper: exactly N `true` values.
@@ -125,7 +125,7 @@ export type CountTrue< T extends readonly boolean[], Acc extends any[] = [] > =
  * type B = IfExactly< [ true, true ], 1, 'yes', 'no' >;         // 'no'
  */
 export type IfExactly< T extends readonly boolean[], N extends number, Then, Else = never > =
-    IfEquals< CountTrue< T >, N, Then, Else >;
+  IfEquals< CountTrue< T >, N, Then, Else >;
 
 /**
  * Conditional helper: only one `true` value.
@@ -143,7 +143,7 @@ export type IfExactly< T extends readonly boolean[], N extends number, Then, Els
  * type B = IfOnlyOne< [ true, true, false ], 'yes', 'no' >;   // 'no'
  */
 export type IfOnlyOne< T extends readonly boolean[], Then, Else = never > =
-    IfExactly< T, 1, Then, Else >;
+  IfExactly< T, 1, Then, Else >;
 
 /**
  * Conditional type based on type equality.
@@ -163,9 +163,9 @@ export type IfOnlyOne< T extends readonly boolean[], Then, Else = never > =
  * type B = IfEquals< string, number, number, boolean >;  // boolean
  */
 export type IfEquals< X, Y, A = X, B = never > =
-    ( < T >() => T extends X ? 1 : 2 ) extends
-    ( < T >() => T extends Y ? 1 : 2 )
-        ? A : B;
+  ( < T >() => T extends X ? 1 : 2 ) extends
+  ( < T >() => T extends Y ? 1 : 2 )
+    ? A : B;
 
 /**
  * Fast type equality test.
@@ -196,9 +196,9 @@ export type Equals< A, B > = IfEquals< A, B, true, false >;
  * type B = EqualsAll< [ boolean, number, number ] >;  // false
  */
 export type EqualsAll< T extends readonly any[] > =
-    T extends readonly [ infer A, infer B, ...infer Rest ]
-        ? If< Equals< A, B >, EqualsAll< [ B, ...Rest ] >, false >
-        : true;
+  T extends readonly [ infer A, infer B, ...infer Rest ]
+    ? If< Equals< A, B >, EqualsAll< [ B, ...Rest ] >, false >
+    : true;
 
 /**
  * Test whether any adjacent types in a tuple are strictly equal.
@@ -217,6 +217,6 @@ export type EqualsAll< T extends readonly any[] > =
  * type C = EqualsAny< [ 1, 2, 3 ] >;                 // false
  */
 export type EqualsAny< T extends readonly any[] > =
-    T extends readonly [ infer A, infer B, ...infer Rest ]
-        ? If< Equals< A, B >, true, EqualsAny< [ B, ...Rest ] > >
-        : false;
+  T extends readonly [ infer A, infer B, ...infer Rest ]
+    ? If< Equals< A, B >, true, EqualsAny< [ B, ...Rest ] > >
+    : false;

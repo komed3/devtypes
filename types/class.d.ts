@@ -58,7 +58,7 @@ export type AbstractConstructor< T > = abstract new ( ...args: any[] ) => T;
  * // [ id: number, name: string ]
  */
 export type ConstructorParameters< C extends Constructor< any > > =
-    C extends { new ( ...args: infer P ): any } ? P : never;
+  C extends { new ( ...args: infer P ): any } ? P : never;
 
 /**
  * Extract the instance type from a constructor function.
@@ -74,7 +74,7 @@ export type ConstructorParameters< C extends Constructor< any > > =
  * type UserInstance = InstanceType< typeof User >; // User
  */
 export type InstanceType< C extends Constructor< any > > =
-    C extends { new ( ...args: any[] ): infer I } ? I : never;
+  C extends { new ( ...args: any[] ): infer I } ? I : never;
 
 /**
  * Extract public method names from a class.
@@ -90,7 +90,7 @@ export type InstanceType< C extends Constructor< any > > =
  * type Methods = MethodNames< Service >; // 'getData' | 'setData'
  */
 export type MethodNames< T > = {
-    [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? K : never
+  [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? K : never
 }[ keyof T ];
 
 /**
@@ -123,8 +123,8 @@ export type ClassMethods< T > = Pick< T, MethodNames< T > >;
  * type ReadonlyProps = ReadonlyPropertyNames< Config >; // 'version' | 'name'
  */
 export type ReadonlyPropertyNames< T > = {
-    [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? never
-        : IfEquals< { [ P in K ]: T[ K ] }, { -readonly [ P in K ]: T[ K ] }, never, K >
+  [ K in keyof T ]-?: T[ K ] extends ( ...args: any[] ) => any ? never
+    : IfEquals< { [ P in K ]: T[ K ] }, { -readonly [ P in K ]: T[ K ] }, never, K >
 }[ keyof T ];
 
 /**
@@ -158,7 +158,7 @@ export type ReadonlyProperties< T > = Pick< T, ReadonlyPropertyNames< T > >;
  * type WritableProps = WritablePropertyNames< User >; // 'name'
  */
 export type WritablePropertyNames< T > =
-    Exclude< keyof T, MethodNames< T > | ReadonlyPropertyNames< T > >;
+  Exclude< keyof T, MethodNames< T > | ReadonlyPropertyNames< T > >;
 
 /**
  * Extract public writable (mutable) properties from a class as an object.
@@ -207,7 +207,7 @@ export type ClassProperties< T > = Omit< T, MethodNames< T > >;
  * // 'version' | 'debug'
  */
 export type StaticPropertyNames< T extends Function > = Exclude< {
-    [ K in keyof T ]-?: T[ K ] extends Function ? never : K
+  [ K in keyof T ]-?: T[ K ] extends Function ? never : K
 }[ keyof T ], 'prototype' >;
 
 /**
@@ -240,7 +240,7 @@ export type StaticProperties< T extends Function > = Pick< T, StaticPropertyName
  * type StaticMethods = StaticMethodNames< typeof Utils >; // 'create' | 'format'
  */
 export type StaticMethodNames< T extends Function > = {
-    [ K in keyof T ]-?: T[ K ] extends Function ? K : never
+  [ K in keyof T ]-?: T[ K ] extends Function ? K : never
 }[ keyof T ];
 
 /**
