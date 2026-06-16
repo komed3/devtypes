@@ -210,6 +210,26 @@ export type MutableProperty< T, K extends keyof T > =
   Omit< T, K > & { -readonly [ P in K ]: T[ P ] };
 
 /**
+ * Replace the type of a specific property.
+ * 
+ * @remarks
+ * Creates a new type by substituting one key with a new type.
+ * Useful for modifying specific properties without affecting the entire structure.
+ * 
+ * @template T - The original object type
+ * @template K - The key of the property to replace
+ * @template N - The new type for the specified property
+ * 
+ * @example
+ * type User = { id: number; name: string; email: string };
+ * type UpdatedUser = ReplaceOne< User, 'name', number >;
+ * // { id: number; name: number; email: string }
+ */
+export type ReplaceOne< T, K extends keyof T, N > = {
+  [ P in keyof T ]: P extends K ? N : T[ P ];
+};
+
+/**
  * Replace the type of one or more keys in an existing type.
  * 
  * @remarks
