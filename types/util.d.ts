@@ -31,14 +31,15 @@ import type { If } from './condition';
  * const id: UserID = 123 as UserID;
  */
 export type Brand<
-    Base, Tag extends string, Key extends string = '__brand',
-    Required extends boolean = false
+  Base, Tag extends string, Key extends string = '__brand',
+  Required extends boolean = false
 > =
-    Base & If<
-        Required,
-        { readonly [ K in Key ]: Tag },
-        { readonly [ K in Key ]?: Tag }
-    >;
+  Base &
+  If<
+    Required,
+    { readonly [ K in Key ]: Tag },
+    { readonly [ K in Key ]?: Tag }
+  >;
 
 /**
  * Coerce a type while preserving assignability.
@@ -134,12 +135,12 @@ export type Flatten< T > = T extends any[] ? { [ K in keyof T ]: T[ K ] } : T;
  * type B = Widen< true >;     // boolean
  */
 export type Widen< T > =
-    T extends string ? string
-        : T extends number ? number
-        : T extends boolean ? boolean
-        : T extends bigint ? bigint
-        : T extends symbol ? symbol
-        : T;
+  T extends string ? string
+    : T extends number ? number
+    : T extends boolean ? boolean
+    : T extends bigint ? bigint
+    : T extends symbol ? symbol
+    : T;
 
 /**
  * Compute intersections across multiple types and unions.
@@ -162,10 +163,10 @@ export type Widen< T > =
  * type Int2 = Intersect< [ true, false, 1, true ] >  // true
  */
 export type Intersect< T extends unknown[] > =
-    T extends [ infer F, infer S, ...infer R ]
-        ? ( F & S )
-            | Intersect< [ S, ...R ] >
-            | Intersect< [ F, ...R ] >
-        : T extends [ infer F, infer S ]
-            ? F & S
-            : never;
+  T extends [ infer F, infer S, ...infer R ]
+    ? ( F & S )
+      | Intersect< [ S, ...R ] >
+      | Intersect< [ F, ...R ] >
+    : T extends [ infer F, infer S ]
+      ? F & S
+      : never;

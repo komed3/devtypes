@@ -8,13 +8,13 @@
  * @license MIT
  */
 
-import { Simplify } from './util';
+import type { Simplify } from './util';
 
 
 /** @internal */
 type UnionLast< U > =
-    UnionToIntersection< U extends any ? ( x: U ) => 0 : never > extends
-        ( x: infer L ) => 0 ? L : never;
+  UnionToIntersection< U extends any ? ( x: U ) => 0 : never > extends
+    ( x: infer L ) => 0 ? L : never;
 
 
 /**
@@ -31,9 +31,9 @@ type UnionLast< U > =
  * // { a: string } & { b: number }
  */
 export type UnionToIntersection< U > =
-    ( U extends any ? ( k: U ) => void : never ) extends ( k: infer I ) => void
-        ? I
-        : never;
+  ( U extends any ? ( k: U ) => void : never ) extends ( k: infer I ) => void
+    ? I
+    : never;
 
 /**
  * Convert a union type to a tuple.
@@ -53,12 +53,12 @@ export type UnionToIntersection< U > =
  * // [ 'a', 'b', 'c' ] (order may vary)
  */
 export type UnionToTuple< U, T extends any[] = [] > =
-    [ U ] extends [ never ]
-        ? T
-        : UnionToTuple<
-            Exclude< U, UnionLast< U > >,
-            [ UnionLast< U >, ...T ]
-        >;
+  [ U ] extends [ never ]
+    ? T
+    : UnionToTuple<
+      Exclude< U, UnionLast< U > >,
+      [ UnionLast< U >, ...T ]
+    >;
 
 /**
  * Build a discriminated union from a tag key and a mapping object.
@@ -80,9 +80,9 @@ export type UnionToTuple< U, T extends any[] = [] > =
  * // { type: 'cat'; meows: boolean } | { type: 'dog'; barks: boolean }
  */
 export type DiscriminatedUnion< Tag extends string, Map extends Record< string, any > > =
-    Simplify< {
-        [ K in keyof Map & string ]: { [ P in Tag ]: K } & Map[ K ];
-    }[ keyof Map & string ] >;
+  Simplify< {
+    [ K in keyof Map & string ]: { [ P in Tag ]: K } & Map[ K ];
+  }[ keyof Map & string ] >;
 
 /**
  * Pick specific members from a union by type.
@@ -162,11 +162,11 @@ export type UnionValues< U > = U extends any ? U[ keyof U ] : never;
  * // { a?: string; b?: number }
  */
 export type UnionMerge< U > = {
-    [ K in UnionKeys< U > ]?: U extends any
-        ? K extends keyof U
-            ? U[ K ]
-            : never
-        : never;
+  [ K in UnionKeys< U > ]?: U extends any
+    ? K extends keyof U
+      ? U[ K ]
+      : never
+    : never;
 };
 
 /**
