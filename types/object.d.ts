@@ -14,10 +14,10 @@ import type { IsJSONSerializable } from './guard';
 
 /** @internal */
 type Join< K, P > = K extends string | number
-    ? P extends string | number
-        ? `${ K & ( string | number ) }.${ P & ( string | number ) }`
-        : never
-    : never;
+  ? P extends string | number
+    ? `${ K & ( string | number ) }.${ P & ( string | number ) }`
+    : never
+  : never;
 
 /** @internal */
 type Prev = [ never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
@@ -51,7 +51,7 @@ export type PlainObject = Record< string | number | symbol, any >;
  * type NumKeys = KeysByValue< Obj, number >;  // 'a' | 'c'
  */
 export type KeysByValue< T, V > = {
-    [ K in keyof T ]-?: T[ K ] extends V ? K : never
+  [ K in keyof T ]-?: T[ K ] extends V ? K : never
 }[ keyof T ];
 
 /**
@@ -100,7 +100,7 @@ export type OmitByValue< T, V > = Omit< T, KeysByValue< T, V > >;
  * type Result = PickNever< Obj >;  // { b: never; d: never }
  */
 export type PickNever< T > = Pick< T, {
-    [ K in keyof T ]-?: T[ K ] extends never ? K : never
+  [ K in keyof T ]-?: T[ K ] extends never ? K : never
 }[ keyof T ] >;
 
 /**
@@ -117,7 +117,7 @@ export type PickNever< T > = Pick< T, {
  * type Result = OmitNever< Obj >;  // { a: string; c: number }
  */
 export type OmitNever< T > = Omit< T, {
-    [ K in keyof T ]-?: T[ K ] extends never ? K : never
+  [ K in keyof T ]-?: T[ K ] extends never ? K : never
 }[ keyof T ] >;
 
 /**
@@ -153,7 +153,7 @@ export type HasProperty< T, K extends PropertyKey > = K extends keyof T ? true :
  * type IsOpt_c = HasOptionalProperty< Obj, 'c' >;  // false
  */
 export type HasOptionalProperty< T, K extends PropertyKey > =
-    K extends keyof T ? {} extends Pick< T, K > ? true : false : false;
+  K extends keyof T ? {} extends Pick< T, K > ? true : false : false;
 
 /**
  * Test if an object has a required property.
@@ -171,7 +171,7 @@ export type HasOptionalProperty< T, K extends PropertyKey > =
  * type IsReq_b = HasRequiredProperty< Obj, 'b' >;  // false
  */
 export type HasRequiredProperty< T, K extends PropertyKey > =
-    K extends keyof T ? {} extends Pick< T, K > ? false : true : false;
+  K extends keyof T ? {} extends Pick< T, K > ? false : true : false;
 
 /**
  * Make a specific property readonly.
@@ -189,7 +189,7 @@ export type HasRequiredProperty< T, K extends PropertyKey > =
  * // { readonly a: string; b: number }
  */
 export type ReadonlyProperty< T, K extends keyof T > =
-    Omit< T, K > & Readonly< Pick< T, K > >;
+  Omit< T, K > & Readonly< Pick< T, K > >;
 
 /**
  * Make a specific property mutable (remove readonly).
@@ -207,7 +207,7 @@ export type ReadonlyProperty< T, K extends keyof T > =
  * // { a: string; readonly b: number }
  */
 export type MutableProperty< T, K extends keyof T > =
-    Omit< T, K > & { -readonly [ P in K ]: T[ P ] };
+  Omit< T, K > & { -readonly [ P in K ]: T[ P ] };
 
 /**
  * Build all nested property paths using dot notation.
@@ -227,13 +227,13 @@ export type MutableProperty< T, K extends keyof T > =
  * // 'id' | 'profile' | 'profile.name' | 'profile.address' | 'profile.address.city'
  */
 export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
-    ? never : T extends object
-        ? { [ K in keyof T ]-?: K extends string | number
-            ? T[ K ] extends readonly any[]
-                ? K : T[ K ] extends object
-                    ? K | Join< K, Paths< T[ K ], Prev[ D ] > > : K
-            : never }[ keyof T ]
-        : '';
+  ? never : T extends object
+    ? { [ K in keyof T ]-?: K extends string | number
+      ? T[ K ] extends readonly any[]
+        ? K : T[ K ] extends object
+          ? K | Join< K, Paths< T[ K ], Prev[ D ] > > : K
+      : never }[ keyof T ]
+    : '';
 
 /**
  * Resolve the value type at a given property path.
@@ -250,8 +250,8 @@ export type Paths< T, D extends number = 5 > = [ D ] extends [ never ]
  * type City = PathValue< User, 'profile.address.city' >;  // string
  */
 export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer Rest }`
-    ? K extends keyof T ? PathValue< T[ K ], Rest > : never
-    : P extends keyof T ? T[ P ] : never;
+  ? K extends keyof T ? PathValue< T[ K ], Rest > : never
+  : P extends keyof T ? T[ P ] : never;
 
 /**
  * Nest an object structure based on a list of keys.
@@ -273,9 +273,9 @@ export type PathValue< T, P extends string > = P extends `${ infer K }.${ infer 
  * // }
  */
 export type ChainMapped< K extends string[], T > =
-    K extends [ infer F extends string, ...infer R extends string[] ]
-        ? { [ K in F ]: ChainMapped< R, T > }
-        : T;
+  K extends [ infer F extends string, ...infer R extends string[] ]
+    ? { [ K in F ]: ChainMapped< R, T > }
+    : T;
 
 /**
  * Constructs an object whose properties keys are `Keys` and property values are `T`.
